@@ -21,12 +21,15 @@ function kboPlayer(kp,club,id){const r=srng(hash32(club.code+"|"+kp.name+"|"+kp.
  const peak=Math.max(0.25,Math.min(0.92,0.55+(kp.active?0.05:-0.06)+0.12*sgauss(r)));const attrs={},pot={},grades={};const head=Math.max(0,(30-kp.age)/11);
  keys.forEach(k=>{attrs[k]=Math.max(0.12,Math.min(0.96,peak+0.10*sgauss(r)));pot[k]=Math.max(attrs[k],Math.min(0.98,attrs[k]+(0.02+0.30*r())*head+0.03*sgauss(r)));grades[k]=grade(Math.max(0,Math.min(1,attrs[k]+0.06*sgauss(r))))});
  if(kind==="B"&&kp.pos==="C")attrs.speed=Math.min(attrs.speed,0.45);
- const potAvg=Object.values(pot).reduce((a,b)=>a+b,0)/keys.length;const salary=Math.round(10*Math.max(0.4,Math.min(15,(Object.values(attrs).reduce((a,b)=>a+b,0)/keys.length-0.3)*18+1.2*sgauss(r)+(kp.age>30?0.8:0))))/10;
+ const potAvg=Object.values(pot).reduce((a,b)=>a+b,0)/keys.length;const salary=salaryModel(Object.values(attrs).reduce((a,b)=>a+b,0)/keys.length,kp.age,!!kp.active,0.8+0.5*r());
  return {id,name:kp.name,num:kp.num,age:kp.age,hand:kind==="B"?(kp.bats==="S"?"L":kp.bats):kp.throws,bats:kp.bats,throws:kp.throws,type:kind,pos:kind==="B"?kp.pos:null,role:kind==="P"?(kp.active?"SP":"RP"):null,
   grades,attrs:Object.fromEntries(keys.map(k=>[k,Math.round(attrs[k]*1000)/1000])),pot:Object.fromEntries(keys.map(k=>[k,Math.round(pot[k]*1000)/1000])),pot_grade:grade(potAvg),
   personality:{ambition:Math.round((0.2+0.7*r())*100)/100,loyalty:Math.round((0.2+0.7*r())*100)/100,pro:Math.round((0.3+0.65*r())*100)/100},
   morale:{playing_time:0.6,team_success:0.6,salary_fairness:0.6,relationships:0.6,role_fit:0.6},condition:Math.round(65+27*r()),fatigue:Math.round((0.05+0.2*r())*100)/100,injury:0,
   contract:{salary,years:1+Math.floor(r()*3),status:kp.age<=23?"rookie":(kp.age<=27?"arbitration":"veteran")},stats:{G:0,PA:0,H:0,HR:0,RBI:0,BB:0,K:0,IP:0,ER:0,W:0,L:0,SV:0,KP:0},height:kp.height,active:!!kp.active,real:!kp.est}}
+/* salary scale (억): KBO 2025 first-team payroll ≈ 100~140억 for 40 players, minimum 0.3억. ovr .58 → ≈1.9억, .75 → ≈7.3억, .92 → ≈15억; farm players 0.3~0.6억 */
+function salaryModel(ovr,age,active,noise){noise=noise||1;if(!active)return Math.round(10*Math.max(0.3,Math.min(0.6,0.3+0.3*Math.max(0,ovr-0.45)*noise)))/10;
+ return Math.round(10*Math.max(0.3,Math.min(30,(0.4+60*Math.pow(Math.max(0,ovr-0.45),1.8))*noise*(age>=31?1.15:1))))/10}
 function buildKboClub(code){const K=window.APP.kbo;if(!K)return null;const club=K.clubs.find(c=>c.code===code);if(!club)return null;
  const R=window.APP.roster;const ourArch={L:R.batters.filter(b=>b.hand==="L").map(b=>b.id),R:R.batters.filter(b=>b.hand!=="L").map(b=>b.id)};
  let id=1;const players=club.players.map(kp=>kboPlayer(kp,club,id++));
@@ -45,15 +48,20 @@ function buildKboClub(code){const K=window.APP.kbo;if(!K)return null;const club=
  const lineup=chosen.slice(0,9).map(p=>p.id);const rotation=pits.filter(p=>p.role==="SP"&&p.engine_id!==undefined).sort((a,b)=>a.engine_id-b.engine_id).map(p=>p.id);
  const opps=K.clubs.filter(c=>c.code!==code).map((c,j)=>{const r=srng(hash32("club|"+c.code+"|2026"));return {id:j+1,code:c.code,name:c.name,short:c.short,color:c.color,bat:Math.round((0.46+0.16*r())*100)/100,pitch:Math.round((0.46+0.16*r())*100)/100,def:Math.round((0.46+0.14*r())*100)/100,W:0,L:0,starter:j%5}});
  const d0=new Date(DATA.date0+"T00:00:00");const sched=[];let g=1,day=0;while(g<=30){const d=new Date(d0);d.setDate(d0.getDate()+day);if(d.getDay()!==1){const oi=Math.floor((g-1)/3)%opps.length;sched.push({g,date:d.toISOString().slice(0,10),opp:opps[oi].id,home:Math.floor((g-1)/3)%2===0,result:null});g++}day++}
- return {players,lineup,rotation,opps,sched,club:{name:club.name,short:club.short,color:club.color,city:club.city,code}}}
-function fresh(identity){const d=JSON.parse(JSON.stringify(DATA));if(identity){d.club.name=identity.name;d.club.color=identity.color;d.club.city=identity.city}
+ /* per-club payroll band: scale first-team salaries so the top-40 total lands between 96 and 136억 (KBO 2025 spread), seeded by club */
+ const target=96+40*((hash32("pay|"+code)%1000)/1000);const t40=players.map(p=>p.contract.salary).sort((a,b)=>b-a).slice(0,40).reduce((a,b)=>a+b,0);
+ const k=t40>0?target/t40:1;players.forEach(p=>{if(p.active)p.contract.salary=Math.round(10*Math.max(0.3,p.contract.salary*k))/10});
+ return {players,lineup,rotation,opps,sched,club:{name:club.name,short:club.short,color:club.color,color2:club.color2,city:club.city,code}}}
+function fresh(identity){const d=JSON.parse(JSON.stringify(DATA));if(identity){d.club.name=identity.name;d.club.color=identity.color;d.club.color2=identity.color2;d.club.city=identity.city}
  const bats=d.players.filter(p=>p.type=="B"&&p.active), sps=d.players.filter(p=>p.type=="P"&&p.role=="SP"&&p.active);
  S={seed:20260403,day:0,players:d.players,fa:d.free_agents,opps:d.opponents,sched:d.schedule,budget:d.club.budget,staff:d.club.staff,
     lineup:bats.slice(0,9).map(p=>p.id),rotation:sps.slice(0,5).map(p=>p.id),rotIdx:0,program:{},log:[],trainLog:[],W:0,L:0,runs:0,ra:0,weekGames:{},club:d.club,policy:"manual",played:[]};
  if(identity&&identity.code){const K=buildKboClub(identity.code);if(K){S.players=K.players;S.lineup=K.lineup;S.rotation=K.rotation;S.opps=K.opps;S.sched=K.sched;S.club=K.club;S.kbo=true;
-   const fa=[];const others=window.APP.kbo.clubs.filter(c=>c.code!==identity.code);for(let k=0;k<8;k++){const c=others[(k*3)%others.length];const cand=c.players.filter(p=>!p.active)[(k*7)%Math.max(1,c.players.filter(p=>!p.active).length)];if(cand){const q=kboPlayer(cand,c,5000+k);q.active=false;q.asking=Math.round(q.contract.salary*12.5)/10;q.from=c.short;fa.push(q)}}S.fa=fa}}
+   const fa=[];const others=window.APP.kbo.clubs.filter(c=>c.code!==identity.code);for(let k=0;k<8;k++){const c=others[(k*3)%others.length];const cand=c.players.filter(p=>!p.active)[(k*7)%Math.max(1,c.players.filter(p=>!p.active).length)];if(cand){const q=kboPlayer(cand,c,5000+k);q.active=false;q.asking=salaryModel(ovr(q),q.age,true,1.1);q.from=c.short;fa.push(q)}}S.fa=fa}}
  S.players.forEach(p=>{S.program[p.id]=p.type=="B"?"bat":"control";S.weekGames[p.id]=0});
- addLog((S.club&&S.club.name?S.club.name+" · ":"")+"시즌 개막 준비. 예산 "+S.budget+"억, 선수 "+S.players.length+"명.");save()}
+ S.budget=40;S.fin={inc:{gate:0,ads:0,parent:0},exp:{salary:0,ops:0,tax:0,fees:0,buyout:0},ledger:[],taxYears:0,offers:[],nego:null,oppMods:{},weekGate:0,att:0};   // 잔액 40억 = 구단주가 승인한 이적·영입 자금
+ addLog((S.club&&S.club.name?S.club.name+" · ":"")+"시즌 개막 준비. 이적 자금 "+S.budget+"억, 선수 "+S.players.length+"명, 상위 40인 보수 "+top40().toFixed(1)+"억 (샐러리캡 137.4억).");save()}
+function top40(){return S.players.map(p=>p.contract.salary).sort((a,b)=>b-a).slice(0,40).reduce((a,b)=>a+b,0)}
 function save(){window.APP.kv.set("club",S)}
 async function load(){const s=await window.APP.kv.get("club");if(s){S=s;return true}return false}
 function P(id){return S.players.find(p=>p.id===id)}
@@ -107,12 +115,12 @@ const POLICY={balanced:{B:["bat","eye","field","speed"],P:["control","stuff","mo
 function applyPolicy(){const pol=POLICY[S.policy];if(!pol)return;S.players.forEach((p,i)=>{if(p.fatigue>0.6){S.program[p.id]="rest";return}const list=pol[p.type];let k=(i+Math.floor(S.day/7))%list.length;if(S.policy==="youth"&&p.age>=29)k=0;S.program[p.id]=list[k]})}
 function advanceDay(){if(S.day>=DATA.days){addLog("시즌 종료. 최종 "+S.W+"승 "+S.L+"패");render();return}
  if(S.policy!=="manual"&&S.day%7===0)applyPolicy();
- const g=gameToday();if(g&&!(S.played||[]).includes(g.g))playGame(g);trainDay();recoverDay();if(S.day%7===6)moraleWeek();S.day++;
- const g2=S.sched.filter(x=>x.result).length;if(g2===30&&!S.done){S.done=true;addLog("정규 시즌 30경기 종료 · "+S.W+"승 "+S.L+"패")}save();render()}
+ const g=gameToday();const M=window.ClubMarket;if(g&&!(S.played||[]).includes(g.g)){playGame(g);if(g.home&&M)M.gate(g)}trainDay();recoverDay();if(S.day%7===6){moraleWeek();if(M)M.weekly()}S.day++;
+ const g2=S.sched.filter(x=>x.result).length;if(g2===30&&!S.done){S.done=true;addLog("정규 시즌 30경기 종료 · "+S.W+"승 "+S.L+"패");if(M)M.seasonEnd()}save();render()}
 function rankNow(){const rows=[{name:"덕아웃 나이트",W:S.W,L:S.L,me:true}].concat(S.opps.map(o=>({name:o.name,W:o.W,L:o.L})));rows.sort((a,b)=>(b.W/(b.W+b.L||1))-(a.W/(a.W+a.L||1)));return rows}
-function render(){const d=dateOf(S.day);$("tDate").textContent=fmt(d);$("tRec").textContent=S.W+"-"+S.L;const rows=rankNow();$("tRank").textContent=(rows.findIndex(r=>r.me)+1)+"위 / 6";$("tBudget").textContent=S.budget.toFixed(1);$("tPay").textContent=S.players.reduce((s,p)=>s+p.contract.salary,0).toFixed(1);
+function render(){if(window.APP.theme&&S.club)window.APP.theme(S.club.color,S.club.color2);const d=dateOf(S.day);$("tDate").textContent=fmt(d);$("tRec").textContent=S.W+"-"+S.L;const rows=rankNow();$("tRank").textContent=(rows.findIndex(r=>r.me)+1)+"위 / 6";$("tBudget").textContent=S.budget.toFixed(1);$("tPay").textContent=top40().toFixed(1)+"/137.4";
  $("tMorale").textContent=Math.round(100*S.players.reduce((s,p)=>s+moraleOverall(p),0)/S.players.length)+"%";
- renderSchedule();renderTraining();renderRoster();renderStats();$("nextDay").disabled=S.day>=DATA.days}
+ renderSchedule();renderTraining();renderRoster();renderStats();if(window.ClubMarket)window.ClubMarket.render();$("nextDay").disabled=S.day>=DATA.days}
 function renderSchedule(){const t=today();const rows=S.sched.map(g=>{const o=S.opps.find(x=>x.id===g.opp);const r=g.result;return "<tr class='"+(g.date===t?"today":"")+"'><td>"+g.g+"</td><td>"+fmt(new Date(g.date+"T00:00:00"))+"</td><td>"+o.name+"</td><td>"+(g.home?"홈":"원정")+"</td><td>"+(r?"<span class='"+(r.us>r.them?"win":"loss")+"'>"+(r.us>r.them?"승":"패")+" "+r.us+":"+r.them+"</span>":"-")+"</td><td>"+(r?r.sp+" "+r.ip+"이닝 "+r.er+"자책":"")+"</td></tr>"});
  if(PG.sched===undefined){const i=S.sched.findIndex(g=>!g.result);PG.sched=Math.floor(Math.max(0,i)/8)}
  pageTable("schedule","<tr><th>#</th><th>날짜</th><th>상대</th><th>장소</th><th>결과</th><th>선발</th></tr>",rows,8,"sched");
@@ -142,10 +150,11 @@ function renderRoster(){const bats=S.players.filter(p=>p.type=="B"&&p.active&&!p
  document.querySelectorAll(".pr").forEach(r=>r.onclick=e=>{if(e.target.tagName==="BUTTON"||e.target.tagName==="SELECT"||e.target.tagName==="OPTION")return;const p=P(+r.dataset.pid);if(swapSlot!==null&&p&&p.type=="B"&&p.active){if(!S.lineup.includes(p.id)){S.lineup[swapSlot]=p.id;swapSlot=null;save();renderRoster();return}}sel=p;renderCard();$("cardModal").hidden=false});
  document.querySelectorAll("[data-act]").forEach(b=>b.onclick=()=>{const p=P(+b.dataset.pid);const a=b.dataset.act;if(a==="down"){p.active=false;S.lineup=S.lineup.map(id=>id===p.id?(S.players.find(x=>x.type=="B"&&x.active&&!S.lineup.includes(x.id))||{id:null}).id:id);S.rotation=S.rotation.filter(id=>id!==p.id);if(S.rotation.length<5){const c=S.players.find(x=>x.type=="P"&&x.active&&!S.rotation.includes(x.id));if(c)S.rotation.push(c.id)}addLog(p.name+" 2군 이동")}
   else if(a==="up"){p.active=true;addLog(p.name+" 1군 등록")}
-  else if(a==="release"){S.players=S.players.filter(x=>x.id!==p.id);S.players.forEach(x=>x.morale.relationships=Math.max(0,x.morale.relationships-0.02));addLog(p.name+" 방출 · 동료 사기 소폭 하락")}
+  else if(a==="release"){const bo=Math.max(0.2,Math.round(p.contract.salary*0.5*10)/10);if(S.budget<bo){addLog(p.name+" 방출 불가 · 잔여 연봉 정산금 "+bo+"억이 잔액보다 큽니다");save();render();return}
+   S.players=S.players.filter(x=>x.id!==p.id);S.players.forEach(x=>x.morale.relationships=Math.max(0,x.morale.relationships-0.02));S.budget=Math.round((S.budget-bo)*10)/10;if(S.fin){S.fin.exp.buyout+=bo;S.fin.ledger.unshift({d:fmt(dateOf(S.day)),kind:"방출 정산",amt:-bo,text:p.name})}addLog(p.name+" 방출 · 잔여 연봉 정산 "+bo+"억 · 동료 사기 소폭 하락")}
   save();render()});
- pageTable("market","<tr><th>선수</th><th>포지션</th><th>나이</th><th>등급</th><th>요구 연봉</th></tr>",S.fa.map(p=>"<tr><td>"+p.name+"</td><td>"+(p.pos||p.role)+"</td><td>"+p.age+"</td><td>"+(p.type=="B"?DATA.bat_keys:DATA.pit_keys).slice(0,3).map(k=>KO[k]+" "+gi(p.grades[k])).join(" ")+"</td><td>"+p.asking+"억 <button data-sign='"+p.id+"'"+(S.budget<p.asking?" disabled":"")+">영입</button></td></tr>"),3,"fa");
- document.querySelectorAll("[data-sign]").forEach(b=>b.onclick=()=>{const p=S.fa.find(x=>x.id===+b.dataset.sign);S.fa=S.fa.filter(x=>x!==p);p.contract.salary=p.asking;p.active=false;S.program[p.id]=p.type=="B"?"bat":"control";S.weekGames[p.id]=0;S.players.push(p);S.budget=Math.round((S.budget-p.asking)*10)/10;addLog(p.name+" 영입 · 연봉 "+p.asking+"억");save();render()});
+ pageTable("market","<tr><th>선수</th><th>포지션</th><th>나이</th><th>등급</th><th>요구 연봉</th></tr>",S.fa.map(p=>"<tr><td>"+p.name+"</td><td>"+(p.pos||p.role)+"</td><td>"+p.age+"</td><td>"+(p.type=="B"?DATA.bat_keys:DATA.pit_keys).slice(0,3).map(k=>KO[k]+" "+gi(p.grades[k])).join(" ")+"</td><td>"+p.asking+"억 <button data-sign='"+p.id+"'>협상</button></td></tr>"),3,"fa");
+ document.querySelectorAll("[data-sign]").forEach(b=>b.onclick=()=>{if(window.ClubMarket)window.ClubMarket.startNego(+b.dataset.sign)});
  renderCard()}
 function renderCard(){const p=sel;if(!p){$("playerCard").innerHTML="<div class='hint'>선수를 누르면 보입니다.</div>";return}if($("cardClose"))$("cardClose").onclick=()=>{$("cardModal").hidden=true};const ks=p.type=="B"?DATA.bat_keys:DATA.pit_keys;const st=p.stats;
  $("playerCard").innerHTML="<div class='card'><h3>"+p.name+" <span class='badge'>"+(p.pos||p.role)+"</span><span class='badge'>"+p.age+"세 · "+p.hand+"</span><span class='badge'>"+(p.active?"1군":"2군")+"</span></h3>"+
@@ -164,11 +173,12 @@ function renderStats(){const rows=rankNow();$("standings").innerHTML="<table><tr
  pageTable("batStats","<tr><th>선수</th><th class='num'>G</th><th class='num'>PA</th><th class='num'>H</th><th class='num'>HR</th><th class='num'>RBI</th><th class='num'>BB</th><th class='num'>K</th><th class='num'>AVG</th></tr>",bats.map(p=>{const s=p.stats;return "<tr><td>"+p.name+"</td><td class='num'>"+s.G+"</td><td class='num'>"+s.PA+"</td><td class='num'>"+s.H+"</td><td class='num'>"+s.HR+"</td><td class='num'>"+s.RBI+"</td><td class='num'>"+s.BB+"</td><td class='num'>"+s.K+"</td><td class='num'>"+(s.H/Math.max(1,s.PA-s.BB)).toFixed(3)+"</td></tr>"}),5,"bat");
  const pits=S.players.filter(p=>p.type=="P"&&p.stats.IP>0).sort((a,b)=>(9*a.stats.ER/a.stats.IP)-(9*b.stats.ER/b.stats.IP));
  pageTable("pitStats","<tr><th>선수</th><th class='num'>G</th><th class='num'>IP</th><th class='num'>ER</th><th class='num'>ERA</th><th class='num'>W</th><th class='num'>L</th><th class='num'>SV</th><th class='num'>K</th></tr>",pits.map(p=>{const s=p.stats;return "<tr><td>"+p.name+"</td><td class='num'>"+s.G+"</td><td class='num'>"+s.IP+"</td><td class='num'>"+s.ER+"</td><td class='num'>"+(9*s.ER/s.IP).toFixed(2)+"</td><td class='num'>"+s.W+"</td><td class='num'>"+s.L+"</td><td class='num'>"+s.SV+"</td><td class='num'>"+s.KP+"</td></tr>"}),4,"pit")}
-document.querySelectorAll(".ctabs [data-tab]").forEach(b=>b.onclick=()=>{document.querySelectorAll(".ctabs [data-tab]").forEach(x=>x.classList.toggle("on",x===b));["schedule","training","roster","stats"].forEach(t=>$("tab-"+t).hidden=t!==b.dataset.tab)});
+document.querySelectorAll(".ctabs [data-tab]").forEach(b=>b.onclick=()=>{document.querySelectorAll(".ctabs [data-tab]").forEach(x=>x.classList.toggle("on",x===b));["schedule","training","roster","stats","market"].forEach(t=>{if($("tab-"+t))$("tab-"+t).hidden=t!==b.dataset.tab})});
 $("nextDay").onclick=()=>advanceDay();
 $("toGame").onclick=()=>{let n=0;do{advanceDay();n++}while(!S.sched.find(g=>g.date===today()&&!g.result)&&S.day<DATA.days&&n<10)};
 $("week").onclick=()=>{for(let i=0;i<7&&S.day<DATA.days;i++)advanceDay()};
 $("reset").onclick=()=>{if(confirm("저장된 시즌을 지우고 새로 시작할까요?")){fresh();render()}};
+window.ClubInt={S:()=>S,P,ovr,save,render,addLog,pageTable,kboPlayer,rankNow,grade,gi,bar,KO,DATA,rng,srng,hash32,today,dateOf,fmt,moraleOverall,salaryModel,top40,positionWarnings};
 window.ClubUI_tab=t=>{const b=document.querySelector(".ctabs [data-tab='"+t+"']");if(b)b.click()};
 load().then(ok=>{if(!ok)fresh();render();if(window.APP.onClubReady)window.APP.onClubReady()});
 document.querySelectorAll(".pol").forEach(b=>b.classList.toggle("on",b.dataset.pol===(S&&S.policy||"manual")));

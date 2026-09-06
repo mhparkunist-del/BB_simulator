@@ -74,6 +74,8 @@
 | 67 | 2026-09-06 | 이닝 교체 때 다음 타순 3명을 KBO 중계처럼 표시 | v2.3.0: 이닝 교체 화면 상단에 "공격 · 다음 타순" 칩 3개(타순·이름·좌우·포지션), 점수 버그에 대기 타자 2명 | web/app/js/game/game.js, web/app/index.html, web/app/css/app.css | 완료 |
 | 68 | 2026-09-06 | 경기 렌더링이 뚝딱임 · 더 부드럽게 하는 오픈소스 방법 조사·적용 | v2.4.0: 원인=수비 장면의 매 프레임 구장 재도색(관중 점 12,000개)·직선 보간·카메라 목표 튐. 관중 스프라이트 타일(프레임 6.0→3.0 ms), 이동 카메라 무캐시 직접 도색, 3차 Hermite 보간(바운드 모서리 보존), 카메라 지수 스무딩(30 m 이상은 컷), 야수 가감속, 공 잔상 6개, 투구 캔버스 800×500. 조사 기록 docs/RENDER_SMOOTHNESS.md | web/app/js/render/math.js, park.js, play.js, web/app/js/app.js(perf·title 점검 모드) | 완료 |
 | 69 | 2026-09-06 | 화면 구성요소가 딱딱함 · 게임에서 자주 쓰는 글꼴과 배경 디자인으로 | v2.4.0: Black Han Sans(숫자·로고)·Jua(버튼·라벨)·Gothic A1(본문) 글꼴, 경기장 조명 글로우 + 사선 결 배경, 유리 패널·둥근 입체 버튼·빛나는 램프·점수 버그·비네트, 타이틀 로고 그라데이션, prefers-reduced-motion | web/app/css/app.css, web/app/index.html, docs/APP_FLOW.md §5 | 완료 |
+| 70 | 2026-09-06 | 구단 예산과 이적시장/협상 시스템 추가, 실제 사례(제도·게임)를 확인해 설계 | v2.5.0: KBO 샐러리캡 137.4억(초과분 30 %/연속 50 %)·하한·트레이드 마감(20경기)·FA 1년 트레이드 금지·계약금 구조, 입장 수입(객단가 1.46만 원×관중)·광고·모기업·연봉·운영 주간 결산, 트레이드(ZenGM식 가치 판정, 현금/선수 역제안, AI 제안), 영입 협상(OOTP식 요구·인내, 성적·출전 기회 반영), 방출 정산. 새 화면 예산·이적, 협상 모달, 조사표 docs/TRANSFER_MARKET.md | web/app/js/club/market.js(신규), web/app/js/club/club.js, web/app/index.html, web/app/css/app.css, web/app/js/app.js | 완료 |
+| 71 | 2026-09-06 | 색도 KBO 테마색으로 다시 수정 | v2.5.0: 구단 주색·강조색(kbo.json color/color2, 10구단) → APP.theme이 화면 토큰 전부를 생성(배경 글로우·패널·버튼·점수 버그·로고·램프), 어두운 주색은 강조색으로 대체, 구단 선택 카드 미리보기, 타이틀은 KBO 리그 남색·빨강 | web/app/js/app.js, web/app/css/app.css, web/app/data/kbo.json, tools/build_kbo.py, web/app/js/club/club.js | 완료 |
 
 ## 운용
 - 새 지시 → 행 추가 → 산출물 버전 파일명(v{N.M}_{MMDD}) → recent report 갱신(이전 보고는 2_Archieve로) → README 이력표·2_Archieve/README.md 색인 갱신.

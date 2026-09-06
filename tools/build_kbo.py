@@ -16,11 +16,11 @@ import random
 import re
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-CLUBS = [
-    ("SS", "삼성 라이온즈", "삼성", "대구", "#074CA1"), ("LG", "LG 트윈스", "LG", "서울", "#C30452"), ("OB", "두산 베어스", "두산", "서울", "#131230"),
-    ("HT", "KIA 타이거즈", "KIA", "광주", "#EA0029"), ("SK", "SSG 랜더스", "SSG", "인천", "#CE0E2D"), ("LT", "롯데 자이언츠", "롯데", "부산", "#041E42"),
-    ("HH", "한화 이글스", "한화", "대전", "#FF6600"), ("NC", "NC 다이노스", "NC", "창원", "#315288"), ("KT", "KT 위즈", "KT", "수원", "#000000"),
-    ("WO", "키움 히어로즈", "키움", "서울", "#820024")]
+CLUBS = [   # code, name, short, city, primary colour, accent colour (light enough to read on a dark screen; scores, lamps, logo)
+    ("SS", "삼성 라이온즈", "삼성", "대구", "#074CA1", "#7FB8FF"), ("LG", "LG 트윈스", "LG", "서울", "#C30452", "#FF6FAE"), ("OB", "두산 베어스", "두산", "서울", "#131230", "#FF4D57"),
+    ("HT", "KIA 타이거즈", "KIA", "광주", "#EA0029", "#FF8A94"), ("SK", "SSG 랜더스", "SSG", "인천", "#CE0E2D", "#F5C542"), ("LT", "롯데 자이언츠", "롯데", "부산", "#041E42", "#7FC0F0"),
+    ("HH", "한화 이글스", "한화", "대전", "#FF6600", "#FFC58F"), ("NC", "NC 다이노스", "NC", "창원", "#315288", "#E1C08A"), ("KT", "KT 위즈", "KT", "수원", "#000000", "#FF5A60"),
+    ("WO", "키움 히어로즈", "키움", "서울", "#820024", "#FF7FB5")]
 GROUPS = {"투수": "P", "포수": "C", "내야수": "IF", "외야수": "OF"}
 IF_POS = ["SS", "2B", "3B", "1B", "SS", "2B", "3B", "1B"]
 OF_POS = ["CF", "LF", "RF", "CF", "LF", "RF"]
@@ -50,7 +50,7 @@ def main():
     today = dt.date(2026, 9, 6)
     out = {"season": 2026, "fetched": today.isoformat(), "source": "위키백과 구단 명단 틀 + KBO 공식 등록명단(1군, 투타·생년월일)", "clubs": []}
     total = 0
-    for code, name, short, city, color in CLUBS:
+    for code, name, short, city, color, color2 in CLUBS:
         w = wiki.get(code, {"players": []})
         r = {row["name"]: row for row in reg.get(code, {}).get("rows", []) if row.get("pos") not in ("감독", "코치")}
         players = []
@@ -81,7 +81,7 @@ def main():
             players.append({"name": p["name"], "num": p["num"], "group": g, "pos": pos, "throws": throws, "bats": bats, "age": age, "birth": birth,
                             "height": round(height, 2), "weight": weight, "active": rr is not None, "est": est})
         players.sort(key=lambda x: ({"P": 0, "C": 1, "IF": 2, "OF": 3}[x["group"]], not x["active"], x["num"]))
-        out["clubs"].append({"code": code, "name": name, "short": short, "city": city, "color": color, "players": players,
+        out["clubs"].append({"code": code, "name": name, "short": short, "city": city, "color": color, "color2": color2, "players": players,
                              "n_active": sum(1 for x in players if x["active"])})
         total += len(players)
         print(name, len(players), "active", sum(1 for x in players if x["active"]))

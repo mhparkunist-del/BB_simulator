@@ -10,7 +10,7 @@ window.APP = window.APP || {};
     return r.json();
   };
   const $ = id => document.getElementById(id);
-  const SCREENS = ["title", "team", "schedule", "training", "roster", "stats", "game"];
+  const SCREENS = ["title", "team", "schedule", "training", "roster", "stats", "market", "game"];
   const TEAMS = [
     { name: "덕아웃 나이트", city: "야간 구장", color: "#f2b441", motto: "밤경기의 명가" },
     { name: "항구 갈매기", city: "항구", color: "#4fa3e0", motto: "바닷바람을 등지고" },
@@ -28,6 +28,7 @@ window.APP = window.APP || {};
     if (A.locked && name !== "game") name = "game";
     $("apphead").hidden = (name === "title" || name === "team");
     $("screen-title").hidden = name !== "title"; $("screen-team").hidden = name !== "team";
+    if (name === "title") A.theme();
     if (name === "title" || name === "team") { $("screen-club").hidden = true; $("screen-game").hidden = true; if (location.hash !== "#" + name) history.replaceState(null, "", "#" + name); return }
     document.querySelectorAll(".nav [data-screen]").forEach(b => b.classList.toggle("on", b.dataset.screen === name));
     $("screen-club").hidden = name === "game";
@@ -49,6 +50,18 @@ window.APP = window.APP || {};
     const rec = window.ClubUI && window.ClubUI.recordExternalGame ? window.ClubUI.recordExternalGame(res) : false;
     A.event("경기 종료", (res.us > res.them ? "이겼습니다. " : "졌습니다. ") + res.us + " : " + res.them + (rec ? "<br>결과가 오늘 일정과 기록에 반영됐습니다. 정비 시간입니다." : "<br>연습 경기라 기록에는 남지 않습니다."), () => A.show("schedule"));
     A.autosave();
+  };
+  /* theme: every accent on the page derives from the club's two colours (primary, accent); the title uses the KBO league navy/red */
+  A.theme = function (color, color2) {
+    const rgb = c => { c = String(c || "#0b2a5b").replace("#", ""); if (c.length === 3) c = c.split("").map(x => x + x).join(""); return [0, 2, 4].map(i => parseInt(c.substr(i, 2), 16) || 0) };
+    const hex = v => "#" + v.map(x => Math.max(0, Math.min(255, Math.round(x))).toString(16).padStart(2, "0")).join("");
+    const lum = v => (0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2]) / 255, mix = (v, t, f) => v.map((x, i) => x + (t[i] - x) * f), W = [255, 255, 255], K = [0, 0, 0];
+    const team = rgb(color || "#0b2a5b"); let acc = rgb(color2 || (color ? hex(mix(team, W, 0.45)) : "#ff7a7a")); if (lum(acc) < 0.45) acc = mix(acc, W, 0.35);
+    const go = lum(team) < 0.18 ? acc : team, st = document.documentElement.style, set = (k, v) => st.setProperty(k, v);
+    set("--team", hex(team)); set("--team-rgb", team.map(Math.round).join(",")); set("--stripe", hex(lum(team) < 0.18 ? acc : mix(team, W, 0.15)));
+    set("--bulb", hex(acc)); set("--bulb2", hex(mix(acc, W, 0.35))); set("--bulb-dark", hex(mix(acc, K, 0.35))); set("--bulb-rgb", acc.map(Math.round).join(",")); set("--bulb-ink", lum(acc) > 0.5 ? "#151008" : "#fff");
+    set("--go", hex(go)); set("--go2", hex(mix(go, W, 0.22))); set("--go-ink", lum(go) > 0.6 ? "#151008" : "#fff"); set("--go-dark", hex(mix(go, K, 0.45)));
+    const m = document.querySelector("meta[name=theme-color]"); if (m) m.content = hex(mix(team, K, 0.6)); A.themeNow = { color: hex(team), color2: hex(acc) };
   };
   A.event = function (title, body, cb) { $("eventTitle").textContent = title; $("eventBody").innerHTML = body; $("eventModal").hidden = false; $("eventOk").onclick = () => { $("eventModal").hidden = true; if (cb) cb() } };
   A.autosave = function () { if (window.ClubUI && window.ClubUI.state()) A.kv.set("autosave", { when: new Date().toISOString(), S: window.ClubUI.state() }) };
@@ -83,14 +96,14 @@ window.APP = window.APP || {};
     };
   }
   function teamList() {
-    if (A.kbo && A.kbo.clubs) return A.kbo.clubs.map(c => ({ name: c.name, city: c.city, color: c.color, code: c.code, motto: "1군 " + c.n_active + "명 · 전체 " + c.players.length + "명 (KBO " + A.kbo.season + ")" }));
+    if (A.kbo && A.kbo.clubs) return A.kbo.clubs.map(c => ({ name: c.name, city: c.city, color: c.color, color2: c.color2, code: c.code, motto: "1군 " + c.n_active + "명 · 전체 " + c.players.length + "명 (KBO " + A.kbo.season + ")" }));
     return TEAMS;
   }
   function renderTeams() {
     A.teamPick = null; $("teamStart").disabled = true;
     const L = teamList();
-    $("teamCards").innerHTML = L.map((t, i) => "<div class='tc' data-i='" + i + "'><b><span class='sw' style='background:" + t.color + "'></span>" + t.name + "</b><span class='hint'>" + t.city + " · " + t.motto + "</span></div>").join("");
-    $("teamCards").querySelectorAll(".tc").forEach(c => c.onclick = () => { A.teamPick = +c.dataset.i; $("teamCards").querySelectorAll(".tc").forEach(x => x.classList.toggle("sel", x === c)); $("teamPick").textContent = L[A.teamPick].name + " 선택"; $("teamStart").disabled = false });
+    $("teamCards").innerHTML = L.map((t, i) => "<div class='tc' data-i='" + i + "' style='border-top:3px solid " + t.color + "'><b><span class='sw' style='background:" + t.color + "'></span>" + t.name + "</b><span class='hint'>" + t.city + " · " + t.motto + "</span></div>").join("");
+    $("teamCards").querySelectorAll(".tc").forEach(c => c.onclick = () => { A.teamPick = +c.dataset.i; A.theme(L[A.teamPick].color, L[A.teamPick].color2); $("teamCards").querySelectorAll(".tc").forEach(x => x.classList.toggle("sel", x === c)); $("teamPick").textContent = L[A.teamPick].name + " 선택"; $("teamStart").disabled = false });
   }
   async function refreshContinue() { const sv = await A.kv.get("autosave"); const has = !!(sv && sv.S); $("btnContinue").hidden = !has; if (has && window.ClubUI && window.ClubUI.setState && !(window.ClubUI.state() && window.ClubUI.state().day === sv.S.day)) window.ClubUI.setState(sv.S) }
   function viewSel(v) {                           // small screens: one 3D view at a time
@@ -133,7 +146,7 @@ window.APP = window.APP || {};
       A.club = await A.fetchJSON("data/club.json");
       try { A.kbo = await A.fetchJSON("data/kbo.json") } catch (e) { A.kbo = null }
       status.textContent = "렌더러 불러오는 중…";
-      if (!A.bundled) for (const f of ["js/render/math.js", "js/render/park.js", "js/render/person.js", "js/render/pitcher.js", "js/render/figures.js", "js/render/play.js", "js/render/seam.js", "js/game/game.js", "js/club/club.js"]) await loadScript(f);
+      if (!A.bundled) for (const f of ["js/render/math.js", "js/render/park.js", "js/render/person.js", "js/render/pitcher.js", "js/render/figures.js", "js/render/play.js", "js/render/seam.js", "js/game/game.js", "js/club/club.js", "js/club/market.js"]) await loadScript(f);
       else if (A.bundledInit) A.bundledInit();
       status.hidden = true;
       document.querySelectorAll(".nav [data-screen]").forEach(b => b.onclick = () => A.show(b.dataset.screen));
@@ -171,6 +184,23 @@ window.APP = window.APP || {};
         A.show("game"); $("autoOrder").onclick(); if (window.GameUI.pick.pitcher === null) document.querySelector("[data-p]").onclick(); $("start").onclick();
         A.show("schedule");
         box.textContent = "SMOKE OK lock: locked=" + !!A.locked + " gameVisible=" + !$("screen-game").hidden + " clubHidden=" + $("screen-club").hidden + " navDisabled=" + [...document.querySelectorAll(".nav [data-screen]")].filter(b => b.disabled).length + " errs=" + errs.length;
+      } else if (mode === "market") {                     // budget, a signing negotiation and a trade proposal on a KBO club
+        await new Promise(r => { const t = setInterval(() => { if (window.ClubUI && window.ClubUI.state() && window.ClubMarket) { clearInterval(t); r() } }, 50) });
+        const t40s = teamList().map(t => { window.ClubUI.fresh(t); return Math.round(window.ClubInt.top40()) });
+        window.ClubUI.fresh(teamList()[4]); for (let i = 0; i < 8; i++) window.ClubUI.advanceDay();
+        const M = window.ClubMarket, S = window.ClubUI.state(), fa = S.fa[0];
+        M.startNego(fa.id); M.offer(Math.round(fa.asking * 0.5 * 10) / 10, 1); const low = M.fin().nego.msg; M.offer(M.fin().nego.ask, M.fin().nego.years); const signed = S.players.some(p => p.id === fa.id);
+        $("negoModal").hidden = true;
+        const opp = S.opps.find(o => o.code); const roster = M.oppRoster(opp.code).map(p => ({ p, v: M.tradeValue(p) })).sort((a, b) => a.v - b.v);
+        const target = roster[Math.floor(roster.length / 2)]; const mine = S.players.filter(p => p.active && !p.noTrade).map(p => ({ p, v: M.tradeValue(p) })).sort((a, b) => b.v - a.v);
+        const r1 = M.proposeTrade(opp.code, [target.p.id], [mine[mine.length - 1].p.id], 0);
+        const give = mine.filter(x => x.v >= target.v * 1.2).pop() || mine[0]; const r2 = M.proposeTrade(opp.code, [target.p.id], [give.p.id], 0);
+        A.show("market");
+        box.textContent = "SMOKE OK market: cash=" + S.budget + " top40=" + window.ClubInt.top40().toFixed(1) + " allClubs=" + t40s.join("/") + " ask=" + fa.asking + " ledger=" + M.fin().ledger.length + " att=" + M.fin().att + " | nego low='" + low.slice(0, 40) + "' signed=" + signed + " | trade1=" + r1.msg.slice(0, 44) + " | trade2=" + r2.msg.slice(0, 60) + " ok=" + r2.ok + " errs=" + errs.length;
+      } else if (mode === "team") {                       // club select with a card chosen: the whole page previews that club's colours
+        await new Promise(r => { const t = setInterval(() => { if (window.ClubUI && window.ClubUI.state()) { clearInterval(t); r() } }, 50) });
+        A.show("title"); $("btnNew").onclick(); $("teamCards").querySelectorAll(".tc")[6].onclick();
+        box.textContent = "SMOKE OK team: pick=" + A.teamPick + " theme=" + JSON.stringify(A.themeNow) + " bulb=" + getComputedStyle(document.documentElement).getPropertyValue("--bulb").trim() + " errs=" + errs.length;
       } else if (mode === "title") {
         await new Promise(r => { const t = setInterval(() => { if (window.ClubUI && window.ClubUI.state()) { clearInterval(t); r() } }, 50) });
         A.show("title"); box.textContent = "SMOKE OK title: fonts=" + (document.fonts ? document.fonts.size : "-") + " errs=" + errs.length;

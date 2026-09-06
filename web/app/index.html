@@ -13,7 +13,7 @@
 <div id="rotate"><div class="ico">⟳</div><p>가로로 돌려 주세요</p><p class="hint">모든 화면이 가로 한 화면에 맞춰져 있습니다.</p></div>
 <header class="apphead" id="apphead" hidden>
   <h1>DUGOUT NIGHT</h1>
-  <nav class="nav"><button data-screen="schedule">일정</button><button data-screen="training">훈련</button><button data-screen="roster">선수단</button><button data-screen="stats">기록</button><button data-screen="game" class="gamebtn">경기</button><span id="lockBadge" class="lock" hidden>경기 중 · 정비는 경기 뒤에</span></nav>
+  <nav class="nav"><button data-screen="schedule">일정</button><button data-screen="training">훈련</button><button data-screen="roster">선수단</button><button data-screen="stats">기록</button><button data-screen="market">예산·이적</button><button data-screen="game" class="gamebtn">경기</button><span id="lockBadge" class="lock" hidden>경기 중 · 정비는 경기 뒤에</span></nav>
   <span class="ctlmini"><button id="saveBtn" title="저장">저장</button><button id="titleBtn" title="타이틀">타이틀</button></span>
   <div id="cstrip" class="strip">
     <span class="s"><small>DATE</small><b id="tDate">-</b></span><span class="s"><small>REC</small><b id="tRec">0-0</b></span><span class="s"><small>RANK</small><b id="tRank">-</b></span>
@@ -38,7 +38,7 @@
     <div class="ctl"><span id="teamPick" class="hint">구단을 누르세요</span><span style="flex:1"></span><button class="go" id="teamStart" disabled>부임하기</button></div></div>
 </section>
 <section id="screen-club" class="screen" hidden>
-  <div class="tabs ctabs" style="display:none"><button data-tab="schedule" class="on">일정</button><button data-tab="training">훈련</button><button data-tab="roster">선수단</button><button data-tab="stats">순위·기록</button></div>
+  <div class="tabs ctabs" style="display:none"><button data-tab="schedule" class="on">일정</button><button data-tab="training">훈련</button><button data-tab="roster">선수단</button><button data-tab="stats">순위·기록</button><button data-tab="market">예산·이적</button></div>
   <div id="tab-schedule" class="fit two-col">
     <div class="panel col"><h2>일정 · 30경기</h2><div id="schedule" class="grow"></div></div>
     <div class="col">
@@ -62,6 +62,14 @@
     <div class="col"><div class="panel"><h2>순위</h2><div id="standings"></div></div><div class="panel grow"><h2>팀 기록</h2><div id="teamStats"></div></div></div>
     <div class="col"><div class="panel grow"><h2>타자 기록</h2><div id="batStats" class="grow"></div></div><div class="panel grow"><h2>투수 기록</h2><div id="pitStats" class="grow"></div></div></div>
   </div>
+  <div id="tab-market" class="fit three-col" hidden>
+    <div class="panel col"><h2>예산 · <span class="hint">입장·광고·모기업 수입, 연봉·운영 지출, 샐러리캡 137.4억(상위 40인)</span></h2><div id="budget" class="col grow"></div></div>
+    <div class="panel col"><h2>트레이드 · <span class="hint">20경기까지 · 선수 ⇄ 선수 + 현금</span></h2><div id="trade" class="col grow"></div></div>
+    <div class="panel col"><h2>영입 협상 · <span class="hint">FA·방출 선수 · 요구액과 인내</span></h2><div id="signing" class="grow"></div><div class="hint">계약금(연봉×연수×30 %)은 잔액에서 바로 나가고 연봉은 주간 결산에서 나갑니다. FA 영입 선수는 1년간 트레이드할 수 없습니다.</div></div>
+  </div>
+  <div id="negoModal" class="modal" hidden><div class="modalbox"><h3>영입 협상</h3><div id="negoBody"></div>
+    <div class="ctl" style="margin-top:8px"><span class="hint">연봉(억)</span><input type="number" id="negoSalary" step="0.5" min="0.3" style="width:80px"><span class="hint">연수</span><select id="negoYears"><option>1</option><option>2</option><option>3</option><option>4</option></select>
+    <button class="go" id="negoOffer">제안</button><button id="negoMeet">요구 수용</button><button id="negoClose">닫기</button></div></div></div>
   <div id="eventModal" class="modal" hidden><div class="modalbox event"><h3 id="eventTitle"></h3><div id="eventBody"></div><div class="ctl" style="justify-content:flex-end;margin-top:10px"><button class="go" id="eventOk">확인</button></div></div></div>
   <div id="tutorial" class="tutor" hidden><div class="tbox"><div id="tutText"></div><div class="ctl" style="justify-content:flex-end;margin-top:8px"><span id="tutStep" class="hint"></span><button id="tutSkip">건너뛰기</button><button class="go" id="tutNext">다음</button></div></div></div>
   <div id="saveModal" class="modal" hidden><div class="modalbox"><h3>저장 슬롯</h3><div id="saveSlots" class="slots"></div><div class="ctl" style="justify-content:flex-end;margin-top:8px"><button id="saveClose">닫기</button></div></div></div>

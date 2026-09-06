@@ -13,5 +13,5 @@ observe in reality (see ``bbsim.agents.base``). Ground-truth ball state never
 crosses into an agent.
 """
 
-__version__ = "2.4.0"
+__version__ = "2.5.0"
 __all__ = ["__version__"]
