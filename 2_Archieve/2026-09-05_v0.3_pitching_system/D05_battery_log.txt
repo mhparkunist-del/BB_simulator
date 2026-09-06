@@ -1,0 +1,60 @@
+PA000 #1 [0-0, R000] 투수 의도 CH@low_away (낮은 공 추격, 오프스피드에 약함) | 포수 사인 CH@low_away (투수 의도 반영) | 최종 CH → foul
+PA000 #2 [0-1, R000] 투수 의도 CH@low (낮은 공 추격, 오프스피드에 약함) | 포수 사인 CH@low_in (투수 의도 반영) | 최종 CH → ball
+PA000 #3 [1-1, R000] 투수 의도 FF@high (-) | 포수 사인 FF@high_in (투수 의도 반영, CH 뒤 터널링) | 최종 FF → ball
+PA000 #4 [2-1, R000] 투수 의도 SI@low_away (낮은 공 추격) | 포수 사인 SI@low_away (투수 의도 반영) | 최종 SI → foul
+PA000 #5 [2-2, R000] 투수 의도 CH@chase_low (낮은 공 추격, 오프스피드에 약함) | 포수 사인 CH@chase_low (투수 의도 반영, SI 뒤 터널링) | 최종 CH → ball
+PA000 #6 [3-2, R000] 투수 의도 FF@chase_high (-) | 포수 사인 FF@chase_high (투수 의도 반영, CH 뒤 터널링) | 최종 FF → ball
+PA001 #1 [0-0, R100] 투수 의도 FF@high (-) | 포수 사인 SI@low_away (도루 위협: 빠른 공) | 최종 SI → ball
+PA001 #2 [1-0, R100] 투수 의도 FF@high (-) | 포수 사인 FF@high (투수 의도 반영, 도루 위협: 빠른 공) | 최종 FF → foul
+PA001 #3 [1-1, R100] 투수 의도 CH@low (-) | 포수 사인 CH@low_away (투수 의도 반영, FF 뒤 터널링) | 최종 CH → in_play
+PA002 #1 [0-0, R001] 투수 의도 FF@high_in (-) | 포수 사인 FF@high (투수 의도 반영) | 최종 FF → ball
+PA002 #2 [1-0, R001] 투수 의도 FF@high_in (-) | 포수 사인 FF@high_in (투수 의도 반영) | 최종 FF → in_play
+PA003 #1 [0-0, R000] 투수 의도 FF@high (-) | 포수 사인 SI@low (-) | 최종 FF (흔들기 1회) → called_strike
+PA003 #2 [0-1, R000] 투수 의도 CH@low (-) | 포수 사인 CH@low (투수 의도 반영, FF 뒤 터널링) | 최종 CH → in_play
+PA004 #1 [0-0, R000] 투수 의도 CH@low (낮은 공 추격, 오프스피드에 약함) | 포수 사인 FF@high (-) | 최종 FF → in_play
+PA005 #1 [0-0, R100] 투수 의도 FF@high (-) | 포수 사인 FF@high (투수 의도 반영, 도루 위협: 빠른 공) | 최종 FF → called_strike
+PA005 #2 [0-1, R100] 투수 의도 CH@low_away (-) | 포수 사인 CH@low_away (투수 의도 반영, FF 뒤 터널링) | 최종 CH → ball
+PA005 #3 [1-1, R100] 투수 의도 SL@low (-) | 포수 사인 SI@low_away (도루 위협: 빠른 공, CH 뒤 터널링) | 최종 SL (흔들기 1회) → ball
+PA005 #4 [2-1, R100] 투수 의도 FF@high (-) | 포수 사인 FF@high (투수 의도 반영, 도루 위협: 빠른 공, SL 뒤 터널링) | 최종 FF → swinging_strike
+PA005 #5 [2-2, R100] 투수 의도 SL@chase_low (-) | 포수 사인 SL@chase_low (투수 의도 반영, FF 뒤 터널링) | 최종 SL → ball
+PA005 #6 [3-2, R100] 투수 의도 FF@chase_high (-) | 포수 사인 FF@chase_high (투수 의도 반영, 도루 위협: 빠른 공, SL 뒤 터널링) | 최종 FF → ball
+PA006 #1 [0-0, R000] 투수 의도 FF@high_in (-) | 포수 사인 FF@high_in (투수 의도 반영) | 최종 FF → called_strike
+PA006 #2 [0-1, R000] 투수 의도 SL@away (-) | 포수 사인 SL@away (투수 의도 반영, FF 뒤 터널링) | 최종 SL → swinging_strike
+PA006 #3 [0-2, R000] 투수 의도 SL@chase_low (낮은 공 추격) | 포수 사인 SL@chase_low (투수 의도 반영, 헛스윙 유도 구종 반복) | 최종 SL → foul
+PA006 #4 [0-2, R000] 투수 의도 CH@chase_low (낮은 공 추격) | 포수 사인 CH@chase_low (투수 의도 반영) | 최종 CH → ball
+PA006 #5 [1-2, R000] 투수 의도 SL@chase_away (-) | 포수 사인 SL@chase_low (투수 의도 반영) | 최종 SL → foul
+PA006 #6 [1-2, R000] 투수 의도 SL@chase_low (낮은 공 추격) | 포수 사인 SL@chase_low (투수 의도 반영) | 최종 SL → swinging_strike
+PA007 #1 [0-0, R000] 투수 의도 FF@high (-) | 포수 사인 FF@high (투수 의도 반영) | 최종 FF → swinging_strike
+PA007 #2 [0-1, R000] 투수 의도 CH@low (-) | 포수 사인 SL@low (오늘 잘 통하는 구종, FF 뒤 터널링) | 최종 SL → ball
+PA007 #3 [1-1, R000] 투수 의도 CH@low (-) | 포수 사인 FF@high (오늘 잘 통하는 구종, SL 뒤 터널링) | 최종 FF → in_play
+PA008 #1 [0-0, R000] 투수 의도 CH@low (-) | 포수 사인 FF@high_in (-) | 최종 FF → foul
+PA008 #2 [0-1, R000] 투수 의도 CH@low (-) | 포수 사인 SL@low_away (FF 뒤 터널링) | 최종 SL → ball
+PA008 #3 [1-1, R000] 투수 의도 CH@low (-) | 포수 사인 FF@high (SL 뒤 터널링) | 최종 CH (흔들기 1회) → foul
+PA008 #4 [1-2, R000] 투수 의도 SL@chase_low (-) | 포수 사인 SL@chase_low (투수 의도 반영) | 최종 SL → ball
+PA008 #5 [2-2, R000] 투수 의도 SL@chase_low (-) | 포수 사인 SL@chase_low (투수 의도 반영) | 최종 SL → ball
+PA008 #6 [3-2, R000] 투수 의도 FF@chase_high (-) | 포수 사인 FF@chase_high (투수 의도 반영, SL 뒤 터널링) | 최종 FF → foul
+PA008 #7 [3-2, R000] 투수 의도 FF@chase_high (-) | 포수 사인 FF@chase_high (투수 의도 반영) | 최종 FF → ball
+PA009 #1 [0-0, R101] 투수 의도 FF@high (-) | 포수 사인 FF@high (투수 의도 반영, 도루 위협: 빠른 공) | 최종 FF → called_strike
+PA009 #2 [0-1, R101] 투수 의도 CH@low (-) | 포수 사인 CH@low_away (투수 의도 반영, FF 뒤 터널링) | 최종 CH → in_play
+PA010 #1 [0-0, R000] 투수 의도 FF@chase_high (초구 스윙 성향) | 포수 사인 FF@high (투수 의도 반영) | 최종 FF → swinging_strike
+PA010 #2 [0-1, R000] 투수 의도 CH@low (-) | 포수 사인 CH@low_in (투수 의도 반영, FF 뒤 터널링) | 최종 CH → foul
+PA010 #3 [0-2, R000] 투수 의도 SL@chase_low (-) | 포수 사인 SL@chase_low (투수 의도 반영) | 최종 SL → ball
+PA010 #4 [1-2, R000] 투수 의도 SL@chase_low (-) | 포수 사인 SL@chase_low (투수 의도 반영) | 최종 SL → in_play
+PA011 #1 [0-0, R000] 투수 의도 FF@high (-) | 포수 사인 FF@high (투수 의도 반영, 오늘 잘 통하는 구종) | 최종 FF → swinging_strike
+PA011 #2 [0-1, R000] 투수 의도 CH@low (낮은 공 추격) | 포수 사인 CH@low (투수 의도 반영, FF 뒤 터널링) | 최종 CH → swinging_strike
+PA011 #3 [0-2, R000] 투수 의도 SL@chase_low (낮은 공 추격) | 포수 사인 CH@chase_low (헛스윙 유도 구종 반복) | 최종 CH → ball
+PA011 #4 [1-2, R000] 투수 의도 SL@chase_low (낮은 공 추격) | 포수 사인 FF@chase_high (오늘 잘 통하는 구종, CH 뒤 터널링) | 최종 SL (흔들기 1회) → ball
+PA011 #5 [2-2, R000] 투수 의도 SL@chase_low (낮은 공 추격) | 포수 사인 FF@chase_high (오늘 잘 통하는 구종, SL 뒤 터널링) | 최종 SL (흔들기 2회) → ball
+PA011 #6 [3-2, R000] 투수 의도 FF@chase_high (-) | 포수 사인 FF@chase_high (투수 의도 반영, 오늘 잘 통하는 구종, SL 뒤 터널링) | 최종 FF → foul
+PA011 #7 [3-2, R000] 투수 의도 FF@chase_high (-) | 포수 사인 FF@chase_high (투수 의도 반영, 오늘 잘 통하는 구종) | 최종 FF → ball
+PA012 #1 [0-0, R000] 투수 의도 CH@low (오프스피드에 약함) | 포수 사인 FF@high (-) | 최종 FF → ball
+PA012 #2 [1-0, R000] 투수 의도 SI@low_away (-) | 포수 사인 FF@high (-) | 최종 FF → foul
+PA012 #3 [1-1, R000] 투수 의도 CH@low (오프스피드에 약함) | 포수 사인 CH@low (투수 의도 반영, FF 뒤 터널링) | 최종 CH → called_strike
+PA012 #4 [1-2, R000] 투수 의도 SL@chase_low (변화구 헛스윙 많음) | 포수 사인 CH@chase_low (-) | 최종 SL (흔들기 1회) → ball
+PA012 #5 [2-2, R000] 투수 의도 FF@chase_high (-) | 포수 사인 FF@chase_high (투수 의도 반영, SL 뒤 터널링) | 최종 FF → swinging_strike
+PA013 #1 [0-0, R100] 투수 의도 FF@high (-) | 포수 사인 FF@high_in (투수 의도 반영, 오늘 잘 통하는 구종, 도루 위협: 빠른 공) | 최종 FF → ball
+PA013 #2 [1-0, R100] 투수 의도 FF@high_in (-) | 포수 사인 FF@high (투수 의도 반영, 도루 위협: 빠른 공) | 최종 FF → called_strike
+PA013 #3 [1-1, R100] 투수 의도 CH@low (-) | 포수 사인 CH@low (투수 의도 반영, FF 뒤 터널링) | 최종 CH → in_play
+PA014 #1 [0-0, R000] 투수 의도 FF@high_in (-) | 포수 사인 FF@high_in (투수 의도 반영) | 최종 FF → ball
+PA014 #2 [1-0, R000] 투수 의도 SI@low_away (-) | 포수 사인 FF@high_in (-) | 최종 SI (흔들기 1회) → in_play
+PA015 #1 [0-0, R000] 투수 의도 CH@low (오프스피드에 약함) | 포수 사인 FF@high_in (-) | 최종 FF → ball

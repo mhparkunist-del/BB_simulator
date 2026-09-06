@@ -1,0 +1,11 @@
+label,family,speed_mph,break_x_m,break_z_m,n
+fast,FB,91.0,-0.212,0.218,7
+new3,BR,89.8,-0.272,-0.069,7
+medium,BR,82.5,0.097,0.058,7
+slow,BR,81.3,-0.118,-0.111,6
+
+bin_frac,trust
+0.25,0.168
+0.4,0.267
+0.55,0.396
+0.7,0.543

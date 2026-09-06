@@ -1,0 +1,555 @@
+{
+  "version": "0.4.0",
+  "notes": "Single source for grips, body chain, spin model, profiles. Python (bbsim.physics.body / bbsim.agents.pitcher) and the HTML viewer (tools/build_viewer.py injects this file) both read it. Coordinates: +x first-base side, +y toward pitcher, +z up; RHP throwing side = -x.",
+  "aero": {
+    "cd": 0.35,
+    "cl_model": "nathan2008",
+    "spin_decay_tau_s": 12.0,
+    "ssw_scale": 1.0
+  },
+  "environment_default": {
+    "temp_c": 20.0,
+    "altitude_m": 0.0,
+    "rel_humidity": 0.5,
+    "wind_mps": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "grips": {
+    "FF": {
+      "name": "포심",
+      "tilt0": 0,
+      "eff": 0.98,
+      "spd": 1.0,
+      "spin": 1.0,
+      "seam": 0,
+      "pron": 0,
+      "ssw": [
+        0.0,
+        0.0
+      ],
+      "fingers": [
+        [
+          -0.22,
+          0.55,
+          0
+        ],
+        [
+          0.22,
+          0.55,
+          0
+        ]
+      ],
+      "thumb": [
+        0,
+        -0.75
+      ],
+      "desc": "검지·중지가 말굽 실밥을 가로질러 걸림. 4개 실밥이 회전면을 지나 양력이 가장 큼."
+    },
+    "SI": {
+      "name": "싱커",
+      "tilt0": 25,
+      "eff": 0.92,
+      "spd": 0.99,
+      "spin": 0.93,
+      "seam": 90,
+      "pron": 10,
+      "ssw": [
+        -0.03,
+        -0.02
+      ],
+      "fingers": [
+        [
+          -0.2,
+          0.55,
+          0
+        ],
+        [
+          0.22,
+          0.5,
+          0
+        ]
+      ],
+      "thumb": [
+        0.05,
+        -0.75
+      ],
+      "desc": "실밥 좁은 쪽을 따라 잡고 손목을 안쪽으로 눌러 축이 팔쪽으로 기움. 실밥 효과(SSW)가 팔쪽·아래로 더해짐."
+    },
+    "CT": {
+      "name": "커터",
+      "tilt0": -30,
+      "eff": 0.55,
+      "spd": 0.95,
+      "spin": 1.02,
+      "seam": 0,
+      "pron": -10,
+      "ssw": [
+        0.01,
+        0.0
+      ],
+      "fingers": [
+        [
+          0.05,
+          0.55,
+          15
+        ],
+        [
+          0.38,
+          0.45,
+          15
+        ]
+      ],
+      "thumb": [
+        -0.1,
+        -0.75
+      ],
+      "desc": "포심을 바깥으로 치우쳐 잡고 손가락 바깥쪽으로 자름. 자이로 성분이 커져 글러브쪽으로 짧게 꺾임."
+    },
+    "SL": {
+      "name": "슬라이더",
+      "tilt0": -80,
+      "eff": 0.35,
+      "spd": 0.92,
+      "spin": 1.07,
+      "seam": 45,
+      "pron": -15,
+      "ssw": [
+        0.02,
+        -0.01
+      ],
+      "fingers": [
+        [
+          0.12,
+          0.52,
+          30
+        ],
+        [
+          0.42,
+          0.38,
+          30
+        ]
+      ],
+      "thumb": [
+        -0.15,
+        -0.7
+      ],
+      "desc": "실밥 바깥쪽에 손가락을 두고 손목을 돌려 놓음. 회전 대부분이 총알 회전이라 움직임은 작지만 늦게 나타남."
+    },
+    "CU": {
+      "name": "커브",
+      "tilt0": 180,
+      "eff": 0.9,
+      "spd": 0.84,
+      "spin": 1.1,
+      "seam": 0,
+      "pron": 0,
+      "ssw": [
+        0.0,
+        0.0
+      ],
+      "fingers": [
+        [
+          -0.25,
+          0.52,
+          -20
+        ],
+        [
+          0.05,
+          0.6,
+          -20
+        ]
+      ],
+      "thumb": [
+        0.2,
+        -0.7
+      ],
+      "desc": "중지를 실밥에 걸고 손목을 앞으로 감아 톱스핀을 줌. 축이 반대라 중력과 같은 방향으로 떨어짐."
+    },
+    "CH": {
+      "name": "체인지업",
+      "tilt0": 22,
+      "eff": 0.78,
+      "spd": 0.88,
+      "spin": 0.72,
+      "seam": 90,
+      "pron": 15,
+      "ssw": [
+        -0.03,
+        -0.01
+      ],
+      "fingers": [
+        [
+          -0.35,
+          0.35,
+          0
+        ],
+        [
+          0.0,
+          0.6,
+          0
+        ],
+        [
+          0.35,
+          0.35,
+          0
+        ]
+      ],
+      "thumb": [
+        0,
+        -0.7
+      ],
+      "desc": "손바닥 깊이 잡고 세 손가락으로 던져 회전수와 구속을 함께 낮춤. 회내로 축이 팔쪽으로 기울고 실밥 효과가 낙차를 더함."
+    },
+    "SP": {
+      "name": "스플리터",
+      "tilt0": 15,
+      "eff": 0.6,
+      "spd": 0.9,
+      "spin": 0.55,
+      "seam": 90,
+      "pron": 5,
+      "ssw": [
+        -0.01,
+        -0.04
+      ],
+      "fingers": [
+        [
+          -0.55,
+          0.45,
+          -25
+        ],
+        [
+          0.55,
+          0.45,
+          25
+        ]
+      ],
+      "thumb": [
+        0,
+        -0.75
+      ],
+      "desc": "검지·중지를 벌려 실밥 바깥에 걸침. 회전이 크게 줄어 양력이 사라지고 실밥 효과로 포심보다 급락."
+    }
+  },
+  "body": {
+    "segments": {
+      "thigh": 0.245,
+      "shank": 0.245,
+      "trunk": 0.29,
+      "upper_arm": 0.186,
+      "forearm_ball": 0.2,
+      "shoulder_half": 0.13,
+      "head": 0.13,
+      "hip_half": 0.06
+    },
+    "release": {
+      "pelvis_forward": 0.72,
+      "pelvis_height": 0.42,
+      "rear_foot_drag": 0.4,
+      "rear_toe_lift": 0.03,
+      "front_foot_x": 0.04,
+      "rear_foot_x": 0.05,
+      "pelvis_x": 0.06,
+      "elbow_flex_deg": 20.0,
+      "arm_angle_elbow_term": 5.0
+    },
+    "timing": {
+      "t_del": 0.9,
+      "tau_lift": 0.15,
+      "tau_fc": 0.82,
+      "tau_mer": 0.96,
+      "t_follow": 0.35
+    },
+    "mound": {
+      "rubber_height": 0.254,
+      "flat_len": 0.152,
+      "slope": 0.0833
+    },
+    "velocity_chain": {
+      "stride_ref": 0.83,
+      "stride_coef": 0.02,
+      "stride_step": 0.1,
+      "lean_ref": 32.0,
+      "lean_coef": 0.03,
+      "lean_step": 15.0,
+      "clamp": 0.04
+    },
+    "command": {
+      "com_x_coef": 0.4,
+      "com_x_free": 0.15,
+      "com_x_step": 0.15,
+      "com_y_coef": 0.3,
+      "com_y_free": 0.3,
+      "com_y_step": 0.2
+    },
+    "limits": {
+      "abd": [
+        75,
+        105
+      ],
+      "tilt": [
+        -30,
+        50
+      ],
+      "lean": [
+        0,
+        65
+      ],
+      "stride": [
+        0.55,
+        1.05
+      ],
+      "fwd": [
+        10,
+        45
+      ]
+    }
+  },
+  "spin_model": {
+    "bu_base": 20.0,
+    "bu_span": 8.0,
+    "wrist_w": 0.6,
+    "finger_w": 0.4,
+    "force_need_base": 35.0,
+    "force_need_slope": 0.8,
+    "grip_skill_base": 0.85,
+    "grip_skill_span": 0.15,
+    "axis_k": 0.6,
+    "axis_k_note": "tilt_axis = tilt0 + pron + axis_k*(90 - arm_angle). Statcast 2024 regression: FF axis moves ~0.6 deg per deg of arm angle (audit 02 #1), not 1:1"
+  },
+  "fatigue": {
+    "free_pitches": 60,
+    "mph_per_pitch": 0.0004,
+    "sigma_per_pitch": 0.004,
+    "spin_per_pitch": 0.0003
+  },
+  "profiles": [
+    {
+      "id": "A",
+      "name": "A · 오버핸드 파워",
+      "hand": "R",
+      "height": 1.93,
+      "abd": 98,
+      "tilt": 40,
+      "lean": 33,
+      "stride": 0.87,
+      "fwd": 35,
+      "eff": 0.95,
+      "cmd": 0.21,
+      "mph": 97,
+      "wrist_speed": 80,
+      "finger_len": 0.7,
+      "grip_force": 70,
+      "grip_skill": 65,
+      "repertoire": [
+        "FF",
+        "SL",
+        "CU",
+        "CH"
+      ],
+      "release_sigma": [
+        0.04,
+        0.03
+      ],
+      "axis_sigma_deg": 4
+    },
+    {
+      "id": "B",
+      "name": "B · 쓰리쿼터 표준",
+      "hand": "R",
+      "height": 1.85,
+      "abd": 92,
+      "tilt": 30,
+      "lean": 30,
+      "stride": 0.84,
+      "fwd": 35,
+      "eff": 0.92,
+      "cmd": 0.21,
+      "mph": 94,
+      "wrist_speed": 60,
+      "finger_len": 0.5,
+      "grip_force": 60,
+      "grip_skill": 60,
+      "repertoire": [
+        "FF",
+        "SI",
+        "SL",
+        "CH"
+      ],
+      "release_sigma": [
+        0.035,
+        0.025
+      ],
+      "axis_sigma_deg": 4
+    },
+    {
+      "id": "C",
+      "name": "C · 사이드암 기교",
+      "hand": "R",
+      "height": 1.8,
+      "abd": 88,
+      "tilt": 10,
+      "lean": 25,
+      "stride": 0.82,
+      "fwd": 35,
+      "eff": 0.8,
+      "cmd": 0.16,
+      "mph": 89,
+      "wrist_speed": 55,
+      "finger_len": 0.5,
+      "grip_force": 55,
+      "grip_skill": 75,
+      "repertoire": [
+        "SI",
+        "SL",
+        "CH",
+        "FF"
+      ],
+      "release_sigma": [
+        0.03,
+        0.02
+      ],
+      "axis_sigma_deg": 3
+    },
+    {
+      "id": "D",
+      "name": "D · 좌완 언더핸드",
+      "hand": "L",
+      "height": 1.78,
+      "abd": 82,
+      "tilt": -25,
+      "lean": 58,
+      "stride": 0.85,
+      "fwd": 30,
+      "eff": 0.85,
+      "cmd": 0.2,
+      "mph": 84,
+      "wrist_speed": 50,
+      "finger_len": 0.4,
+      "grip_force": 50,
+      "grip_skill": 70,
+      "repertoire": [
+        "SI",
+        "SL",
+        "CH"
+      ],
+      "release_sigma": [
+        0.03,
+        0.02
+      ],
+      "axis_sigma_deg": 3
+    },
+    {
+      "id": "E",
+      "name": "E · 좌완 하이슬롯",
+      "hand": "L",
+      "height": 1.88,
+      "abd": 98,
+      "tilt": 42,
+      "lean": 32,
+      "stride": 0.85,
+      "fwd": 35,
+      "eff": 0.97,
+      "cmd": 0.18,
+      "mph": 95,
+      "wrist_speed": 85,
+      "finger_len": 0.6,
+      "grip_force": 65,
+      "grip_skill": 60,
+      "repertoire": [
+        "FF",
+        "CU",
+        "CH",
+        "CT"
+      ],
+      "release_sigma": [
+        0.03,
+        0.02
+      ],
+      "axis_sigma_deg": 3
+    }
+  ],
+  "forms": {
+    "overhand": {
+      "name": "오버핸드",
+      "abd": 100,
+      "tilt": 42,
+      "lean": 30,
+      "stride": 0.82,
+      "fwd": 34,
+      "desc": "측면 기울기 최대. 팔 각도 55~60°, 릴리스 높음. 상체 회전이 세로축으로 쏠려 골반 회전 기여가 줄고 팔꿈치 부하 지수가 오름."
+    },
+    "high34": {
+      "name": "하이 쓰리쿼터",
+      "abd": 96,
+      "tilt": 34,
+      "lean": 30,
+      "stride": 0.84,
+      "fwd": 35,
+      "desc": "가장 흔한 파워 폼. 외전 95° 근처, 측면 34°로 문헌 오버핸드군 평균."
+    },
+    "threequarter": {
+      "name": "쓰리쿼터",
+      "abd": 92,
+      "tilt": 30,
+      "lean": 30,
+      "stride": 0.84,
+      "fwd": 35,
+      "desc": "리그 중앙값(팔 각도 40°). 외전·측면·전방 모두 최적 구간이라 사슬 효율 기준(1.00)."
+    },
+    "low34": {
+      "name": "로우 쓰리쿼터",
+      "abd": 90,
+      "tilt": 22,
+      "lean": 28,
+      "stride": 0.83,
+      "fwd": 36,
+      "desc": "팔 각도 25~30°. 수평 움직임이 커지고 릴리스가 낮아짐. 효율 손실 거의 없음."
+    },
+    "sidearm": {
+      "name": "사이드암",
+      "abd": 86,
+      "tilt": 10,
+      "lean": 25,
+      "stride": 0.82,
+      "fwd": 36,
+      "desc": "팔 각도 10° 근처. 외전 86°로 약간 낮고 몸통 회전이 가로축으로 쏠려 구속 −2~3%."
+    },
+    "submarine": {
+      "name": "언더핸드",
+      "abd": 82,
+      "tilt": -22,
+      "lean": 58,
+      "stride": 0.85,
+      "fwd": 30,
+      "desc": "전방 기울기 58°로 상체가 거의 수평, 팔 각도 −30°. 다리·골반 힘은 크지만 어깨 내회전 기여가 작아 구속 −6~8%."
+    }
+  },
+  "chain_efficiency": {
+    "abd_opt": 95.0,
+    "abd_sigma": 18.0,
+    "abd_max_loss": 0.1,
+    "tilt_lo": -20.0,
+    "tilt_hi": 45.0,
+    "tilt_loss_per_deg": 0.0025,
+    "tilt_max_loss": 0.06,
+    "slot_lo": 0.0,
+    "slot_loss_per_deg": 0.0015,
+    "slot_max_loss": 0.08,
+    "lean_opt": 32.0,
+    "lean_hi": 50.0,
+    "lean_loss_per_deg": 0.002,
+    "lean_max_loss": 0.05,
+    "core_weight": 0.6,
+    "elbow_load": {
+      "abd_coef": 0.004,
+      "tilt_coef": 0.003,
+      "base": 1.0
+    },
+    "notes": "velocity_mult = (1 + stride term + lean term) x (1 - abd loss) x (1 - tilt loss) x (1 - slot loss) x (1 - lean-excess loss); realised = 1 - core_weight*(1-core)*(1-mult)... see body.chain_efficiency. Sources: Matsuo 2002 (abduction 90-110 optimal), Matsuo 2006 (abduction/lateral tilt -> elbow varus torque), Matsuo 2001 (forward trunk tilt in high-velocity group), Escamilla 2018 (sidearm velocity slightly lower), Statcast submarine velocities (~85 mph)."
+  },
+  "profiles_cmd_note": "v0.7: cmd sigma x1.8 (0.18-0.25 m per axis). Rybarczyk 2021: MLB pitchers miss their target by ~30 cm radial on average; zone% ~49 comes from aiming inside the zone (audit 02 #7, 03)"
+}

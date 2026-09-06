@@ -1,0 +1,9 @@
+code,memory,n,mean_err_cm,mean_p_fastball
+FF,with memory,12,3.3,0.73
+FF,no memory,12,17.6,0.89
+SI,with memory,12,15.5,0.58
+SI,no memory,12,31.7,0.83
+SL,with memory,12,12.4,0.07
+SL,no memory,12,10.9,0.12
+CH,with memory,12,16.0,0.09
+CH,no memory,12,25.0,0.11

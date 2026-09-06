@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>덕아웃 나이트게임</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Noto+Sans+KR:wght@400;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+:root{--ground:#0d1a13;--panel:#132419;--panel2:#0a1510;--line:#24382c;--ink:#ece7d8;--mute:#8ea394;--bulb:#f2b441;--strike:#e0524b;--ball:#4fa3e0;--hit:#5fcb7a;--grass:#1c4a2e;--dirt:#6b4f2e}
+html,body{background:var(--ground);color:var(--ink);margin:0}
+body{font:14px/1.5 "Noto Sans KR",system-ui,sans-serif}
+.num{font-family:"Oswald","Noto Sans KR",sans-serif;font-variant-numeric:tabular-nums}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+header{display:flex;align-items:baseline;gap:14px;padding:10px 20px;border-bottom:1px solid var(--line);background:var(--panel2)}
+header h1{margin:0;font:700 22px/1 "Oswald",sans-serif;letter-spacing:.06em;color:var(--bulb)}
+header .v{color:var(--mute);font-size:12px;letter-spacing:.04em}
+main{max-width:1240px;margin:0 auto;padding:16px;display:grid;gap:14px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:14px}
+.panel h2{margin:0 0 10px;font:500 12px/1 "Oswald",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+.hint{color:var(--mute);font-size:12px}
+.grid{display:grid;grid-template-columns:1fr 360px;gap:14px}
+@media (max-width:900px){.grid{grid-template-columns:1fr}}
+.roster{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}
+.pc{border:1px solid var(--line);border-radius:6px;padding:8px 10px;cursor:pointer;background:var(--panel2);position:relative}
+.pc:hover{border-color:var(--mute)}
+.pc.sel{border-color:var(--bulb);box-shadow:inset 0 0 0 1px var(--bulb)}
+.pc b{display:block;font-size:13px}
+.pc .ord{position:absolute;right:8px;top:6px;font:700 16px "Oswald";color:var(--bulb)}
+.g{display:flex;gap:5px;margin-top:4px;font-size:11px;color:var(--mute);align-items:center}
+.g i{font-style:normal;display:inline-block;min-width:16px;text-align:center;padding:0 4px;border-radius:3px;font:700 11px "Oswald";color:#0b1510;background:#7f8c84}
+.g i.S{background:#e9c46a}.g i.A{background:#8ad1a8}.g i.B{background:#9fb8ff}.g i.C{background:#d6a874}.g i.D{background:#8a8f95}
+button{font:inherit;padding:8px 14px;border:1px solid var(--line);background:var(--panel2);color:var(--ink);border-radius:4px;cursor:pointer}
+button:hover{border-color:var(--mute)}
+button:focus-visible{outline:2px solid var(--bulb);outline-offset:2px}
+button.on{background:var(--bulb);color:#0b1510;border-color:var(--bulb);font-weight:700}
+button.go{background:var(--strike);border-color:var(--strike);color:#fff;font:700 16px "Noto Sans KR";padding:12px 22px}
+button:disabled{opacity:.4;cursor:default}
+select,input{font:inherit;background:var(--panel2);color:var(--ink);border:1px solid var(--line);border-radius:4px;padding:6px 8px}
+.ctl{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+/* scoreboard strip */
+.board{display:grid;grid-template-columns:auto auto auto auto auto 1fr auto;gap:22px;align-items:center;padding:10px 18px;background:var(--panel2);border:1px solid var(--line);border-radius:6px}
+.cell{display:flex;flex-direction:column;align-items:center;gap:2px}
+.cell small{font:500 10px "Oswald";letter-spacing:.16em;color:var(--mute)}
+.cell b{font:700 34px/1 "Oswald";color:var(--bulb)}
+.lamps{display:flex;gap:6px}
+.lamps span{width:12px;height:12px;border-radius:50%;background:#2a3d31;border:1px solid #3a5242}
+.lamps span.on{background:var(--strike);box-shadow:0 0 6px var(--strike)}
+.lamps.balls span.on{background:var(--hit);box-shadow:0 0 6px var(--hit)}
+.diamond{width:46px;height:46px;position:relative}
+.base{position:absolute;width:12px;height:12px;background:#2a3d31;border:1px solid #3a5242;transform:rotate(45deg)}
+.base.on{background:var(--bulb);box-shadow:0 0 6px var(--bulb)}
+.readout{text-align:right}
+.readout b{font:700 44px/1 "Oswald";color:var(--ink)}
+.readout small{display:block;font:500 10px "Oswald";letter-spacing:.16em;color:var(--mute)}
+canvas{width:100%;display:block;background:var(--panel2);border:1px solid var(--line);border-radius:6px}
+#feed{max-height:280px;overflow:auto;font-size:13.5px}
+#feed .l{padding:6px 10px;border-top:1px solid var(--line)}
+#feed .l.big{background:var(--panel2);font-weight:700}
+#feed .l .t{color:var(--mute);font:500 11px "IBM Plex Mono";margin-right:8px}
+table.box{border-collapse:collapse;width:100%;font-size:13px}
+table.box th,table.box td{padding:4px 8px;border-bottom:1px solid var(--line);text-align:center}
+table.box td:first-child,table.box th:first-child{text-align:left}
+.line{display:flex;gap:2px;margin-top:8px}
+.line span{min-width:28px;padding:4px 0;text-align:center;background:var(--panel2);border:1px solid var(--line);font:700 14px "Oswald";color:var(--bulb)}
+.line span.h{background:var(--line);color:var(--mute);font:500 11px "Oswald";letter-spacing:.1em}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+@media (max-width:760px){
+ main{padding:10px;gap:10px}
+ header{padding:8px 12px}header h1{font-size:18px}header .v{display:none}
+ .board{grid-template-columns:repeat(3,1fr);gap:8px 12px;padding:8px 10px}
+ .board .cell b{font-size:26px}.readout b{font-size:34px}
+ .grid{grid-template-columns:1fr}
+ .roster{grid-template-columns:repeat(2,1fr)}
+ button{padding:12px 14px;font-size:15px;min-height:44px}
+ button.go{width:100%}
+ .ctl{gap:6px}
+ input[type=number]{font-size:16px}
+ #feed{max-height:200px}
+ .panel{padding:10px}
+}
+</style>
+</head>
+<body>
+<header><h1>DUGOUT NIGHT GAME</h1><span class="v">감독 시점 · 보이는 것만으로 승부합니다 · bbsim __VERSION__</span></header>
+<main>
+<div id="setup">
+  <div class="panel"><h2>경기 조건</h2>
+    <div class="ctl"><label>이닝 <input id="innings" type="number" value="3" min="1" max="9" style="width:60px"></label>
+    <label>난이도(상대 수비) <select id="diff"><option value="easy">쉬움</option><option value="normal" selected>보통</option><option value="hard">어려움</option></select></label>
+    <label>시드 <input id="seed" type="number" value="1" style="width:80px"></label></div>
+    <div class="hint" style="margin-top:8px">상대 투수·수비의 능력은 알 수 없습니다. 자기 팀 선수는 스카우트 등급(S~D)만 보이고, 실제와 다를 수 있습니다. 이 파일은 서버 없이 열리며, 타석 결과는 미리 계산된 은행에서 뽑습니다(같은 조건이라도 매번 다른 표본).</div>
+  </div>
+  <div class="panel"><h2>선발 투수</h2><div class="roster" id="pitchers"></div></div>
+  <div class="panel"><h2>타순 · 누르는 순서대로 9명</h2><div class="roster" id="batters"></div>
+    <div class="ctl" style="margin-top:10px"><span id="order" class="hint">선택 0/9</span><button id="clearOrder">초기화</button><button id="autoOrder">자동 타순</button><button class="go" id="start" disabled>플레이 볼</button></div></div>
+</div>
+<div id="game" hidden>
+  <div class="board">
+    <div class="cell"><small>INNING</small><b class="num" id="sInn">1</b></div>
+    <div class="cell"><small>RUNS</small><b class="num" id="sRuns">0</b></div>
+    <div class="cell"><small>BALL</small><div class="lamps balls" id="lBalls"><span></span><span></span><span></span></div></div>
+    <div class="cell"><small>STRIKE</small><div class="lamps" id="lStrikes"><span></span><span></span></div></div>
+    <div class="cell"><small>OUT</small><div class="lamps" id="lOuts"><span></span><span></span><span></span></div></div>
+    <div class="cell" style="align-items:flex-start"><small>AT BAT</small><span id="sBatter" style="font-size:14px">—</span><div class="diamond"><div class="base" id="b2" style="left:17px;top:2px"></div><div class="base" id="b3" style="left:2px;top:17px"></div><div class="base" id="b1" style="left:32px;top:17px"></div></div></div>
+    <div class="readout"><b class="num" id="speed">—</b><small id="speedNote">MPH</small></div>
+  </div>
+  <div class="grid">
+    <div>
+      <div class="panel"><h2>중계 카메라</h2><canvas id="cam" width="800" height="450"></canvas></div>
+      <div class="panel" style="margin-top:14px"><h2>중계</h2><div id="feed"></div></div>
+    </div>
+    <div>
+      <div class="panel"><h2>K-zone</h2><canvas id="kz" width="340" height="280"></canvas></div>
+      <div class="panel" style="margin-top:14px"><h2>벤치 지시 · 이번 타석</h2>
+        <div class="ctl"><button data-call="none" class="call on">자유</button><button data-call="bunt" class="call">번트</button><button data-call="take" class="call">기다려</button><button data-call="power" class="call">강공</button></div>
+        <div class="ctl" style="margin-top:10px"><button class="go" id="playPA">타석 진행</button><label>배속 <input id="spd" type="number" value="1" step="0.5" min="0.25" max="10" style="width:60px"></label><button id="skip">건너뛰기</button></div>
+      </div>
+      <div class="panel" style="margin-top:14px"><h2>필드</h2><canvas id="field" width="360" height="300"></canvas></div>
+    </div>
+  </div>
+  <div class="panel" id="boxPanel" hidden><h2>경기 종료 · 박스스코어</h2><div id="box"></div><div class="ctl" style="margin-top:10px"><button id="again">새 경기</button></div></div>
+</div>
+</main>
+<script>
+const BANK=/*__BANK__*/;
+const MOBILE=/*__MOBILE__*/;
+const $=id=>document.getElementById(id);
+const KO={contact:"컨택",power:"파워",eye:"선구",stuff:"구위",control:"제구",stamina:"체력"};
+const CALLKO={bunt:"번트",take:"기다려",power:"강공"};
+let pick={pitcher:null,order:[]}, G=null, call="none", playing=false, skipFlag=false, rng=null;
+function mulberry(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return ((t^t>>>14)>>>0)/4294967296}}
+function grades(c,keys){return "<div class='g'>"+keys.filter(k=>c[k]).map(k=>KO[k]+" <i class='"+c[k]+"'>"+c[k]+"</i>").join("")+"</div>"}
+function roster(){const R=BANK.roster;
+ $("pitchers").innerHTML=R.pitchers.map(p=>"<div class='pc' data-p='"+p.id+"'><b>"+p.name+" · "+p.hand+" · "+p.form+"</b>"+grades(p,["stuff","control","stamina"])+"</div>").join("");
+ $("batters").innerHTML=R.batters.map(b=>"<div class='pc' data-b='"+b.id+"'><span class='ord' id='ord"+b.id+"'></span><b>"+b.name+" · "+b.hand+"</b>"+grades(b,["contact","power","eye"])+"</div>").join("");
+ document.querySelectorAll("[data-p]").forEach(e=>e.onclick=()=>{pick.pitcher=+e.dataset.p;document.querySelectorAll("[data-p]").forEach(x=>x.classList.toggle("sel",+x.dataset.p==pick.pitcher));check()});
+ document.querySelectorAll("[data-b]").forEach(e=>e.onclick=()=>{const id=+e.dataset.b;if(pick.order.includes(id)||pick.order.length>=9)return;pick.order.push(id);e.classList.add("sel");$("ord"+id).textContent=pick.order.length;check()});check()}
+function check(){$("order").textContent="선택 "+pick.order.length+"/9";$("start").disabled=!(pick.pitcher!==null&&pick.order.length==9)}
+$("clearOrder").onclick=()=>{pick.order=[];document.querySelectorAll("[data-b]").forEach(x=>{x.classList.remove("sel");$("ord"+x.dataset.b).textContent=""});check()};
+$("autoOrder").onclick=()=>{$("clearOrder").onclick();const sc=b=>({S:5,A:4,B:3,C:2,D:1}[b.contact]+{S:5,A:4,B:3,C:2,D:1}[b.eye]+{S:5,A:4,B:3,C:2,D:1}[b.power]);[...BANK.roster.batters].sort((a,b)=>sc(b)-sc(a)).slice(0,9).forEach(b=>{pick.order.push(b.id);document.querySelector("[data-b='"+b.id+"']").classList.add("sel");$("ord"+b.id).textContent=pick.order.length});if(pick.pitcher===null){pick.pitcher=1;document.querySelector("[data-p='1']").classList.add("sel")}check()};
+$("start").onclick=()=>{rng=mulberry(+$("seed").value||1);G={inning:1,outs:0,runs:0,runners:[false,false,false],idx:0,total:+$("innings").value||3,over:false,line:[0],box:{},pitches:0,diff:$("diff").value,lineup:pick.order.slice(),pitcher:pick.pitcher,used:{}};
+ $("setup").hidden=true;$("game").hidden=false;$("feed").innerHTML="";feed("플레이 볼 · 선발 "+BANK.roster.pitchers[G.pitcher].name+" · 1번 "+BANK.roster.batters[G.lineup[0]].name,true);render();drawCam(null,0,0);drawField(null,0);drawKz(null,false)};
+document.querySelectorAll(".call").forEach(b=>b.onclick=()=>{call=b.dataset.call;document.querySelectorAll(".call").forEach(x=>x.classList.toggle("on",x===b))});
+function feed(t,big){const d=document.createElement("div");d.className="l"+(big?" big":"");d.innerHTML=(G?"<span class='t'>"+G.inning+"회</span>":"")+t;$("feed").prepend(d)}
+function lamps(id,n){[...$(id).children].forEach((s,j)=>s.classList.toggle("on",j<n))}
+function render(){$("sInn").textContent=Math.min(G.inning,G.total);$("sRuns").textContent=G.runs;lamps("lOuts",G.outs);["b1","b2","b3"].forEach((b,j)=>$(b).classList.toggle("on",G.runners[j]));$("sBatter").textContent=G.over?"경기 종료":BANK.roster.batters[G.lineup[G.idx%9]].name+" · 투수 "+G.pitches+"구";$("playPA").disabled=G.over||playing}
+function pickPA(bid){const key=bid+"|"+G.pitcher+"|"+call+"|"+G.diff;const list=BANK.bank[key]||BANK.bank[bid+"|"+G.pitcher+"|none|"+G.diff];const u=G.used[key]||0;G.used[key]=u+1;return list[(u+Math.floor(rng()*list.length))%list.length]}
+function advanceAll(n){let r=0;for(let i=0;i<n;i++){if(G.runners[2])r++;G.runners=[false,G.runners[0],G.runners[1]]}return r}
+function applyOutcome(pa){const R=G.runners;let runs=0,outs=0;const o=pa.outcome,la=pa.la,dist=pa.dist;const ev={};
+ if(o=="strikeout")outs=1;
+ else if(o=="walk"||o=="hbp"){if(R[0]){if(R[1]){if(R[2])runs++;R[2]=true}R[1]=true}R[0]=true}
+ else if(o=="out"){outs=1;if(la!==null&&la<10&&R[0]&&G.outs+outs<3&&rng()<0.40){outs++;R[0]=false;ev.dp=true}
+  else if(la!==null&&la>=25&&dist>65&&R[2]&&G.outs+outs<3){runs++;R[2]=false;ev.sf=true}
+  else if(la!==null&&la<10&&G.outs+outs<3){if(R[2]){runs++;R[2]=false}if(R[1]){R[2]=true;R[1]=false}}}
+ else if(o=="single"||o=="error"){if(R[2])runs++;const r2=R[1]&&rng()<0.6;let r3=R[1]&&!r2;runs+=r2?1:0;const r13=R[0]&&rng()<0.3&&!r3;r3=r3||r13;const r2n=R[0]&&!r13;G.runners=[true,r2n,r3]}
+ else if(o=="double"){runs+=(R[2]?1:0)+(R[1]?1:0);const r1s=R[0]&&rng()<0.45;runs+=r1s?1:0;G.runners=[false,true,R[0]&&!r1s]}
+ else if(o=="triple"){runs+=R.filter(Boolean).length;G.runners=[false,false,true]}
+ else if(o=="HR"){runs+=R.filter(Boolean).length+1;G.runners=[false,false,false]}
+ else outs=1;
+ return {runs,outs,ev}}
+const OUTKO={strikeout:"삼진",walk:"볼넷",hbp:"몸에 맞는 공",out:"아웃",single:"안타",double:"2루타",triple:"3루타",HR:"홈런!",error:"실책으로 출루"};
+$("playPA").onclick=async()=>{if(playing||!G||G.over)return;playing=true;render();const bid=G.lineup[G.idx%9];const name=BANK.roster.batters[bid].name;const pa=pickPA(bid);
+ feed(name+" 타석"+(call!="none"?" · 지시: "+CALLKO[call]:""),false);
+ for(const p of pa.pitches){lamps("lBalls",p.count[0]);lamps("lStrikes",p.count[1]);await animate(p);feed(p.text,false);$("speed").textContent=p.mph.toFixed(0);G.pitches++;if(skipFlag)break}
+ skipFlag=false;lamps("lBalls",0);lamps("lStrikes",0);
+ if(pa.wild){const r=advanceAll(Math.min(pa.wild,3));G.runs+=r;G.line[G.line.length-1]+=r;feed("폭투로 주자 진루"+(r?" · 득점":""),false)}
+ const {runs,outs,ev}=applyOutcome(pa);G.runs+=runs;G.outs+=outs;G.line[G.line.length-1]+=runs;
+ const bx=G.box[name]||(G.box[name]={PA:0,H:0,BB:0,K:0});bx.PA++;bx.H+=["single","double","triple","HR"].includes(pa.outcome)?1:0;bx.BB+=(pa.outcome=="walk"||pa.outcome=="hbp")?1:0;bx.K+=pa.outcome=="strikeout"?1:0;
+ feed(OUTKO[pa.outcome]+(ev.dp?" (병살)":"")+(ev.sf?" (희생플라이)":"")+" · 아웃 "+G.outs+" · 득점 "+G.runs,true);
+ G.idx++;if(G.outs>=3){feed(G.inning+"회 종료 · "+G.line[G.line.length-1]+"점",true);G.inning++;G.outs=0;G.runners=[false,false,false];if(G.inning>G.total){G.over=true;showBox()}else G.line.push(0)}
+ call="none";document.querySelectorAll(".call").forEach(x=>x.classList.toggle("on",x.dataset.call=="none"));playing=false;render()};
+$("skip").onclick=()=>{skipFlag=true};
+function showBox(){$("boxPanel").hidden=false;$("box").innerHTML="<table class='box'><tr><th>타자</th><th>타석</th><th>안타</th><th>볼넷</th><th>삼진</th></tr>"+Object.entries(G.box).map(([n,v])=>"<tr><td>"+n+"</td><td>"+v.PA+"</td><td>"+v.H+"</td><td>"+v.BB+"</td><td>"+v.K+"</td></tr>").join("")+"</table><div class='line'><span class='h'>INN</span>"+G.line.map((r,i)=>"<span title='"+(i+1)+"회'>"+r+"</span>").join("")+"<span class='h'>R</span><span>"+G.runs+"</span></div>";$("again").onclick=()=>location.reload();feed("경기 종료 · 총 "+G.runs+"점",true)}
+/* ---------- rendering ---------- */
+function interp(fl,t){const T=fl.t,X=fl.xyz;if(t<=T[0])return X[0];for(let i=1;i<T.length;i++)if(T[i]>=t){const f=(t-T[i-1])/(T[i]-T[i-1]);return [0,1,2].map(k=>X[i-1][k]+f*(X[i][k]-X[i-1][k]))}return X[X.length-1]}
+function sub3(a,b){return [a[0]-b[0],a[1]-b[1],a[2]-b[2]]}function dot(a,b){return a[0]*b[0]+a[1]*b[1]+a[2]*b[2]}function cross(a,b){return [a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]]}function norm(a){const n=Math.hypot(a[0],a[1],a[2])||1;return [a[0]/n,a[1]/n,a[2]/n]}
+function camera(C,Tg,w,h,fov){const f=norm(sub3(Tg,C)),r=norm(cross(f,[0,0,1])),u=cross(r,f);const fl=w/(2*Math.tan(fov*Math.PI/360));return {fl,proj:P=>{const d=sub3(P,C);const z=dot(d,f);if(z<0.05)return null;return [w/2+fl*dot(d,r)/z,h/2-fl*dot(d,u)/z,z]}}}
+function poly3(g,cam,pts,close){let s=false;g.beginPath();pts.forEach(P=>{const q=cam.proj(P);if(!q)return;s?g.lineTo(q[0],q[1]):g.moveTo(q[0],q[1]);s=true});if(close)g.closePath();g.stroke()}
+function line3(g,cam,A,B){poly3(g,cam,[A,B],false)}
+function drawCam(p,tp,tb){const c=$("cam"),g=c.getContext("2d");g.fillStyle="#08110c";g.fillRect(0,0,c.width,c.height);const cam=camera([0,26,3.0],[0,0,0.9],c.width,c.height,30);
+ g.fillStyle="#1c4a2e";const G3=[[-95,95,0],[95,95,0],[0,-3,0]];g.beginPath();G3.forEach((P,i)=>{const q=cam.proj(P);if(!q)return;i?g.lineTo(q[0],q[1]):g.moveTo(q[0],q[1])});g.closePath();g.fill();
+ g.strokeStyle="#2f6a44";g.lineWidth=1;line3(g,cam,[0,0,0],[95,95,0]);line3(g,cam,[0,0,0],[-95,95,0]);g.strokeStyle="#6b4f2e";g.lineWidth=2;poly3(g,cam,[[0,0,0],[19.4,19.4,0],[0,38.8,0],[-19.4,19.4,0]],true);
+ const M=[];for(let a=0;a<=360;a+=20)M.push([2.7*Math.cos(a*Math.PI/180),18.44+2.7*Math.sin(a*Math.PI/180),0]);poly3(g,cam,M,true);
+ g.strokeStyle="#ece7d8";g.lineWidth=1;poly3(g,cam,[[-0.216,0,0],[0.216,0,0],[0.216,0.216,0],[0,0.432,0],[-0.216,0.216,0]],true);
+ const top=p?p.zone_top:1.05,bot=p?p.zone_bottom:0.5,y=(p?p.contact_y:0.58)-0.15;g.strokeStyle="rgba(236,231,216,.5)";poly3(g,cam,[[-0.216,y,bot],[0.216,y,bot],[0.216,y,top],[-0.216,y,top]],true);
+ const hand=p?p.batter_hand:"R";const bx=hand=="L"?1.4:-1.4;g.strokeStyle="#c9c2ae";g.lineWidth=2;line3(g,cam,[bx,0.2,0],[bx,0.2,1.75]);line3(g,cam,[0,17.5,0],[0,17.5,1.85]);
+ BANK.fielders.forEach(f=>{if(f.pos=="P"||f.pos=="C")return;let xy=f.xy;if(p&&p.fielding&&tb>0){const a=p.fielding.attempts.find(x=>x.position==f.pos);if(a){const k=Math.min(1,tb/2.5);xy=[f.xy[0]+k*(a.point[0]-f.xy[0]),f.xy[1]+k*(a.point[1]-f.xy[1])]}}g.strokeStyle="#8ad1a8";line3(g,cam,[xy[0],xy[1],0],[xy[0],xy[1],1.8])});
+ if(!p)return;let q=interp(p.flight,tp);if(p.batted&&tb>0)q=interp(p.batted.flight,tb);
+ const s=cam.proj(q);if(s){const r=Math.max(2.5,cam.fl*0.037/s[2]);g.fillStyle="#fff";g.beginPath();g.arc(s[0],s[1],r,0,7);g.fill();if(r>4){g.strokeStyle="#e0524b";g.lineWidth=1.5;const ang=(tp+tb)*p.flight.rpm/60*2*Math.PI;g.beginPath();g.arc(s[0],s[1],r*0.7,ang,ang+2.2);g.stroke()}}}
+function drawKz(p,done){const c=$("kz"),g=c.getContext("2d");g.fillStyle="#0a1510";g.fillRect(0,0,c.width,c.height);const S=160,X=x=>c.width/2+x*S,Y=z=>c.height-16-z*S;const top=p?p.zone_top:1.05,bot=p?p.zone_bottom:0.5;
+ g.strokeStyle="#ece7d8";g.lineWidth=1.5;g.strokeRect(X(-0.216),Y(top),0.432*S,(top-bot)*S);g.strokeStyle="#24382c";g.lineWidth=1;for(let i=1;i<3;i++){g.beginPath();g.moveTo(X(-0.216+i*0.144),Y(top));g.lineTo(X(-0.216+i*0.144),Y(bot));g.stroke();g.beginPath();g.moveTo(X(-0.216),Y(bot+i*(top-bot)/3));g.lineTo(X(0.216),Y(bot+i*(top-bot)/3));g.stroke()}
+ if(p&&done&&p.plate_xz){g.fillStyle=p.result=="ball"?"#4fa3e0":(p.swing?"#e0524b":"#f2b441");g.beginPath();g.arc(X(p.plate_xz[0]),Y(p.plate_xz[1]),7,0,7);g.fill()}}
+function drawField(p,tb){const c=$("field"),g=c.getContext("2d");g.fillStyle="#0a1510";g.fillRect(0,0,c.width,c.height);const hx=c.width/2,hy=c.height-14,S=(c.height-36)/130;g.fillStyle="#1c4a2e";g.beginPath();g.moveTo(hx,hy);g.arc(hx,hy,125*S,-Math.PI*0.75,-Math.PI*0.25);g.closePath();g.fill();
+ const Pt=q=>[hx+q[0]*S,hy-q[1]*S];g.strokeStyle="#6b4f2e";g.lineWidth=2;g.beginPath();[[0,0],[19.4,19.4],[0,38.8],[-19.4,19.4]].forEach((q,i)=>{const [x,y]=Pt(q);i?g.lineTo(x,y):g.moveTo(x,y)});g.closePath();g.stroke();
+ g.strokeStyle="#3a5242";g.lineWidth=1;g.beginPath();for(let a=-45;a<=45;a+=3){const f=Math.pow(Math.cos(a*Math.PI/180),2),R=(100+22*f)*S,x=hx+R*Math.sin(a*Math.PI/180),y=hy-R*Math.cos(a*Math.PI/180);a==-45?g.moveTo(x,y):g.lineTo(x,y)}g.stroke();
+ BANK.fielders.forEach(f=>{let xy=f.xy;const a=p&&p.fielding&&p.fielding.attempts.find(x=>x.position==f.pos);if(a&&tb>0){const k=Math.min(1,tb/2.5);xy=[f.xy[0]+k*(a.point[0]-f.xy[0]),f.xy[1]+k*(a.point[1]-f.xy[1])]}const [x,y]=Pt(xy);g.fillStyle=a?"#e0524b":"#8ad1a8";g.beginPath();g.arc(x,y,4.5,0,7);g.fill();g.fillStyle="#c9c2ae";g.font="10px IBM Plex Mono";g.fillText(f.pos,x+6,y+3)});
+ if(!p||!p.batted)return;const flt=p.batted.flight;g.strokeStyle="#4fa3e0";g.beginPath();flt.xyz.forEach((q,i)=>{const [x,y]=Pt(q);i?g.lineTo(x,y):g.moveTo(x,y)});g.stroke();const q=interp(flt,Math.min(tb,flt.t[flt.t.length-1]));const [x,y]=Pt(q);g.fillStyle="#fff";g.beginPath();g.arc(x,y-q[2]*S*0.5,4+q[2]*0.15,0,7);g.fill()}
+function animate(p){return new Promise(res=>{const t0=performance.now();const spd=parseFloat($("spd").value)||1;const T=p.flight.t[p.flight.t.length-1];const TB=p.batted?p.batted.flight.t[p.batted.flight.t.length-1]+1.0:0;$("speed").textContent="—";drawKz(p,false);
+  function fr(now){const el=(now-t0)/1000*spd;const tp=Math.min(el,T),tb=Math.max(0,Math.min(el-T,TB));drawCam(p,tp,tb);drawField(p,tb);if(el>=T)drawKz(p,true);if(el<T+TB+0.5&&!skipFlag)requestAnimationFrame(fr);else{drawKz(p,true);res()}}requestAnimationFrame(fr)})}
+if(MOBILE){document.querySelectorAll('canvas').forEach(c=>{if(c.id=='cam'){c.width=480;c.height=300}if(c.id=='field'){c.width=320;c.height=260}if(c.id=='kz'){c.width=300;c.height=240}})}
+roster();
+</script>
+</body>
+</html>

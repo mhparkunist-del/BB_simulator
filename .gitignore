@@ -1,0 +1,10 @@
+# build outputs (regenerate with tools/build_*.py); the deployable app in web/app/ is tracked
+__pycache__/
+*.pyc
+examples/out/
+2_Archieve/web_versions/*.html
+web/*.html
+!web/app/
+web/templates/*.bak
+*.bak
+.DS_Store

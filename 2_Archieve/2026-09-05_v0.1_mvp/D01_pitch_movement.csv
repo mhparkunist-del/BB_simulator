@@ -1,0 +1,7 @@
+code,name,release_mph,plate_mph,spin_rpm,tilt_deg,gyro_frac,flight_time_s,h_move_in,v_move_in,miss_x_m,miss_z_m
+FF,four-seam fastball,94.0,85.3,2300,25,0.15,0.409,-8.8,19.0,-0.0,-0.0
+SI,sinker,93.0,84.4,2150,60,0.3,0.414,-16.7,9.7,-0.0,-0.0
+CT,cutter,89.0,80.8,2350,300,0.8,0.433,12.0,6.8,-0.0,0.0
+SL,slider,85.0,77.3,2450,260,0.85,0.453,12.9,-1.9,-0.0,0.0
+CU,curveball,79.0,71.9,2550,170,0.3,0.488,-3.7,-23.6,-0.0,0.0
+CH,changeup,85.0,77.3,1700,60,0.4,0.453,-14.7,8.6,-0.0,-0.0

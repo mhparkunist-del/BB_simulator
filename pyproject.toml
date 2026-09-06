@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bbsim"
+version = "0.6.0"
+description = "Physics-first baseball simulation engine with independent pitcher/catcher/batter agents"
+requires-python = ">=3.9"
+dependencies = ["numpy>=1.24"]
+
+[project.optional-dependencies]
+viz = ["matplotlib>=3.7"]
+dev = ["pytest"]
+
+[tool.setuptools.packages.find]
+include = ["bbsim*"]

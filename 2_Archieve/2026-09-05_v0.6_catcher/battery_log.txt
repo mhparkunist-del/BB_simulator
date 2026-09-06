@@ -1,0 +1,40 @@
+PA000 #1 [0-0] 투수 CH@low_away | 포수 CH@low_away (투수 의도 반영) | 최종 CH → called_strike
+PA000 #2 [0-1] 투수 CH@low_away | 포수 CH@low_away (투수 의도 반영) | 최종 CH → called_strike
+PA000 #3 [0-2] 투수 SL@chase_low | 포수 SL@chase_away (투수 의도 반영, 이 타자, 변화구에 헛스윙 39%) | 최종 SL → in_play
+PA001 #1 [0-0] 투수 FF@high | 포수 FF@high_in (투수 의도 반영) | 최종 FF → called_strike
+PA001 #2 [0-1] 투수 CH@low | 포수 CH@low (투수 의도 반영) | 최종 CH → foul
+PA001 #3 [0-2] 투수 SL@chase_low | 포수 SL@chase_low (투수 의도 반영) | 최종 SL → ball
+PA001 #4 [1-2] 투수 CH@chase_low | 포수 CH@chase_low (투수 의도 반영) | 최종 CH → ball
+PA001 #5 [2-2] 투수 FF@chase_high | 포수 FF@chase_high (투수 의도 반영) | 최종 FF → in_play
+PA002 #1 [0-0] 투수 CH@low_in | 포수 CH@low_in (투수 의도 반영) | 최종 CH → in_play
+PA003 #1 [0-0] 투수 FF@high | 포수 FF@high (투수 의도 반영) | 최종 FF → in_play
+PA004 #1 [0-0] 투수 CH@low | 포수 CH@low_away (투수 의도 반영) | 최종 CH → ball
+PA004 #2 [1-0] 투수 FF@high | 포수 FF@high (투수 의도 반영) | 최종 FF → ball
+PA004 #3 [2-0] 투수 SI@low_away | 포수 SI@tunnel (투수 의도 반영, FF와 같은 궤적으로 터널링 (플레이트 분리 32 cm)) | 최종 SI → called_strike
+PA004 #4 [2-1] 투수 FF@high_in | 포수 FF@tunnel (투수 의도 반영, SI와 같은 궤적으로 터널링 (플레이트 분리 32 cm)) | 최종 FF → ball
+PA004 #5 [3-1] 투수 SI@low_away | 포수 SI@middle (투수 의도 반영) | 최종 SI → called_strike
+PA004 #6 [3-2] 투수 FF@chase_high | 포수 FF@chase_high (투수 의도 반영) | 최종 FF → ball
+PA005 #1 [0-0] 투수 FF@high | 포수 SI@low_away () | 최종 SI → ball
+PA005 #2 [1-0] 투수 FF@high | 포수 SI@low () | 최종 FF → in_play
+PA006 #1 [0-0] 투수 FF@chase_high | 포수 SI@low_in () | 최종 SI → ball
+PA006 #2 [1-0] 투수 FF@low_away | 포수 SI@low_in () | 최종 SI → swinging_strike
+PA006 #3 [1-1] 투수 CH@low_away | 포수 CH@low (투수 의도 반영) | 최종 CH → in_play
+PA007 #1 [0-0] 투수 FF@high | 포수 FF@high (투수 의도 반영) | 최종 FF → called_strike
+PA007 #2 [0-1] 투수 CH@low_in | 포수 CH@low_in (투수 의도 반영) | 최종 CH → foul
+PA007 #3 [0-2] 투수 SL@chase_low | 포수 SL@chase_low (투수 의도 반영) | 최종 SL → ball
+PA007 #4 [1-2] 투수 CH@chase_low | 포수 SL@chase_low () | 최종 SL → ball
+PA007 #5 [2-2] 투수 CH@chase_low | 포수 CH@chase_low (투수 의도 반영) | 최종 CH → called_strike
+PA008 #1 [0-0] 투수 CH@low | 포수 SI@low () | 최종 SI → ball
+PA008 #2 [1-0] 투수 FF@high_in | 포수 FF@high (투수 의도 반영) | 최종 FF → called_strike
+PA008 #3 [1-1] 투수 CH@low | 포수 CH@low_in (투수 의도 반영) | 최종 CH → ball
+PA008 #4 [2-1] 투수 FF@high_in | 포수 FF@high (투수 의도 반영) | 최종 FF → in_play
+PA009 #1 [0-0] 투수 FF@high | 포수 CH@low () | 최종 FF → ball
+PA009 #2 [1-0] 투수 FF@high | 포수 SI@tunnel (FF와 같은 궤적으로 터널링 (플레이트 분리 32 cm)) | 최종 SI → called_strike
+PA009 #3 [1-1] 투수 SL@low | 포수 CH@low () | 최종 CH → in_play
+PA010 #1 [0-0] 투수 FF@chase_high | 포수 CH@low_in () | 최종 FF → called_strike
+PA010 #2 [0-1] 투수 CH@low | 포수 CH@low_in (투수 의도 반영) | 최종 CH → called_strike
+PA010 #3 [0-2] 투수 CH@chase_low | 포수 SL@chase_low (3루 주자: 폭투 위험 회피) | 최종 SL → swinging_strike
+PA011 #1 [0-0] 투수 CH@low_in | 포수 SI@low_away () | 최종 SI → called_strike
+PA011 #2 [0-1] 투수 CH@low_in | 포수 CH@low_away (투수 의도 반영) | 최종 CH → ball
+PA011 #3 [1-1] 투수 FF@high_in | 포수 SI@low_in () | 최종 SI → ball
+PA011 #4 [2-1] 투수 FF@high_in | 포수 FF@high (투수 의도 반영) | 최종 FF → foul

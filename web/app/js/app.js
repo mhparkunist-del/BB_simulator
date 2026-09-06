@@ -1,0 +1,90 @@
+/* bbsim app · shell: data loading, module loading in order, screens (hash router), orientation, service worker, smoke mode */
+window.APP = window.APP || {};
+(function () {
+  const A = window.APP;
+  A.base = A.base || (location.pathname.replace(/[^/]*$/, ""));
+  A.fetchJSON = async function (path) {
+    if (A.embedded && A.embedded[path]) return A.embedded[path];
+    const r = await fetch(A.base + path, { cache: "default" });
+    if (!r.ok) throw new Error(path + " " + r.status);
+    return r.json();
+  };
+  const $ = id => document.getElementById(id);
+  const SCREENS = ["schedule", "training", "roster", "stats", "game"];
+  function loadScript(src) {
+    return new Promise((res, rej) => { const s = document.createElement("script"); s.src = A.base + src; s.onload = res; s.onerror = () => rej(new Error("script " + src)); document.head.appendChild(s) });
+  }
+  A.show = function (name) {
+    if (!SCREENS.includes(name)) name = "schedule";
+    document.querySelectorAll(".nav [data-screen]").forEach(b => b.classList.toggle("on", b.dataset.screen === name));
+    $("screen-club").hidden = name === "game";
+    $("screen-game").hidden = name !== "game";
+    if (name !== "game" && window.ClubUI_tab) window.ClubUI_tab(name);
+    if (name === "game") {
+      if (window.ClubUI && window.ClubUI.lineupForGame) A.clubLineup = window.ClubUI.lineupForGame();
+      if (window.GameUI && !(window.GameUI.state && window.GameUI.state())) { window.GameUI.roster(); }
+      try { if (screen.orientation && screen.orientation.lock) screen.orientation.lock("landscape").catch(() => {}) } catch (e) {}
+    } else { try { if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock() } catch (e) {} }
+    if (location.hash !== "#" + name) history.replaceState(null, "", "#" + name);
+  };
+  function viewSel(v) {                           // small screens: one 3D view at a time
+    A.viewSel = v; window.VIEW_HIDE = { cam: v !== "cam", body: v !== "body", seam: v !== "seam" };
+    ["cam", "body", "seam"].forEach(k => { const p = $("vw-" + k); if (p) p.hidden = k !== v });
+    document.querySelectorAll(".viewsel button").forEach(b => b.classList.toggle("on", b.dataset.view === v));
+    if (window.GameUI) window.GameUI.drawIdle();
+  }
+  function applyLayout() {
+    const wide = window.innerWidth >= 1100;
+    document.body.classList.toggle("wide", wide);
+    if (wide) { window.VIEW_HIDE = {}; ["cam", "body", "seam"].forEach(k => { const p = $("vw-" + k); if (p) p.hidden = false }); document.querySelectorAll(".viewsel button").forEach(b => b.classList.remove("on")) }
+    else viewSel(A.viewSel || "cam");
+  }
+  async function boot() {
+    const status = $("boot");
+    const q = new URLSearchParams(location.search);
+    const smokeMode = window.SMOKE || q.get("smoke");
+    if (smokeMode && !A.bundled) { const im = new Image(); im.src = A.base + "hold?ms=6000"; document.body.appendChild(im) }   // keeps the load event (and the screenshot) waiting
+    try {
+      status.textContent = "데이터 불러오는 중…";
+      A.roster = await A.fetchJSON("data/roster.json");
+      A.club = await A.fetchJSON("data/club.json");
+      status.textContent = "렌더러 불러오는 중…";
+      if (!A.bundled) for (const f of ["js/render/math.js", "js/render/park.js", "js/render/person.js", "js/render/pitcher.js", "js/render/figures.js", "js/render/play.js", "js/render/seam.js", "js/game/game.js", "js/club/club.js"]) await loadScript(f);
+      else if (A.bundledInit) A.bundledInit();
+      status.hidden = true;
+      document.querySelectorAll(".nav [data-screen]").forEach(b => b.onclick = () => A.show(b.dataset.screen));
+      document.querySelectorAll(".viewsel button").forEach(b => b.onclick = () => viewSel(b.dataset.view));
+      window.addEventListener("resize", applyLayout);
+      applyLayout();
+      A.show((location.hash || "#schedule").slice(1));
+      if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register(A.base + "sw.js").catch(() => {});
+      if (smokeMode) smoke(smokeMode);
+    } catch (e) {
+      status.hidden = false; status.textContent = "불러오기 실패: " + e.message; status.className = "boot err";
+      console.error(e);
+    }
+  }
+  async function smoke(mode) {                    // headless check: drive a flow, report at the top of the page
+    const box = document.createElement("div"); box.style.cssText = "background:#063;color:#fff;padding:6px;font:14px monospace;white-space:pre-wrap";
+    document.body.insertBefore(box, document.body.firstChild);
+    const errs = []; window.addEventListener("error", e => errs.push(e.message));
+    try {
+      if (mode === "club") {
+        await new Promise(r => { const t = setInterval(() => { if (window.ClubUI && window.ClubUI.state()) { clearInterval(t); r() } }, 50) });
+        window.ClubUI.fresh(); for (let i = 0; i < 9; i++) window.ClubUI.advanceDay();
+        A.show("training");
+        const S = window.ClubUI.state();
+        box.textContent = "SMOKE OK club: day=" + S.day + " record=" + S.W + "-" + S.L + " errs=" + errs.length;
+      } else {
+        A.show("game");
+        $("autoOrder").onclick(); if (window.GameUI.pick.pitcher === null) document.querySelector("[data-p]").onclick(); $("start").onclick();
+        const GU = window.GameUI, G = GU.state();
+        const p = await GU.pickPitch(); const T = p.flight.t[p.flight.t.length - 1];
+        [-1.2, 0.0, 0.40, T + 0.3].forEach(t => GU.drawAll(p, t));
+        box.textContent = "SMOKE OK game: half=" + G.half + " pitcher=" + G.pitcher + " pitch=" + p.result + " swing=" + p.swing + " view=" + (A.viewSel || "all") + " bundled=" + !!A.bundled + " errs=" + errs.length;
+      }
+    } catch (e) { box.style.background = "#900"; box.textContent = "SMOKE ERR: " + e.message + "\n" + (e.stack || "").slice(0, 400) }
+    document.title = box.textContent.slice(0, 40);
+  }
+  document.addEventListener("DOMContentLoaded", boot);
+})();

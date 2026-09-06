@@ -1,0 +1,336 @@
+<title>투구 궤적 실험실</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#f5f3ec; --panel:#fbfaf6; --ink:#1b2420; --muted:#5f6a63; --line:#d8d3c4; --line-soft:#e8e4d8;
+  --accent:#c1352b; --accent-ink:#8f251e; --ghost:#6b7f8f; --grass:#3f7a4a; --clay:#b9793f;
+  --zone:#1b2420; --ok:#2f7d4f; --bad:#9c3b2e;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#151a17; --panel:#1d2320; --ink:#ece9df; --muted:#9aa39c; --line:#2f3833; --line-soft:#242c28;
+    --accent:#e0564a; --accent-ink:#f0857b; --ghost:#8ea3b3; --grass:#5c9a67; --clay:#c98d55;
+    --zone:#ece9df; --ok:#6fbf8a; --bad:#e07a6a;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#151a17; --panel:#1d2320; --ink:#ece9df; --muted:#9aa39c; --line:#2f3833; --line-soft:#242c28;
+  --accent:#e0564a; --accent-ink:#f0857b; --ghost:#8ea3b3; --grass:#5c9a67; --clay:#c98d55;
+  --zone:#ece9df; --ok:#6fbf8a; --bad:#e07a6a;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:14px;line-height:1.5}
+header{display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:20px 28px 12px;border-bottom:1px solid var(--line)}
+h1{font-family:"Barlow Condensed","Arial Narrow",sans-serif;font-weight:700;font-size:34px;letter-spacing:.01em;margin:0;text-wrap:balance}
+h1 small{font-family:"IBM Plex Mono",monospace;font-weight:400;font-size:12px;color:var(--muted);margin-left:10px;letter-spacing:.04em}
+header p{margin:0;color:var(--muted);max-width:60ch}
+.wrap{display:grid;grid-template-columns:320px 1fr;gap:0;min-height:calc(100vh - 80px)}
+aside{border-right:1px solid var(--line);padding:18px 20px 32px;background:var(--panel);display:flex;flex-direction:column;gap:18px}
+main{padding:18px 28px 40px;display:flex;flex-direction:column;gap:18px;min-width:0}
+.group{display:flex;flex-direction:column;gap:10px}
+.eyebrow{font-family:"Barlow Condensed",sans-serif;font-weight:600;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.presets{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.presets button{font:600 14px "Barlow Condensed",sans-serif;letter-spacing:.06em;padding:7px 0;border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:4px;cursor:pointer}
+.presets button:hover{border-color:var(--accent)}
+.presets button.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.presets button:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.ctl{display:grid;grid-template-columns:1fr auto;align-items:center;gap:2px 10px}
+.ctl label{color:var(--muted);font-size:13px}
+.ctl output{font-family:"IBM Plex Mono",monospace;font-size:13px;font-variant-numeric:tabular-nums;text-align:right}
+.ctl input[type=range]{grid-column:1/-1;width:100%;accent-color:var(--accent);margin:0;height:22px}
+.seg{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.seg button{font:500 13px "IBM Plex Sans",sans-serif;padding:6px;border:0;background:transparent;color:var(--ink);cursor:pointer}
+.seg button.on{background:var(--ink);color:var(--bg)}
+.toggles{display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--muted)}
+.toggles label{display:flex;gap:8px;align-items:center;cursor:pointer}
+.toggles input{accent-color:var(--accent)}
+.play{display:flex;gap:8px;align-items:center}
+.play button{font:600 15px "Barlow Condensed",sans-serif;letter-spacing:.06em;padding:8px 16px;border-radius:4px;border:1px solid var(--accent);background:var(--accent);color:#fff;cursor:pointer}
+.play button.secondary{background:transparent;color:var(--ink);border-color:var(--line)}
+.play output{font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--muted);margin-left:auto;font-variant-numeric:tabular-nums}
+.stats{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.stat{background:var(--panel);padding:10px 14px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.stat .k{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+.stat .v{font-family:"Barlow Condensed",sans-serif;font-weight:600;font-size:30px;line-height:1.05;font-variant-numeric:tabular-nums;white-space:nowrap}
+.stat .v span{font-size:14px;font-weight:500;color:var(--muted);margin-left:4px}
+.stat .s{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stat.call .v{color:var(--ok)} .stat.call.ball .v{color:var(--bad)}
+.views{display:grid;grid-template-columns:2fr 1fr;grid-template-rows:auto auto;gap:14px}
+.view{border:1px solid var(--line);border-radius:6px;background:var(--panel);padding:10px 12px 8px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.view h2{font-family:"Barlow Condensed",sans-serif;font-weight:600;font-size:15px;letter-spacing:.08em;text-transform:uppercase;margin:0;color:var(--muted);display:flex;justify-content:space-between;gap:8px}
+.view h2 span{font-family:"IBM Plex Mono",monospace;font-weight:400;font-size:11px;letter-spacing:0;text-transform:none}
+.view canvas{width:100%;display:block}
+#side{grid-column:1/-1}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+.legend i{display:inline-block;width:22px;height:0;border-top:2px solid var(--accent);vertical-align:middle;margin-right:6px}
+.legend i.ghost{border-top:2px dashed var(--ghost)} .legend i.vac{border-top:2px dotted var(--clay)}
+.note{font-size:12.5px;color:var(--muted);max-width:78ch}
+.note code{font-family:"IBM Plex Mono",monospace;font-size:12px}
+@media (max-width:900px){.wrap{grid-template-columns:1fr}aside{border-right:0;border-bottom:1px solid var(--line)}.stats{grid-template-columns:repeat(3,1fr)}.views{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){.play button{transition:none}}
+</style>
+
+<header>
+  <h1>투구 궤적 실험실 <small>bbsim physics · v0.1 (0905)</small></h1>
+  <p>투수가 공을 놓는 순간부터 플레이트 앞면까지, 항력과 마그누스 힘을 RK4로 적분해 궤적을 계산합니다. 회색 점선은 같은 공을 회전 없이 던졌을 때의 기준선입니다.</p>
+</header>
+
+<div class="wrap">
+<aside>
+  <div class="group">
+    <div class="eyebrow">구종 프리셋 (우완 리그 중앙값)</div>
+    <div class="presets" id="presets"></div>
+    <div class="seg" id="hand"><button data-h="R" class="on">우완 RHP</button><button data-h="L">좌완 LHP</button></div>
+  </div>
+
+  <div class="group">
+    <div class="eyebrow">마운드 · 릴리스</div>
+    <div class="ctl"><label>러버 → 플레이트 거리</label><output id="o-mound"></output><input type="range" id="mound" min="14" max="22" step="0.01" value="18.44"></div>
+    <div class="ctl"><label>익스텐션 (러버 앞으로)</label><output id="o-ext"></output><input type="range" id="ext" min="0.8" max="2.4" step="0.01" value="1.68"></div>
+    <div class="ctl"><label>릴리스 높이</label><output id="o-relz"></output><input type="range" id="relz" min="1.2" max="2.2" step="0.01" value="1.80"></div>
+    <div class="ctl"><label>릴리스 좌우 (1루측 +)</label><output id="o-relx"></output><input type="range" id="relx" min="-1.0" max="1.0" step="0.01" value="-0.55"></div>
+  </div>
+
+  <div class="group">
+    <div class="eyebrow">공</div>
+    <div class="ctl"><label>구속 (릴리스)</label><output id="o-mph"></output><input type="range" id="mph" min="60" max="105" step="0.5" value="94"></div>
+    <div class="ctl"><label>회전수</label><output id="o-rpm"></output><input type="range" id="rpm" min="0" max="3400" step="10" value="2300"></div>
+    <div class="ctl"><label>회전축 기울기 (0=순수 백스핀)</label><output id="o-tilt"></output><input type="range" id="tilt" min="0" max="359" step="1" value="25"></div>
+    <div class="ctl"><label>자이로 비율 (총알 회전)</label><output id="o-gyro"></output><input type="range" id="gyro" min="0" max="0.95" step="0.01" value="0.15"></div>
+  </div>
+
+  <div class="group">
+    <div class="eyebrow">목표 (플레이트 앞면)</div>
+    <div class="ctl"><label>좌우 x</label><output id="o-tx"></output><input type="range" id="tx" min="-0.5" max="0.5" step="0.01" value="0"></div>
+    <div class="ctl"><label>높이 z</label><output id="o-tz"></output><input type="range" id="tz" min="0.2" max="1.4" step="0.01" value="0.75"></div>
+  </div>
+
+  <div class="group">
+    <div class="eyebrow">표시</div>
+    <div class="toggles">
+      <label><input type="checkbox" id="showGhost" checked> 무회전 기준선 (항력만)</label>
+      <label><input type="checkbox" id="showVac"> 진공 포물선 (힘 없음)</label>
+    </div>
+  </div>
+</aside>
+
+<main>
+  <div class="stats" id="stats">
+    <div class="stat"><div class="k">비행 거리</div><div class="v" id="s-dist">–<span>m</span></div><div class="s" id="s-dist2"></div></div>
+    <div class="stat"><div class="k">구속 릴리스 → 플레이트</div><div class="v" id="s-speed">–</div><div class="s" id="s-speed2"></div></div>
+    <div class="stat"><div class="k">비행 시간</div><div class="v" id="s-time">–<span>ms</span></div><div class="s" id="s-time2"></div></div>
+    <div class="stat"><div class="k">유도 수직 움직임 IVB</div><div class="v" id="s-ivb">–<span>in</span></div><div class="s" id="s-ivb2"></div></div>
+    <div class="stat"><div class="k">수평 움직임 HB</div><div class="v" id="s-hb">–<span>in</span></div><div class="s" id="s-hb2"></div></div>
+    <div class="stat call" id="s-callbox"><div class="k">플레이트 통과</div><div class="v" id="s-call">–</div><div class="s" id="s-call2"></div></div>
+  </div>
+
+  <div class="play">
+    <button id="btnPlay">▶ 슬로모션 재생</button>
+    <button class="secondary" id="btnReset">처음으로</button>
+    <output id="clock">t = 0 ms</output>
+  </div>
+
+  <div class="views">
+    <div class="view" id="side"><h2>옆에서 본 궤적 <span>y (m) → 높이 z (m)</span></h2><canvas id="cSide"></canvas></div>
+    <div class="view"><h2>위에서 본 궤적 <span>y (m) → 좌우 x (m)</span></h2><canvas id="cTop"></canvas></div>
+    <div class="view"><h2>포수 시점 <span>x (m) → z (m)</span></h2><canvas id="cCatch"></canvas></div>
+  </div>
+
+  <div class="legend"><span><i></i>회전 포함 (실제 궤적)</span><span><i class="ghost"></i>무회전 기준선</span><span><i class="vac"></i>진공 포물선</span></div>
+  <p class="note">모델: a = g + (ρA/2m)|v|(−C_D v + C_L ŵ×v), C_D=0.35, C_L=1.5S (S&lt;0.1) / 0.09+0.6S (Nathan 2008), S=rω/|v|. 조준은 목표를 향해 던진 뒤 플레이트 앞면 오차만큼 4회 보정하므로 "제구 완벽" 기준 궤적입니다. 좌표: +x 1루측, +y 투수 방향, 플레이트 앞면 y=0.432 m. 스트라이크 존은 키 185 cm 타자 기준(0.50–1.05 m).</p>
+</main>
+</div>
+
+<script>
+// ---------- physics (port of bbsim.physics) ----------
+const RHO=1.225, G=9.81, M=0.1449, R=0.03689, A=Math.PI*R*R, CD=0.35;
+const PLATE_Y=0.4318, HALF_W=0.2159+R, ZONE_T=1.045, ZONE_B=0.50;
+const MPH=0.44704, RPM=2*Math.PI/60;
+const cl=s=>s<0.1?1.5*s:0.09+0.6*s;
+const cross=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]];
+const norm=a=>Math.hypot(a[0],a[1],a[2]);
+function accel(v,w,mode){ // mode: 'full' | 'noSpin' | 'vacuum'
+  const a=[0,0,-G]; if(mode==='vacuum') return a;
+  const sp=norm(v); if(sp<1e-9) return a;
+  const k=RHO*A/(2*M);
+  for(let i=0;i<3;i++) a[i]+=-k*CD*sp*v[i];
+  const om=norm(w);
+  if(mode==='full'&&om>1e-9){ const wh=w.map(x=>x/om); const c=cross(wh,v); const s=R*om/sp; const kk=k*cl(s)*sp; for(let i=0;i<3;i++) a[i]+=kk*c[i]; }
+  return a;
+}
+function integrate(p0,v0,w,mode,dt=0.001){
+  const out=[{t:0,p:p0.slice(),v:v0.slice()}]; let p=p0.slice(),v=v0.slice(),t=0;
+  for(let n=0;n<4000;n++){
+    const k1v=accel(v,w,mode), k1p=v;
+    const p2=p.map((x,i)=>x+0.5*dt*k1p[i]), v2=v.map((x,i)=>x+0.5*dt*k1v[i]); const k2v=accel(v2,w,mode), k2p=v2;
+    const p3=p.map((x,i)=>x+0.5*dt*k2p[i]), v3=v.map((x,i)=>x+0.5*dt*k2v[i]); const k3v=accel(v3,w,mode), k3p=v3;
+    const p4=p.map((x,i)=>x+dt*k3p[i]), v4=v.map((x,i)=>x+dt*k3v[i]); const k4v=accel(v4,w,mode), k4p=v4;
+    p=p.map((x,i)=>x+dt/6*(k1p[i]+2*k2p[i]+2*k3p[i]+k4p[i]));
+    v=v.map((x,i)=>x+dt/6*(k1v[i]+2*k2v[i]+2*k3v[i]+k4v[i]));
+    t+=dt; out.push({t,p:p.slice(),v:v.slice()});
+    if(p[1]<=-0.3||p[2]<=0) break;
+  }
+  return out;
+}
+function crossing(tr,y){
+  for(let i=1;i<tr.length;i++){ const a=tr[i-1].p[1], b=tr[i].p[1];
+    if(a>=y&&b<y){ const f=(a-y)/(a-b); const s0=tr[i-1],s1=tr[i];
+      return {t:s0.t+f*(s1.t-s0.t), p:s0.p.map((x,k)=>x+f*(s1.p[k]-x)), v:s0.v.map((x,k)=>x+f*(s1.v[k]-x))}; } }
+  return null;
+}
+function spinVector(rpm,tiltDeg,gyro,hand,vhat){
+  const t=tiltDeg*Math.PI/180; let a=[-Math.cos(t),0,-Math.sin(t)]; if(hand==='L') a[0]=-a[0];
+  const d=a[0]*vhat[0]+a[1]*vhat[1]+a[2]*vhat[2]; a=a.map((x,i)=>x-d*vhat[i]); const n=norm(a)||1e-12; a=a.map(x=>x/n);
+  const om=rpm*RPM, g=Math.min(gyro,0.999), s=Math.sqrt(1-g*g);
+  return a.map((x,i)=>om*(s*x+g*vhat[i]));
+}
+function throwPitch(P){
+  const release=[P.relx, P.mound-P.ext, P.relz]; const speed=P.mph*MPH;
+  const target=[P.tx,PLATE_Y,P.tz]; let aim=target.slice();
+  const tf=norm(aim.map((x,i)=>x-release[i]))/speed; aim[2]+=0.5*G*tf*tf;
+  let tr=null,v0=null,w=null;
+  for(let it=0;it<4;it++){
+    const d=aim.map((x,i)=>x-release[i]); const dn=norm(d); const dh=d.map(x=>x/dn);
+    v0=dh.map(x=>x*speed); w=spinVector(P.rpm,P.tilt,P.gyro,P.hand,dh);
+    tr=integrate(release,v0,w,'full');
+    const c=crossing(tr,PLATE_Y);
+    if(!c){aim[2]+=0.3;continue;}
+    aim[0]-=c.p[0]-target[0]; aim[2]-=c.p[2]-target[2];
+  }
+  const ghost=integrate(release,v0,w,'noSpin'), vac=integrate(release,v0,w,'vacuum');
+  return {tr,ghost,vac,plate:crossing(tr,PLATE_Y),gplate:crossing(ghost,PLATE_Y),release,v0,w};
+}
+
+// ---------- presets ----------
+const PRESETS={FF:{n:'포심',mph:94,rpm:2300,tilt:25,gyro:0.15},SI:{n:'싱커',mph:93,rpm:2150,tilt:60,gyro:0.30},CT:{n:'커터',mph:89,rpm:2350,tilt:300,gyro:0.80},SL:{n:'슬라이더',mph:85,rpm:2450,tilt:260,gyro:0.85},CU:{n:'커브',mph:79,rpm:2550,tilt:170,gyro:0.30},CH:{n:'체인지업',mph:85,rpm:1700,tilt:60,gyro:0.40}};
+const ids=['mound','ext','relz','relx','mph','rpm','tilt','gyro','tx','tz'];
+const el=id=>document.getElementById(id);
+let hand='R', preset='FF', result=null, anim={playing:false,t:0,raf:0,last:0};
+const SLOW=8;
+
+function params(){ const P={hand}; ids.forEach(k=>P[k]=parseFloat(el(k).value)); return P; }
+function clock(tilt){ const h=((tilt/30)+12)%12; const hh=Math.floor(h)||12; const mm=Math.round((h-Math.floor(h))*60); return `${hh}:${String(mm).padStart(2,'0')}`; }
+function fmtOutputs(P){
+  el('o-mound').textContent=`${P.mound.toFixed(2)} m · ${(P.mound/0.3048).toFixed(1)} ft`;
+  el('o-ext').textContent=`${P.ext.toFixed(2)} m → 릴리스 y=${(P.mound-P.ext).toFixed(2)}`;
+  el('o-relz').textContent=`${P.relz.toFixed(2)} m`; el('o-relx').textContent=`${P.relx>=0?'+':''}${P.relx.toFixed(2)} m`;
+  el('o-mph').textContent=`${P.mph.toFixed(1)} mph · ${(P.mph*1.609).toFixed(0)} km/h`;
+  el('o-rpm').textContent=`${P.rpm} rpm`; el('o-tilt').textContent=`${P.tilt}° · ${clock(P.tilt)}`;
+  el('o-gyro').textContent=`${Math.round(P.gyro*100)}% · 유효회전 ${Math.round(P.rpm*Math.sqrt(1-P.gyro*P.gyro))} rpm`;
+  el('o-tx').textContent=`${P.tx>=0?'+':''}${P.tx.toFixed(2)} m`; el('o-tz').textContent=`${P.tz.toFixed(2)} m`;
+}
+
+// ---------- canvas helpers ----------
+function css(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim();}
+function setup(c,h){ const dpr=window.devicePixelRatio||1; const w=c.clientWidth||600; c.width=w*dpr; c.height=h*dpr; c.style.height=h+'px'; const g=c.getContext('2d'); g.setTransform(dpr,0,0,dpr,0,0); return {g,w,h}; }
+function path(g,pts,color,dash,width){ g.save(); g.strokeStyle=color; g.lineWidth=width||2; g.setLineDash(dash||[]); g.beginPath(); pts.forEach((q,i)=>i?g.lineTo(q[0],q[1]):g.moveTo(q[0],q[1])); g.stroke(); g.restore(); }
+function text(g,s,x,y,opt={}){ g.save(); g.fillStyle=opt.color||css('--muted'); g.font=opt.font||'11px "IBM Plex Mono", monospace'; g.textAlign=opt.align||'left'; g.textBaseline=opt.base||'alphabetic'; g.fillText(s,x,y); g.restore(); }
+function ball(g,x,y,r){ g.save(); g.fillStyle=css('--panel'); g.strokeStyle=css('--accent'); g.lineWidth=2; g.beginPath(); g.arc(x,y,r,0,Math.PI*2); g.fill(); g.stroke();
+  g.strokeStyle=css('--accent'); g.lineWidth=1.2; g.beginPath(); g.arc(x-r*0.55,y,r*0.75,-Math.PI*0.4,Math.PI*0.4); g.stroke(); g.beginPath(); g.arc(x+r*0.55,y,r*0.75,Math.PI*0.6,Math.PI*1.4); g.stroke(); g.restore(); }
+function stateAt(tr,t){ if(t<=0) return tr[0]; if(t>=tr[tr.length-1].t) return tr[tr.length-1]; let i=Math.min(tr.length-1,Math.max(1,Math.floor(t/0.001))); while(tr[i].t<t&&i<tr.length-1)i++; while(tr[i-1].t>t&&i>1)i--; const a=tr[i-1],b=tr[i],f=(t-a.t)/(b.t-a.t||1); return {t,p:a.p.map((x,k)=>x+f*(b.p[k]-x)),v:a.v}; }
+
+function drawSide(res,tNow){
+  const c=el('cSide'); const {g,w,h}=setup(c,300); g.clearRect(0,0,w,h);
+  const P=params(); const yMax=P.mound+0.6, yMin=-0.6; const pad={l:44,r:16,t:16,b:30};
+  const X=y=>pad.l+(yMax-y)/(yMax-yMin)*(w-pad.l-pad.r); const zMax=2.4; const Y=z=>h-pad.b-z/zMax*(h-pad.t-pad.b);
+  // grid
+  g.strokeStyle=css('--line-soft'); g.lineWidth=1;
+  for(let z=0;z<=2;z+=0.5){ g.beginPath(); g.moveTo(pad.l,Y(z)); g.lineTo(w-pad.r,Y(z)); g.stroke(); text(g,z.toFixed(1),pad.l-6,Y(z)+4,{align:'right'}); }
+  for(let y=0;y<=yMax;y+=2){ g.beginPath(); g.moveTo(X(y),pad.t); g.lineTo(X(y),h-pad.b); g.stroke(); text(g,y.toFixed(0),X(y),h-pad.b+14,{align:'center'}); }
+  text(g,'z (m)',pad.l-6,pad.t+4,{align:'right'}); text(g,'y (m)  ← 투수 방향',w-pad.r,h-pad.b+14,{align:'right'});
+  // ground + mound
+  g.fillStyle=css('--clay'); g.globalAlpha=0.35; g.beginPath(); g.moveTo(X(P.mound+0.6),Y(0)); g.quadraticCurveTo(X(P.mound),Y(0.45),X(P.mound-2.8),Y(0)); g.closePath(); g.fill(); g.globalAlpha=1;
+  g.strokeStyle=css('--grass'); g.lineWidth=2; g.beginPath(); g.moveTo(pad.l,Y(0)); g.lineTo(w-pad.r,Y(0)); g.stroke();
+  g.fillStyle=css('--ink'); g.fillRect(X(P.mound)-2,Y(0.254)-3,4,3); text(g,'러버',X(P.mound),Y(0.254)-8,{align:'center'});
+  g.fillRect(X(PLATE_Y),Y(0)-3,X(0)-X(PLATE_Y),3); text(g,'플레이트',X(PLATE_Y/2),Y(0)-8,{align:'center'});
+  // strike zone band at plate front
+  g.strokeStyle=css('--zone'); g.lineWidth=1.5; g.setLineDash([3,3]); g.strokeRect(X(PLATE_Y)-3,Y(ZONE_T),6,Y(ZONE_B)-Y(ZONE_T)); g.setLineDash([]);
+  // mound distance dimension
+  g.strokeStyle=css('--muted'); g.lineWidth=1; g.beginPath(); g.moveTo(X(P.mound),Y(2.15)); g.lineTo(X(0),Y(2.15)); g.stroke();
+  [X(P.mound),X(0)].forEach(x=>{g.beginPath();g.moveTo(x,Y(2.15)-5);g.lineTo(x,Y(2.15)+5);g.stroke();});
+  text(g,`러버 → 플레이트 ${P.mound.toFixed(2)} m (${(P.mound/0.3048).toFixed(1)} ft)`,X(P.mound/2),Y(2.15)-6,{align:'center'});
+  g.beginPath(); g.moveTo(X(P.mound-P.ext),Y(1.95)); g.lineTo(X(PLATE_Y),Y(1.95)); g.stroke();
+  [X(P.mound-P.ext),X(PLATE_Y)].forEach(x=>{g.beginPath();g.moveTo(x,Y(1.95)-5);g.lineTo(x,Y(1.95)+5);g.stroke();});
+  text(g,`실제 비행 ${(P.mound-P.ext-PLATE_Y).toFixed(2)} m`,X((P.mound-P.ext+PLATE_Y)/2),Y(1.95)+14,{align:'center'});
+  // paths
+  if(el('showVac').checked) path(g,res.vac.map(s=>[X(s.p[1]),Y(s.p[2])]),css('--clay'),[2,4],1.5);
+  if(el('showGhost').checked) path(g,res.ghost.map(s=>[X(s.p[1]),Y(s.p[2])]),css('--ghost'),[6,5],1.8);
+  const upto=res.tr.filter(s=>s.t<=tNow);
+  path(g,res.tr.map(s=>[X(s.p[1]),Y(s.p[2])]),css('--accent'),[],1); g.globalAlpha=1;
+  path(g,upto.map(s=>[X(s.p[1]),Y(s.p[2])]),css('--accent'),[],3);
+  const s=stateAt(res.tr,tNow); ball(g,X(s.p[1]),Y(s.p[2]),7);
+  text(g,'릴리스',X(res.release[1]),Y(res.release[2])-12,{align:'center'});
+}
+function drawTop(res,tNow){
+  const c=el('cTop'); const {g,w,h}=setup(c,240); g.clearRect(0,0,w,h);
+  const P=params(); const yMax=P.mound+0.6,yMin=-0.6; const pad={l:40,r:12,t:12,b:26};
+  const X=y=>pad.l+(yMax-y)/(yMax-yMin)*(w-pad.l-pad.r); const xr=1.2; const Y=x=>pad.t+(xr-x)/(2*xr)*(h-pad.t-pad.b);
+  g.strokeStyle=css('--line-soft'); g.lineWidth=1;
+  for(let x=-1;x<=1;x+=0.5){ g.beginPath(); g.moveTo(pad.l,Y(x)); g.lineTo(w-pad.r,Y(x)); g.stroke(); text(g,(x>0?'+':'')+x.toFixed(1),pad.l-5,Y(x)+4,{align:'right'}); }
+  for(let y=0;y<=yMax;y+=4){ g.beginPath(); g.moveTo(X(y),pad.t); g.lineTo(X(y),h-pad.b); g.stroke(); text(g,y.toFixed(0),X(y),h-pad.b+13,{align:'center'}); }
+  text(g,'x (m) +1루측',pad.l-5,pad.t+2,{align:'right'});
+  g.fillStyle=css('--ink'); g.fillRect(X(P.mound)-2,Y(0.305),4,Y(-0.305)-Y(0.305));
+  g.beginPath(); g.moveTo(X(PLATE_Y),Y(-0.2159)); g.lineTo(X(PLATE_Y),Y(0.2159)); g.lineTo(X(0.216),Y(0.2159)); g.lineTo(X(0),Y(0)); g.lineTo(X(0.216),Y(-0.2159)); g.closePath(); g.fill();
+  if(el('showVac').checked) path(g,res.vac.map(s=>[X(s.p[1]),Y(s.p[0])]),css('--clay'),[2,4],1.5);
+  if(el('showGhost').checked) path(g,res.ghost.map(s=>[X(s.p[1]),Y(s.p[0])]),css('--ghost'),[6,5],1.8);
+  path(g,res.tr.map(s=>[X(s.p[1]),Y(s.p[0])]),css('--accent'),[],1);
+  path(g,res.tr.filter(s=>s.t<=tNow).map(s=>[X(s.p[1]),Y(s.p[0])]),css('--accent'),[],3);
+  const s=stateAt(res.tr,tNow); ball(g,X(s.p[1]),Y(s.p[0]),6);
+}
+function drawCatch(res,tNow){
+  const c=el('cCatch'); const {g,w,h}=setup(c,240); g.clearRect(0,0,w,h);
+  const pad={l:36,r:10,t:10,b:24}; const xr=1.0, zMax=2.2;
+  const sc=Math.min((w-pad.l-pad.r)/(2*xr),(h-pad.t-pad.b)/zMax); const cx=pad.l+(w-pad.l-pad.r)/2;
+  const X=x=>cx+x*sc; const Y=z=>h-pad.b-z*sc;
+  g.strokeStyle=css('--line-soft'); g.lineWidth=1;
+  for(let z=0;z<=2;z+=0.5){ g.beginPath(); g.moveTo(X(-xr),Y(z)); g.lineTo(X(xr),Y(z)); g.stroke(); text(g,z.toFixed(1),X(-xr)-5,Y(z)+4,{align:'right'}); }
+  for(let x=-1;x<=1;x+=0.5){ g.beginPath(); g.moveTo(X(x),Y(0)); g.lineTo(X(x),Y(zMax)); g.stroke(); text(g,(x>0?'+':'')+x.toFixed(1),X(x),h-pad.b+13,{align:'center'}); }
+  g.fillStyle=css('--ink'); g.fillRect(X(-0.2159),Y(0.03),X(0.2159)-X(-0.2159),3);
+  g.strokeStyle=css('--zone'); g.lineWidth=1.5; g.strokeRect(X(-HALF_W),Y(ZONE_T),X(HALF_W)-X(-HALF_W),Y(ZONE_B)-Y(ZONE_T));
+  text(g,'스트라이크 존',X(-HALF_W),Y(ZONE_T)-5);
+  if(el('showVac').checked) path(g,res.vac.map(s=>[X(s.p[0]),Y(s.p[2])]),css('--clay'),[2,4],1.5);
+  if(el('showGhost').checked) path(g,res.ghost.map(s=>[X(s.p[0]),Y(s.p[2])]),css('--ghost'),[6,5],1.8);
+  path(g,res.tr.map(s=>[X(s.p[0]),Y(s.p[2])]),css('--accent'),[],1);
+  path(g,res.tr.filter(s=>s.t<=tNow).map(s=>[X(s.p[0]),Y(s.p[2])]),css('--accent'),[],3);
+  // target ring
+  const P=params(); g.strokeStyle=css('--ghost'); g.lineWidth=1.5; g.beginPath(); g.arc(X(P.tx),Y(P.tz),7,0,Math.PI*2); g.stroke();
+  const s=stateAt(res.tr,tNow); const dist=Math.max(0.6,s.p[1]+1.2); ball(g,X(s.p[0]),Y(s.p[2]),Math.min(22,Math.max(4,7*sc/40*(18/dist))));
+}
+function draw(){ if(!result) return; drawSide(result,anim.t); drawTop(result,anim.t); drawCatch(result,anim.t); el('clock').textContent=`t = ${Math.round(anim.t*1000)} ms  (${SLOW}× 슬로모션)`; }
+
+function stats(res){
+  const P=params(); const fd=P.mound-P.ext-PLATE_Y;
+  el('s-dist').innerHTML=`${fd.toFixed(2)}<span>m</span>`; el('s-dist2').textContent=`러버 ${P.mound.toFixed(2)} − 익스텐션 ${P.ext.toFixed(2)} − 플레이트 앞 0.43`;
+  const v0=norm(res.v0)/MPH;
+  if(!res.plate){ el('s-speed').textContent=`${v0.toFixed(1)} → –`; el('s-time').innerHTML='–<span>ms</span>'; el('s-ivb').innerHTML='–<span>in</span>'; el('s-hb').innerHTML='–<span>in</span>'; el('s-call').textContent='땅'; el('s-callbox').classList.add('ball'); el('s-call2').textContent='플레이트 앞에서 지면에 닿음'; return; }
+  const v1=norm(res.plate.v)/MPH;
+  el('s-speed').innerHTML=`${v0.toFixed(1)} → ${v1.toFixed(1)}<span>mph</span>`; el('s-speed2').textContent=`항력 감속 −${(v0-v1).toFixed(1)} mph · 평균 ${(fd/res.plate.t/MPH).toFixed(1)} mph`;
+  el('s-time').innerHTML=`${Math.round(res.plate.t*1000)}<span>ms</span>`; el('s-time2').textContent=`타자 commit 마감 ≈ ${Math.round(res.plate.t*1000-150)} ms`;
+  const ivb=(res.plate.p[2]-res.gplate.p[2])*39.37, hb=(res.plate.p[0]-res.gplate.p[0])*39.37;
+  const drop=(res.release[2]-res.plate.p[2])*39.37;
+  el('s-ivb').innerHTML=`${ivb>=0?'+':''}${ivb.toFixed(1)}<span>in</span>`; el('s-ivb2').textContent=`총 낙차 ${drop.toFixed(1)} in (중력 포함)`;
+  el('s-hb').innerHTML=`${hb>=0?'+':''}${hb.toFixed(1)}<span>in</span>`; el('s-hb2').textContent=hb<0?'타자석 3루측(우완 팔쪽)으로':'1루측(우완 글러브쪽)으로';
+  const x=res.plate.p[0], z=res.plate.p[2]; const strike=Math.abs(x)<=HALF_W&&z>=ZONE_B-R&&z<=ZONE_T+R;
+  el('s-call').textContent=strike?'STRIKE':'BALL'; el('s-callbox').classList.toggle('ball',!strike);
+  el('s-call2').textContent=`x ${x>=0?'+':''}${x.toFixed(2)} m, z ${z.toFixed(2)} m · 유효회전 ${Math.round(norm(res.w)*Math.sqrt(1-P.gyro*P.gyro)/RPM)} rpm`;
+}
+
+function recompute(){ const P=params(); fmtOutputs(P); result=throwPitch(P); stats(result); anim.t=0; draw(); }
+function tick(now){ if(!anim.playing) return; const dt=(now-anim.last)/1000/SLOW; anim.last=now; anim.t+=dt; const tEnd=result.tr[result.tr.length-1].t; if(anim.t>=tEnd){anim.t=tEnd;anim.playing=false;el('btnPlay').textContent='▶ 다시 재생';} draw(); if(anim.playing) anim.raf=requestAnimationFrame(tick); }
+function play(){ if(anim.playing){anim.playing=false;el('btnPlay').textContent='▶ 슬로모션 재생';return;} const tEnd=result.tr[result.tr.length-1].t; if(anim.t>=tEnd) anim.t=0; anim.playing=true; anim.last=performance.now(); el('btnPlay').textContent='❚❚ 일시정지'; anim.raf=requestAnimationFrame(tick); }
+
+// ---------- wiring ----------
+const pb=el('presets');
+Object.entries(PRESETS).forEach(([k,p])=>{ const b=document.createElement('button'); b.textContent=`${k} ${p.n}`; b.dataset.k=k; if(k===preset) b.classList.add('on'); b.onclick=()=>{ preset=k; [...pb.children].forEach(x=>x.classList.toggle('on',x.dataset.k===k)); el('mph').value=p.mph; el('rpm').value=p.rpm; el('tilt').value=p.tilt; el('gyro').value=p.gyro; recompute(); }; pb.appendChild(b); });
+el('hand').querySelectorAll('button').forEach(b=>b.onclick=()=>{ hand=b.dataset.h; el('hand').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b)); el('relx').value=hand==='R'?-0.55:0.55; recompute(); });
+ids.forEach(k=>el(k).addEventListener('input',()=>{ if(['mph','rpm','tilt','gyro'].includes(k)) [...pb.children].forEach(x=>x.classList.remove('on')); recompute(); }));
+['showGhost','showVac'].forEach(k=>el(k).addEventListener('change',draw));
+el('btnPlay').onclick=play; el('btnReset').onclick=()=>{anim.playing=false;anim.t=0;el('btnPlay').textContent='▶ 슬로모션 재생';draw();};
+window.addEventListener('resize',draw);
+document.fonts?.ready.then(draw);
+recompute();
+if(!matchMedia('(prefers-reduced-motion: reduce)').matches) setTimeout(play,600);
+</script>

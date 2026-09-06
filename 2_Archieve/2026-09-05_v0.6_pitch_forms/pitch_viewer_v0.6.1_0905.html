@@ -1,0 +1,510 @@
+<title>투구 궤적 실험실</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#f5f3ec; --panel:#fbfaf6; --ink:#1b2420; --muted:#5f6a63; --line:#d8d3c4; --line-soft:#e8e4d8;
+  --accent:#c1352b; --accent-ink:#8f251e; --ghost:#6b7f8f; --grass:#3f7a4a; --clay:#b9793f; --leather:#f2ecdc; --seam:#b3372c;
+  --bone:#3a4a56; --com:#c98a12; --gaze:#2b6f9e; --zone:#1b2420; --ok:#2f7d4f; --bad:#9c3b2e; --warn:#b8860b; color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#151a17; --panel:#1d2320; --ink:#ece9df; --muted:#9aa39c; --line:#2f3833; --line-soft:#242c28;
+    --accent:#e0564a; --accent-ink:#f0857b; --ghost:#8ea3b3; --grass:#5c9a67; --clay:#c98d55; --leather:#e6dfcc; --seam:#c8433a;
+    --bone:#c7d3dc; --com:#e6b04a; --gaze:#6fb1e0; --zone:#ece9df; --ok:#6fbf8a; --bad:#e07a6a; --warn:#e0b84a; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#151a17; --panel:#1d2320; --ink:#ece9df; --muted:#9aa39c; --line:#2f3833; --line-soft:#242c28;
+  --accent:#e0564a; --accent-ink:#f0857b; --ghost:#8ea3b3; --grass:#5c9a67; --clay:#c98d55; --leather:#e6dfcc; --seam:#c8433a;
+  --bone:#c7d3dc; --com:#e6b04a; --gaze:#6fb1e0; --zone:#ece9df; --ok:#6fbf8a; --bad:#e07a6a; --warn:#e0b84a; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:14px;line-height:1.5}
+header{display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:20px 28px 12px;border-bottom:1px solid var(--line)}
+h1{font-family:"Barlow Condensed","Arial Narrow",sans-serif;font-weight:700;font-size:34px;letter-spacing:.01em;margin:0;text-wrap:balance}
+h1 small{font-family:"IBM Plex Mono",monospace;font-weight:400;font-size:12px;color:var(--muted);margin-left:10px;letter-spacing:.04em}
+header p{margin:0;color:var(--muted);max-width:62ch}
+.wrap{display:grid;grid-template-columns:340px 1fr;min-height:calc(100vh - 80px)}
+aside{border-right:1px solid var(--line);padding:18px 20px 32px;background:var(--panel);display:flex;flex-direction:column;gap:16px}
+main{padding:18px 28px 40px;display:flex;flex-direction:column;gap:16px;min-width:0}
+.group{display:flex;flex-direction:column;gap:8px}
+.eyebrow{font-family:"Barlow Condensed",sans-serif;font-weight:600;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:flex;justify-content:space-between;align-items:baseline}
+.eyebrow span{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:0;text-transform:none;font-weight:400}
+.presets{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.presets button{font:600 13px "Barlow Condensed",sans-serif;letter-spacing:.05em;padding:6px 3px;border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:4px;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.presets button:hover{border-color:var(--accent)}
+.presets button.on{background:var(--accent);border-color:var(--accent);color:#fff}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.ctl{display:grid;grid-template-columns:1fr auto;align-items:center;gap:1px 10px}
+.ctl label{color:var(--muted);font-size:12.5px}
+.ctl output{font-family:"IBM Plex Mono",monospace;font-size:12px;font-variant-numeric:tabular-nums;text-align:right}
+.ctl input[type=range]{grid-column:1/-1;width:100%;accent-color:var(--accent);margin:0;height:20px}
+.seg{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.seg button{font:500 13px "IBM Plex Sans",sans-serif;padding:6px;border:0;background:transparent;color:var(--ink);cursor:pointer}
+.seg button.on{background:var(--ink);color:var(--bg)}
+select{font:500 13.5px "IBM Plex Sans",sans-serif;padding:7px 8px;border:1px solid var(--line);border-radius:4px;background:var(--panel);color:var(--ink);width:100%}
+.derived{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--muted);line-height:1.6;border-left:2px solid var(--accent);padding-left:10px}
+.derived b{color:var(--ink);font-weight:500}
+.toggles{display:flex;flex-direction:column;gap:5px;font-size:13px;color:var(--muted)}
+.toggles label{display:flex;gap:8px;align-items:center;cursor:pointer}
+.toggles input{accent-color:var(--accent)}
+.play{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.play button{font:600 15px "Barlow Condensed",sans-serif;letter-spacing:.06em;padding:8px 16px;border-radius:4px;border:1px solid var(--accent);background:var(--accent);color:#fff;cursor:pointer}
+.play button.secondary{background:transparent;color:var(--ink);border-color:var(--line)}
+.play select{font:500 13px "IBM Plex Sans",sans-serif;padding:6px 8px;border:1px solid var(--line);border-radius:4px;background:var(--panel);color:var(--ink);width:auto}
+.play output{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--muted);margin-left:auto;font-variant-numeric:tabular-nums}
+.play input[type=range]{flex:1 1 160px;accent-color:var(--accent);min-width:120px}
+.stats{display:grid;grid-template-columns:repeat(8,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.stat{background:var(--panel);padding:10px 14px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.stat .k{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+.stat .v{font-family:"Barlow Condensed",sans-serif;font-weight:600;font-size:29px;line-height:1.05;font-variant-numeric:tabular-nums;white-space:nowrap}
+.stat .v span{font-size:14px;font-weight:500;color:var(--muted);margin-left:4px}
+.stat .s{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stat.call .v{color:var(--ok)} .stat.call.ball .v{color:var(--bad)}
+.delta{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--muted);line-height:1.6;border-left:2px solid var(--gaze);padding-left:10px}
+.delta b{color:var(--ink);font-weight:500}
+.legend i.base{border-top:2px dashed var(--gaze)}
+.check{display:flex;gap:10px;flex-wrap:wrap;font-family:"IBM Plex Mono",monospace;font-size:11.5px}
+.check span{padding:3px 8px;border-radius:3px;border:1px solid var(--line);color:var(--muted)}
+.check span.ok{border-color:var(--ok);color:var(--ok)} .check span.warn{border-color:var(--warn);color:var(--warn)}
+.views{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.view{border:1px solid var(--line);border-radius:6px;background:var(--panel);padding:10px 12px 8px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.view h2{font-family:"Barlow Condensed",sans-serif;font-weight:600;font-size:15px;letter-spacing:.08em;text-transform:uppercase;margin:0;color:var(--muted);display:flex;justify-content:space-between;gap:8px}
+.view h2 span{font-family:"IBM Plex Mono",monospace;font-weight:400;font-size:11px;letter-spacing:0;text-transform:none}
+.view h2 select{font:500 12px "IBM Plex Sans",sans-serif;padding:2px 6px;border:1px solid var(--line);border-radius:4px;background:var(--panel);color:var(--ink);width:auto;text-transform:none;letter-spacing:0}
+.view canvas{width:100%;display:block}
+#pov{grid-column:1/2;grid-row:1/3} #side{grid-column:2/4} #body{grid-column:2/3} #top{grid-column:3/4}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+.legend i{display:inline-block;width:22px;height:0;border-top:2px solid var(--accent);vertical-align:middle;margin-right:6px}
+.legend i.ghost{border-top:2px dashed var(--ghost)} .legend i.bone{border-top:3px solid var(--bone)} .legend i.gaze{border-top:2px dotted var(--gaze)}
+.legend i.dot{width:8px;height:8px;border:0;border-radius:50%;background:var(--com)}
+.note{font-size:12.5px;color:var(--muted);max-width:84ch}
+@media (max-width:1100px){.views{grid-template-columns:1fr 1fr}#pov{grid-column:1/2;grid-row:1/3}#side{grid-column:2/3}#body{grid-column:2/3}#top{grid-column:auto}}
+@media (max-width:1300px){.stats{grid-template-columns:repeat(4,1fr)}}
+@media (max-width:900px){.wrap{grid-template-columns:1fr}aside{border-right:0;border-bottom:1px solid var(--line)}.stats{grid-template-columns:repeat(2,1fr)}.views{grid-template-columns:1fr}#pov,#side,#body,#top{grid-column:auto;grid-row:auto}}
+</style>
+
+<header>
+  <h1>투구 궤적 실험실 <small>bbsim physics · v0.6.1_0905 · params <span id="pver"></span></small></h1>
+  <p>선수 카드(키·폼·손목·손가락·악력)가 인체 사슬과 회전 모델을 거쳐 릴리스·회전축·구속·회전수가 되고, 항력·마그누스·실밥 효과·회전 감쇠·환경을 넣은 RK4 적분이 궤적이 됩니다. 파이썬 엔진과 같은 파라미터 파일을 씁니다.</p>
+</header>
+
+<div class="wrap">
+<aside>
+  <div class="group">
+    <div class="eyebrow">투수 프로필 <span id="profTag"></span></div>
+    <select id="profile"></select>
+    <div class="seg" id="hand"><button data-h="R" class="on">우완 RHP</button><button data-h="L">좌완 LHP</button></div>
+    <div class="ctl"><label>키</label><output id="o-height"></output><input type="range" id="height" min="1.65" max="2.05" step="0.01" value="1.85"></div>
+  </div>
+
+  <div class="group">
+    <div class="eyebrow">투구폼 프리셋 <span>인체공학 기준 폼</span></div>
+    <div class="presets" id="forms"></div>
+    <div class="toggles"><label><input type="checkbox" id="lockBase"> 현재 폼을 기준으로 고정 (변형 비교)</label></div>
+    <div class="delta" id="delta">기준 폼을 고정하면 슬라이더 변형에 따른 릴리스·구속·궤적 차이가 여기와 그림(점선)에 표시됩니다.</div>
+  </div>
+
+  <div class="group">
+    <div class="eyebrow">폼 (릴리스 순간) <span>감사 반영: 외전 90° 기준</span></div>
+    <div class="ctl"><label>어깨 외전 각 (문헌 84~95°)</label><output id="o-abd"></output><input type="range" id="abd" min="75" max="105" step="1" value="92"></div>
+    <div class="ctl"><label>몸통 측면 기울기 (글러브쪽 +, 슬롯을 만듦)</label><output id="o-tilt"></output><input type="range" id="tilt" min="-30" max="50" step="1" value="30"></div>
+    <div class="ctl"><label>몸통 전방 기울기</label><output id="o-lean"></output><input type="range" id="lean" min="0" max="65" step="1" value="30"></div>
+    <div class="ctl"><label>스트라이드 (키 대비, 프로 0.80~0.85)</label><output id="o-stride"></output><input type="range" id="stride" min="0.55" max="1.05" step="0.01" value="0.84"></div>
+    <div class="ctl"><label>팔 전방 각</label><output id="o-fwd"></output><input type="range" id="fwd" min="10" max="45" step="1" value="35"></div>
+    <div class="ctl"><label>코어·회전 힘 (자세의 잠재 효율을 얼마나 실현하는가)</label><output id="o-core"></output><input type="range" id="core" min="0" max="1" step="0.01" value="0.7"></div>
+    <div class="derived" id="derived"></div>
+  </div>
+
+  <div class="group">
+    <div class="eyebrow">회전 모델 (선수 카드) <span>rpm = BU × 구속 × 그립 × 악력 포화</span></div>
+    <div class="ctl"><label>기본 구속 (사슬·그립 보정 전)</label><output id="o-mph"></output><input type="range" id="mph" min="70" max="103" step="0.5" value="94"></div>
+    <div class="ctl"><label>손목 굴곡 속도</label><output id="o-wrist"></output><input type="range" id="wrist_speed" min="0" max="100" step="1" value="60"></div>
+    <div class="ctl"><label>손가락 길이 (정규화)</label><output id="o-finger"></output><input type="range" id="finger_len" min="0" max="1" step="0.01" value="0.5"></div>
+    <div class="ctl"><label>손가락 압력 (악력)</label><output id="o-force"></output><input type="range" id="grip_force" min="0" max="100" step="1" value="60"></div>
+    <div class="ctl"><label>그립·실밥 숙련</label><output id="o-skill"></output><input type="range" id="grip_skill" min="0" max="100" step="1" value="60"></div>
+    <div class="ctl"><label>회전 효율 (손목·전완)</label><output id="o-eff"></output><input type="range" id="eff" min="0.3" max="1" step="0.01" value="0.92"></div>
+    <div class="ctl"><label>기본 제구 산포 σ</label><output id="o-cmd"></output><input type="range" id="cmd" min="0" max="0.35" step="0.01" value="0.14"></div>
+    <div class="toggles"><label><input type="checkbox" id="rpmOverride"> 회전수 직접 지정 (오버라이드)</label></div>
+    <div class="ctl"><label>회전수 오버라이드</label><output id="o-rpm"></output><input type="range" id="rpm" min="0" max="3400" step="10" value="2300" disabled></div>
+  </div>
+
+  <div class="group">
+    <div class="eyebrow">그립 <span id="gripTag"></span></div>
+    <div class="presets" id="grips"></div>
+  </div>
+
+  <div class="group">
+    <div class="eyebrow">환경 · 마운드 · 목표</div>
+    <div class="ctl"><label>기온</label><output id="o-temp"></output><input type="range" id="temp" min="-5" max="40" step="1" value="20"></div>
+    <div class="ctl"><label>고도</label><output id="o-alt"></output><input type="range" id="alt" min="0" max="2000" step="50" value="0"></div>
+    <div class="ctl"><label>바람 (좌우, 1루측 +)</label><output id="o-windx"></output><input type="range" id="windx" min="-8" max="8" step="0.5" value="0"></div>
+    <div class="ctl"><label>바람 (앞뒤, 투수 방향 + = 맞바람)</label><output id="o-windy"></output><input type="range" id="windy" min="-8" max="8" step="0.5" value="0"></div>
+    <div class="ctl"><label>러버 → 플레이트 거리</label><output id="o-mound"></output><input type="range" id="mound" min="14" max="22" step="0.01" value="18.44"></div>
+    <div class="ctl"><label>목표 좌우 x (1루측 +)</label><output id="o-tx"></output><input type="range" id="tx" min="-0.5" max="0.5" step="0.01" value="0"></div>
+    <div class="ctl"><label>목표 높이 z</label><output id="o-tz"></output><input type="range" id="tz" min="0.2" max="1.4" step="0.01" value="0.75"></div>
+  </div>
+
+  <div class="group">
+    <div class="eyebrow">표시</div>
+    <div class="toggles">
+      <label><input type="checkbox" id="showGhost" checked> 무회전 기준선 (항력만)</label>
+      <label><input type="checkbox" id="showSSW" checked> 실밥 효과(SSW) 적용</label>
+      <label><input type="checkbox" id="showScatter" checked> 제구 산포 점 (던지기 누적)</label>
+      <label><input type="checkbox" id="showCom" checked> 무게중심·지지 기저·시선</label>
+    </div>
+  </div>
+</aside>
+
+<main>
+  <div class="stats">
+    <div class="stat"><div class="k">릴리스 (사슬 도출)</div><div class="v" id="s-rel">–</div><div class="s" id="s-rel2"></div></div>
+    <div class="stat"><div class="k">구속 릴리스 → 플레이트</div><div class="v" id="s-speed">–</div><div class="s" id="s-speed2"></div></div>
+    <div class="stat"><div class="k">회전수 (도출)</div><div class="v" id="s-rpm">–</div><div class="s" id="s-rpm2"></div></div>
+    <div class="stat"><div class="k">회전축 · 유효 회전</div><div class="v" id="s-axis">–</div><div class="s" id="s-axis2"></div></div>
+    <div class="stat"><div class="k">움직임 IVB / HB</div><div class="v" id="s-move">–</div><div class="s" id="s-move2"></div></div>
+    <div class="stat call" id="s-callbox"><div class="k">플레이트 통과</div><div class="v" id="s-call">–</div><div class="s" id="s-call2"></div></div>
+    <div class="stat"><div class="k">사슬 효율 (자세→힘)</div><div class="v" id="s-chain">–</div><div class="s" id="s-chain2"></div></div>
+    <div class="stat"><div class="k">타자 시점 (접근각·체감)</div><div class="v" id="s-perc">–</div><div class="s" id="s-perc2"></div></div>
+  </div>
+  <div class="check" id="check"></div>
+
+  <div class="play">
+    <button id="btnThrow">⚾ 던지기 (산포 적용)</button>
+    <button class="secondary" id="btnPlay">▶ 딜리버리부터 재생</button>
+    <button class="secondary" id="btnReset">릴리스 순간으로</button>
+    <button class="secondary" id="btnClear">산포 지우기</button>
+    <select id="slow" aria-label="재생 배속"><option value="1">1× 실시간</option><option value="2">2×</option><option value="4" selected>4×</option><option value="8">8×</option><option value="20">20×</option><option value="50">50×</option></select>
+    <input type="range" id="scrub" min="-900" max="500" step="1" value="0" aria-label="타임라인">
+    <output id="clock">t = 0 ms</output>
+  </div>
+
+  <div class="views">
+    <div class="view" id="pov"><h2>눈으로 보는 공 <select id="eye"><option value="catcher">포수 눈 (플레이트 뒤 2 m)</option><option value="batterR">우타자 눈</option><option value="batterL">좌타자 눈</option></select></h2><canvas id="cPov"></canvas><div class="legend" id="povInfo" style="justify-content:space-between"></div></div>
+    <div class="view" id="side"><h2>옆에서 본 딜리버리와 궤적 <span>y (m) → 높이 z (m)</span></h2><canvas id="cSide"></canvas></div>
+    <div class="view" id="body"><h2>인체 모델 (포수 시점) <span id="phaseTag"></span></h2><canvas id="cBody"></canvas></div>
+    <div class="view" id="top"><h2>위에서 본 궤적 <span>y → x (m)</span></h2><canvas id="cTop"></canvas></div>
+    <div class="view"><h2>포수 시점 2D <span>x (m) → z (m)</span></h2><canvas id="cCatch"></canvas></div>
+    <div class="view"><h2>공 회전 (포수 시점) <span>40× 슬로모션</span></h2><canvas id="cBall"></canvas></div>
+    <div class="view"><h2>그립 (투수 손 시점) <span id="gripName"></span></h2><canvas id="cGrip"></canvas></div>
+  </div>
+
+  <div class="legend"><span><i></i>회전+실밥 궤적</span><span><i class="base"></i>기준 폼 (고정 시)</span><span><i class="ghost"></i>무회전 기준선</span><span><i class="bone"></i>분절(뼈대)</span><span><i class="dot"></i>무게중심</span><span><i class="gaze"></i>시선 (눈 → 목표)</span></div>
+  <p class="note" id="explain"></p>
+  <p class="note" id="modelnote"></p>
+</main>
+
+<script>
+const PARAMS = {"version": "0.3.1", "notes": "Single source for grips, body chain, spin model, profiles. Python (bbsim.physics.body / bbsim.agents.pitcher) and the HTML viewer (tools/build_viewer.py injects this file) both read it. Coordinates: +x first-base side, +y toward pitcher, +z up; RHP throwing side = -x.", "aero": {"cd": 0.35, "cl_model": "nathan2008", "spin_decay_tau_s": 12.0, "ssw_scale": 1.0}, "environment_default": {"temp_c": 20.0, "altitude_m": 0.0, "rel_humidity": 0.5, "wind_mps": [0.0, 0.0, 0.0]}, "grips": {"FF": {"name": "포심", "tilt0": 0, "eff": 0.98, "spd": 1.0, "spin": 1.0, "seam": 0, "pron": 0, "ssw": [0.0, 0.0], "fingers": [[-0.22, 0.55, 0], [0.22, 0.55, 0]], "thumb": [0, -0.75], "desc": "검지·중지가 말굽 실밥을 가로질러 걸림. 4개 실밥이 회전면을 지나 양력이 가장 큼."}, "SI": {"name": "싱커", "tilt0": 25, "eff": 0.85, "spd": 0.99, "spin": 0.93, "seam": 90, "pron": 10, "ssw": [-0.03, -0.02], "fingers": [[-0.2, 0.55, 0], [0.22, 0.5, 0]], "thumb": [0.05, -0.75], "desc": "실밥 좁은 쪽을 따라 잡고 손목을 안쪽으로 눌러 축이 팔쪽으로 기움. 실밥 효과(SSW)가 팔쪽·아래로 더해짐."}, "CT": {"name": "커터", "tilt0": -30, "eff": 0.55, "spd": 0.95, "spin": 1.02, "seam": 0, "pron": -10, "ssw": [0.01, 0.0], "fingers": [[0.05, 0.55, 15], [0.38, 0.45, 15]], "thumb": [-0.1, -0.75], "desc": "포심을 바깥으로 치우쳐 잡고 손가락 바깥쪽으로 자름. 자이로 성분이 커져 글러브쪽으로 짧게 꺾임."}, "SL": {"name": "슬라이더", "tilt0": -80, "eff": 0.35, "spd": 0.9, "spin": 1.07, "seam": 45, "pron": -15, "ssw": [0.02, -0.01], "fingers": [[0.12, 0.52, 30], [0.42, 0.38, 30]], "thumb": [-0.15, -0.7], "desc": "실밥 바깥쪽에 손가락을 두고 손목을 돌려 놓음. 회전 대부분이 총알 회전이라 움직임은 작지만 늦게 나타남."}, "CU": {"name": "커브", "tilt0": 180, "eff": 0.9, "spd": 0.84, "spin": 1.1, "seam": 0, "pron": 0, "ssw": [0.0, 0.0], "fingers": [[-0.25, 0.52, -20], [0.05, 0.6, -20]], "thumb": [0.2, -0.7], "desc": "중지를 실밥에 걸고 손목을 앞으로 감아 톱스핀을 줌. 축이 반대라 중력과 같은 방향으로 떨어짐."}, "CH": {"name": "체인지업", "tilt0": 30, "eff": 0.75, "spd": 0.9, "spin": 0.72, "seam": 90, "pron": 15, "ssw": [-0.03, -0.03], "fingers": [[-0.35, 0.35, 0], [0.0, 0.6, 0], [0.35, 0.35, 0]], "thumb": [0, -0.7], "desc": "손바닥 깊이 잡고 세 손가락으로 던져 회전수와 구속을 함께 낮춤. 회내로 축이 팔쪽으로 기울고 실밥 효과가 낙차를 더함."}, "SP": {"name": "스플리터", "tilt0": 15, "eff": 0.6, "spd": 0.9, "spin": 0.55, "seam": 90, "pron": 5, "ssw": [-0.01, -0.04], "fingers": [[-0.55, 0.45, -25], [0.55, 0.45, 25]], "thumb": [0, -0.75], "desc": "검지·중지를 벌려 실밥 바깥에 걸침. 회전이 크게 줄어 양력이 사라지고 실밥 효과로 포심보다 급락."}}, "body": {"segments": {"thigh": 0.245, "shank": 0.245, "trunk": 0.29, "upper_arm": 0.186, "forearm_ball": 0.2, "shoulder_half": 0.13, "head": 0.13, "hip_half": 0.06}, "release": {"pelvis_forward": 0.72, "pelvis_height": 0.42, "rear_foot_drag": 0.4, "rear_toe_lift": 0.03, "front_foot_x": 0.04, "rear_foot_x": 0.05, "pelvis_x": 0.06, "elbow_flex_deg": 20.0, "arm_angle_elbow_term": 5.0}, "timing": {"t_del": 0.9, "tau_lift": 0.15, "tau_fc": 0.82, "tau_mer": 0.96, "t_follow": 0.35}, "mound": {"rubber_height": 0.254, "flat_len": 0.152, "slope": 0.0833}, "velocity_chain": {"stride_ref": 0.83, "stride_coef": 0.02, "stride_step": 0.1, "lean_ref": 32.0, "lean_coef": 0.03, "lean_step": 15.0, "clamp": 0.04}, "command": {"com_x_coef": 0.4, "com_x_free": 0.15, "com_x_step": 0.15, "com_y_coef": 0.3, "com_y_free": 0.3, "com_y_step": 0.2}, "limits": {"abd": [75, 105], "tilt": [-30, 50], "lean": [0, 65], "stride": [0.55, 1.05], "fwd": [10, 45]}}, "spin_model": {"bu_base": 20.0, "bu_span": 8.0, "wrist_w": 0.6, "finger_w": 0.4, "force_need_base": 35.0, "force_need_slope": 0.8, "grip_skill_base": 0.85, "grip_skill_span": 0.15}, "fatigue": {"free_pitches": 60, "mph_per_pitch": 0.0004, "sigma_per_pitch": 0.004, "spin_per_pitch": 0.0003}, "profiles": [{"id": "A", "name": "A · 오버핸드 파워", "hand": "R", "height": 1.93, "abd": 98, "tilt": 40, "lean": 33, "stride": 0.87, "fwd": 35, "eff": 0.95, "cmd": 0.14, "mph": 97, "wrist_speed": 80, "finger_len": 0.7, "grip_force": 70, "grip_skill": 65, "repertoire": ["FF", "SL", "CU", "CH"], "release_sigma": [0.04, 0.03], "axis_sigma_deg": 4}, {"id": "B", "name": "B · 쓰리쿼터 표준", "hand": "R", "height": 1.85, "abd": 92, "tilt": 30, "lean": 30, "stride": 0.84, "fwd": 35, "eff": 0.92, "cmd": 0.12, "mph": 94, "wrist_speed": 60, "finger_len": 0.5, "grip_force": 60, "grip_skill": 60, "repertoire": ["FF", "SI", "SL", "CH"], "release_sigma": [0.035, 0.025], "axis_sigma_deg": 4}, {"id": "C", "name": "C · 사이드암 기교", "hand": "R", "height": 1.8, "abd": 88, "tilt": 10, "lean": 25, "stride": 0.82, "fwd": 35, "eff": 0.8, "cmd": 0.1, "mph": 89, "wrist_speed": 55, "finger_len": 0.5, "grip_force": 55, "grip_skill": 75, "repertoire": ["SI", "SL", "CH", "FF"], "release_sigma": [0.03, 0.02], "axis_sigma_deg": 3}, {"id": "D", "name": "D · 좌완 언더핸드", "hand": "L", "height": 1.78, "abd": 82, "tilt": -25, "lean": 58, "stride": 0.85, "fwd": 30, "eff": 0.85, "cmd": 0.13, "mph": 84, "wrist_speed": 50, "finger_len": 0.4, "grip_force": 50, "grip_skill": 70, "repertoire": ["SI", "SL", "CH"], "release_sigma": [0.03, 0.02], "axis_sigma_deg": 3}, {"id": "E", "name": "E · 좌완 하이슬롯", "hand": "L", "height": 1.88, "abd": 98, "tilt": 42, "lean": 32, "stride": 0.85, "fwd": 35, "eff": 0.97, "cmd": 0.11, "mph": 95, "wrist_speed": 85, "finger_len": 0.6, "grip_force": 65, "grip_skill": 60, "repertoire": ["FF", "CU", "CH", "CT"], "release_sigma": [0.03, 0.02], "axis_sigma_deg": 3}], "forms": {"overhand": {"name": "오버핸드", "abd": 100, "tilt": 42, "lean": 30, "stride": 0.82, "fwd": 34, "desc": "측면 기울기 최대. 팔 각도 55~60°, 릴리스 높음. 상체 회전이 세로축으로 쏠려 골반 회전 기여가 줄고 팔꿈치 부하 지수가 오름."}, "high34": {"name": "하이 쓰리쿼터", "abd": 96, "tilt": 34, "lean": 30, "stride": 0.84, "fwd": 35, "desc": "가장 흔한 파워 폼. 외전 95° 근처, 측면 34°로 문헌 오버핸드군 평균."}, "threequarter": {"name": "쓰리쿼터", "abd": 92, "tilt": 30, "lean": 30, "stride": 0.84, "fwd": 35, "desc": "리그 중앙값(팔 각도 40°). 외전·측면·전방 모두 최적 구간이라 사슬 효율 기준(1.00)."}, "low34": {"name": "로우 쓰리쿼터", "abd": 90, "tilt": 22, "lean": 28, "stride": 0.83, "fwd": 36, "desc": "팔 각도 25~30°. 수평 움직임이 커지고 릴리스가 낮아짐. 효율 손실 거의 없음."}, "sidearm": {"name": "사이드암", "abd": 86, "tilt": 10, "lean": 25, "stride": 0.82, "fwd": 36, "desc": "팔 각도 10° 근처. 외전 86°로 약간 낮고 몸통 회전이 가로축으로 쏠려 구속 −2~3%."}, "submarine": {"name": "언더핸드", "abd": 82, "tilt": -22, "lean": 58, "stride": 0.85, "fwd": 30, "desc": "전방 기울기 58°로 상체가 거의 수평, 팔 각도 −30°. 다리·골반 힘은 크지만 어깨 내회전 기여가 작아 구속 −6~8%."}}, "chain_efficiency": {"abd_opt": 95.0, "abd_sigma": 18.0, "abd_max_loss": 0.1, "tilt_lo": -20.0, "tilt_hi": 45.0, "tilt_loss_per_deg": 0.0025, "tilt_max_loss": 0.06, "slot_lo": 0.0, "slot_loss_per_deg": 0.0015, "slot_max_loss": 0.08, "lean_opt": 32.0, "lean_hi": 50.0, "lean_loss_per_deg": 0.002, "lean_max_loss": 0.05, "core_weight": 0.6, "elbow_load": {"abd_coef": 0.004, "tilt_coef": 0.003, "base": 1.0}, "notes": "velocity_mult = (1 + stride term + lean term) x (1 - abd loss) x (1 - tilt loss) x (1 - slot loss) x (1 - lean-excess loss); realised = 1 - core_weight*(1-core)*(1-mult)... see body.chain_efficiency. Sources: Matsuo 2002 (abduction 90-110 optimal), Matsuo 2006 (abduction/lateral tilt -> elbow varus torque), Matsuo 2001 (forward trunk tilt in high-velocity group), Escamilla 2018 (sidearm velocity slightly lower), Statcast submarine velocities (~85 mph)."}};
+const GRIPS=PARAMS.grips, PROFILES=PARAMS.profiles, BODY=PARAMS.body, SM=PARAMS.spin_model;
+document.getElementById('pver').textContent=PARAMS.version;
+// ---------- physics (port of bbsim.physics) ----------
+const G=9.81,M=0.1449,R=0.03689,A=Math.PI*R*R,CD=PARAMS.aero.cd,TAU=PARAMS.aero.spin_decay_tau_s;
+const PLATE_Y=0.4318,HALF_W=0.2159+R,ZONE_T=1.045,ZONE_B=0.50;
+const MPH=0.44704,RPM=2*Math.PI/60;
+const cl=s=>s<0.1?1.5*s:0.09+0.6*s;
+const cross=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]];
+const norm=a=>Math.hypot(a[0],a[1],a[2]);
+const dot=(a,b)=>a[0]*b[0]+a[1]*b[1]+a[2]*b[2];
+const add=(a,b,k=1)=>[a[0]+k*b[0],a[1]+k*b[1],a[2]+k*b[2]];
+const unit=a=>{const n=norm(a)||1e-12;return a.map(x=>x/n);};
+function rhoAir(tempC,alt,rh){ const p=101325*Math.exp(-alt/8400), t=tempC+273.15; return p/(287.05*t)*(1-0.0035*rh*(t-273.15)/20); }
+function accel(v,w,mode,env,ssw){ const a=[0,0,-G]; const vr=add(v,env.wind,-1); const sp=norm(vr); if(sp<1e-9) return a; const k=env.rho*A/(2*M);
+  for(let i=0;i<3;i++) a[i]+=-k*CD*sp*vr[i]; const om=norm(w);
+  if(mode==='full'&&om>1e-9){ const wh=w.map(x=>x/om); const c=cross(wh,vr); const kk=k*cl(R*om/sp)*sp; for(let i=0;i<3;i++) a[i]+=kk*c[i]; }
+  if(mode==='full'&&ssw){ for(let i=0;i<3;i++) a[i]+=k*sp*sp*PARAMS.aero.ssw_scale*ssw[i]; } return a; }
+function integrate(p0,v0,w0,mode,env,ssw,dt=0.001){ const out=[{t:0,p:p0.slice(),v:v0.slice(),w:w0.slice()}]; let p=p0.slice(),v=v0.slice(),w=w0.slice(),t=0; const decay=TAU>0?Math.exp(-dt/TAU):1;
+  for(let n=0;n<4000;n++){ const k1v=accel(v,w,mode,env,ssw),k1p=v;
+    const p2=p.map((x,i)=>x+0.5*dt*k1p[i]),v2=v.map((x,i)=>x+0.5*dt*k1v[i]); const k2v=accel(v2,w,mode,env,ssw),k2p=v2;
+    const p3=p.map((x,i)=>x+0.5*dt*k2p[i]),v3=v.map((x,i)=>x+0.5*dt*k2v[i]); const k3v=accel(v3,w,mode,env,ssw),k3p=v3;
+    const p4=p.map((x,i)=>x+dt*k3p[i]),v4=v.map((x,i)=>x+dt*k3v[i]); const k4v=accel(v4,w,mode,env,ssw),k4p=v4;
+    p=p.map((x,i)=>x+dt/6*(k1p[i]+2*k2p[i]+2*k3p[i]+k4p[i])); v=v.map((x,i)=>x+dt/6*(k1v[i]+2*k2v[i]+2*k3v[i]+k4v[i])); w=w.map(x=>x*decay);
+    t+=dt; out.push({t,p:p.slice(),v:v.slice(),w:w.slice()}); if(p[1]<=-0.3||p[2]<=0) break; } return out; }
+function crossing(tr,y){ for(let i=1;i<tr.length;i++){ const a=tr[i-1].p[1],b=tr[i].p[1]; if(a>=y&&b<y){ const f=(a-y)/(a-b),s0=tr[i-1],s1=tr[i];
+  return {t:s0.t+f*(s1.t-s0.t),p:s0.p.map((x,k)=>x+f*(s1.p[k]-x)),v:s0.v.map((x,k)=>x+f*(s1.v[k]-x)),w:s1.w}; } } return null; }
+function spinVector(rpm,tiltDeg,gyro,hand,vhat){ const t=tiltDeg*Math.PI/180; let a=[-Math.cos(t),0,-Math.sin(t)]; if(hand==='L') a[0]=-a[0];
+  const d=dot(a,vhat); a=a.map((x,i)=>x-d*vhat[i]); a=unit(a); const om=rpm*RPM,g=Math.min(gyro,0.999),s=Math.sqrt(1-g*g); return a.map((x,i)=>om*(s*x+g*vhat[i])); }
+function throwPitch(S){ const release=S.release, speed=S.mphEff*MPH, target=[S.tx,PLATE_Y,S.tz]; let aim=target.slice();
+  const tf=norm(add(aim,release,-1))/speed; aim[2]+=0.5*G*tf*tf; let tr=null,v0=null,w=null;
+  for(let it=0;it<4;it++){ const dh=unit(add(aim,release,-1)); v0=dh.map(x=>x*speed); w=spinVector(S.rpm,S.tiltAxis,S.gyro,S.hand,dh);
+    tr=integrate(release,v0,w,'full',S.env,S.ssw); const c=crossing(tr,PLATE_Y); if(!c){aim[2]+=0.3;continue;} aim[0]-=c.p[0]-target[0]; aim[2]-=c.p[2]-target[2]; }
+  const ghost=integrate(release,v0,w,'noSpin',S.env,null);
+  return {tr,ghost,plate:crossing(tr,PLATE_Y),gplate:crossing(ghost,PLATE_Y),release,v0,w,spec:S}; }
+
+// ---------- body chain: JS port of bbsim.physics.body.release_pose ----------
+function groundH(y,M0){ const m=BODY.mound; const beyond=Math.max(0,(M0-m.flat_len)-y); return Math.min(m.rubber_height,Math.max(0,m.rubber_height-beyond*m.slope)); }
+function ik2(root,target,l1,l2,bendDir){ const d=add(target,root,-1); let L=norm(d); const dh=unit(d); L=Math.min(L,l1+l2-1e-4);
+  const a=(l1*l1-l2*l2+L*L)/(2*L); const hh=Math.sqrt(Math.max(0,l1*l1-a*a)); let perp=add(bendDir,dh,-dot(bendDir,dh)); perp=norm(perp)<1e-6?[0,-1,0]:unit(perp); return add(add(root,dh,a),perp,hh); }
+function releasePose(P){ const seg=BODY.segments, rel=BODY.release, h=P.height, side=P.hand==='R'?-1:1, M0=P.mound, stride=P.stride*h;
+  const ffy=M0-stride, rfy=M0-rel.rear_foot_drag*stride;
+  const frontFoot=[-side*rel.front_foot_x*h, ffy, groundH(ffy,M0)], rearFoot=[side*rel.rear_foot_x*h, rfy, groundH(rfy,M0)+rel.rear_toe_lift*h];
+  const pely=M0-rel.pelvis_forward*stride; const pelvis=[side*rel.pelvis_x*h, pely, groundH(pely,M0)+rel.pelvis_height*h];
+  const hip=seg.hip_half*h, leg=(seg.thigh+seg.shank)*h; let stretch=1;
+  for(let i=0;i<12;i++){ const rh=add(pelvis,[side*hip,0,0]), fh=add(pelvis,[-side*hip,0,0]); stretch=Math.max(norm(add(rearFoot,rh,-1))/leg, norm(add(frontFoot,fh,-1))/leg); if(stretch<=1) break; pelvis[2]-=(stretch-1)*leg*1.5+0.005; }
+  const ln=P.lean*Math.PI/180, tl=P.tilt*Math.PI/180; const up=unit([-side*Math.sin(tl)*Math.cos(ln), -Math.sin(ln), Math.cos(ln)*Math.cos(tl)]);
+  const shC=add(pelvis,up,seg.trunk*h); const eSide=unit(add([side,0,0],up,-dot([side,0,0],up))); const shT=add(shC,eSide,seg.shoulder_half*h), shG=add(shC,eSide,-seg.shoulder_half*h); const head=add(shC,up,seg.head*h);
+  const th=((P.abd-90)+P.tilt)*Math.PI/180, fw=P.fwd*Math.PI/180; const frontal=[side*Math.cos(th),0,Math.sin(th)], tp=[0,-1,0];
+  const upper=unit(add(frontal.map(x=>x*Math.cos(fw)),tp,Math.sin(fw))); const elbow=add(shT,upper,seg.upper_arm*h);
+  const ef=fw+rel.elbow_flex_deg*Math.PI/180; const fore=unit(add(frontal.map(x=>x*Math.cos(ef)),tp,Math.sin(ef))); const hand=add(elbow,fore,seg.forearm_ball*h);
+  const armAngle=Math.atan2(hand[2]-shT[2],Math.abs(hand[0]-shT[0]))*180/Math.PI;
+  const com=add(add(pelvis.map(x=>x*0.55),shC,0.35),head,0.10); const cmd=BODY.command;
+  const comX=Math.abs(com[0]-frontFoot[0]), comB=com[1]-frontFoot[1];
+  const cmdMul=1+cmd.com_x_coef*Math.max(0,comX-cmd.com_x_free)/cmd.com_x_step+cmd.com_y_coef*Math.max(0,comB-cmd.com_y_free)/cmd.com_y_step;
+  const vc=BODY.velocity_chain; const cl_=(x)=>Math.min(vc.clamp,Math.max(-vc.clamp,x));
+  const vmul=1+cl_(vc.stride_coef*(P.stride-vc.stride_ref)/vc.stride_step)+cl_(vc.lean_coef*(P.lean-vc.lean_ref)/vc.lean_step);
+  const rearKnee=ik2(add(pelvis,[side*hip,0,0]),rearFoot,seg.thigh*h,seg.shank*h,[0,-1,0]); const frontKnee=ik2(add(pelvis,[-side*hip,0,0]),frontFoot,seg.thigh*h,seg.shank*h,[0,-1,0.3]);
+  return {release:hand,shT,shG,shC,elbow,hand,pelvis,com,frontFoot,rearFoot,rearKnee,frontKnee,head,eyes:add(head,[0,-0.06*h,0.02*h]),up,armAngle,ext:M0-hand[1],stretch,vmul,cmdMul,comX,comB,frontal,tp}; }
+function spinModel(mph,ws,fl,gf,gs,code){ const g=GRIPS[code]; const bu=SM.bu_base+SM.bu_span*(SM.wrist_w*ws/100+SM.finger_w*fl); const need=SM.force_need_base+SM.force_need_slope*(mph-85); const fF=Math.min(1,gf/Math.max(need,1)); const fG=SM.grip_skill_base+SM.grip_skill_span*gs/100; return {bu,fForce:fF,fGrip:fG,rpm:bu*mph*fG*fF*g.spin}; }
+
+// ---------- chain efficiency: JS port of bbsim.physics.body.chain_efficiency ----------
+function chainEff(abd,tilt,lean,stride,armAngle,core){ const c=PARAMS.chain_efficiency, vc=BODY.velocity_chain; const cl_=(x)=>Math.min(vc.clamp,Math.max(-vc.clamp,x));
+  let gain=1+cl_(vc.stride_coef*(stride-vc.stride_ref)/vc.stride_step)+cl_(vc.lean_coef*(Math.min(lean,c.lean_opt)-vc.lean_ref)/vc.lean_step);
+  const abdLoss=c.abd_max_loss*(1-Math.exp(-0.5*Math.pow((abd-c.abd_opt)/c.abd_sigma,2)));
+  const tiltEx=Math.max(0,tilt-c.tilt_hi)+Math.max(0,c.tilt_lo-tilt); const tiltLoss=Math.min(c.tilt_max_loss,c.tilt_loss_per_deg*tiltEx);
+  const slotLoss=Math.min(c.slot_max_loss,c.slot_loss_per_deg*Math.max(0,c.slot_lo-armAngle)); const leanLoss=Math.min(c.lean_max_loss,c.lean_loss_per_deg*Math.max(0,lean-c.lean_hi));
+  const potential=gain*(1-abdLoss)*(1-tiltLoss)*(1-slotLoss)*(1-leanLoss); core=Math.min(1,Math.max(0,core));
+  const realised=1-(1-potential)*(1+c.core_weight*(1-core))-c.core_weight*(1-core)*0.05;
+  const elbow=c.elbow_load.base+c.elbow_load.abd_coef*Math.abs(abd-c.abd_opt)+c.elbow_load.tilt_coef*Math.max(0,tilt-30);
+  return {vmul:realised,potential,gain,abdLoss,tiltLoss,slotLoss,leanLoss,elbow,core}; }
+function perceived(res){ const pl=res.plate; if(!pl) return null; const [vx,vy,vz]=pl.v; const vaa=Math.atan2(vz,-vy)*180/Math.PI, haa=Math.atan2(vx,-vy)*180/Math.PI; const sp=norm(res.v0)/MPH; const eff=sp+(res.spec.ext-1.95)/0.3048*1.4;
+  const E=[-0.75*(res.spec.hand==='R'?1:-1)*-1,0.30,1.67]; const d=add(res.spec.release,E,-1); return {vaa,haa,eff,relElev:Math.atan2(d[2],d[1])*180/Math.PI,relAz:Math.atan2(d[0],d[1])*180/Math.PI}; }
+let baseline=null;
+// ---------- delivery animation (keyframes around the audited release pose) ----------
+const TM=BODY.timing; const T_DEL=TM.t_del, T_FOLLOW=TM.t_follow;
+const smooth=(a,b,x)=>{const t=Math.min(1,Math.max(0,(x-a)/(b-a)));return t*t*(3-2*t);};
+const lerp=(a,b,t)=>a+(b-a)*t; const lerp3=(a,b,t)=>[lerp(a[0],b[0],t),lerp(a[1],b[1],t),lerp(a[2],b[2],t)]; const nlerp=(a,b,t)=>unit(lerp3(a,b,t));
+function keyed(keys,tau){ if(tau<=keys[0][0]) return keys[0][1]; for(let i=1;i<keys.length;i++){ if(tau<=keys[i][0]){ const f=smooth(keys[i-1][0],keys[i][0],tau); const a=keys[i-1][1],b=keys[i][1]; return Array.isArray(a)?(Math.abs(norm(a)-1)<0.01?nlerp(a,b,f):lerp3(a,b,f)):lerp(a,b,f);} } return keys[keys.length-1][1]; }
+function skeleton(S,tau){ const rp=S.pose, h=S.height, side=S.hand==='R'?-1:1, M0=S.mound, seg=BODY.segments; const Lth=seg.thigh*h,Lsh=seg.shank*h,Ltr=seg.trunk*h,Lua=seg.upper_arm*h,Lfa=seg.forearm_ball*h,SW=seg.shoulder_half*h,hip=seg.hip_half*h;
+  const tl=TM.tau_lift, fc=TM.tau_fc, mer=TM.tau_mer; const stride=S.stride*h;
+  const g0=groundH(M0,M0);
+  const rearFoot=[side*BODY.release.rear_foot_x*h, keyed([[0,M0-0.03*h],[fc,M0-0.03*h],[1,rp.rearFoot[1]],[1.35,M0-0.6*stride]],tau), 0]; rearFoot[2]=groundH(rearFoot[1],M0)+keyed([[0,0],[fc,0],[1,BODY.release.rear_toe_lift*h],[1.35,0.05*h]],tau);
+  const frontFoot=[ keyed([[0,-side*0.08*h],[tl,-side*0.08*h],[fc,rp.frontFoot[0]],[1.35,rp.frontFoot[0]]],tau), keyed([[0,M0-0.12*h],[tl,M0-0.16*h],[fc,M0-stride],[1.35,M0-stride]],tau), 0 ]; frontFoot[2]=groundH(frontFoot[1],M0)+keyed([[0,0],[tl,0.36*h],[fc,0],[1.35,0]],tau);
+  const pelvis=[ keyed([[0,0],[fc,rp.pelvis[0]*0.5],[1,rp.pelvis[0]],[1.35,rp.pelvis[0]]],tau), keyed([[0,M0-0.14*h],[tl,M0-0.10*h],[fc,M0-0.55*stride],[1,rp.pelvis[1]],[1.35,M0-0.85*stride]],tau), keyed([[0,g0+0.50*h],[tl,g0+0.52*h],[fc,groundH(M0-0.55*stride,M0)+0.47*h],[1,rp.pelvis[2]],[1.35,rp.pelvis[2]-0.03*h]],tau) ];
+  const phi=keyed([[0,80],[0.3,80],[fc,45],[fc+0.06,0],[1,0],[1.35,-10]],tau)*Math.PI/180;   // pelvis line: closed -> open
+  const rearHip=add(pelvis,[side*hip*Math.cos(phi),hip*Math.sin(phi),0]), frontHip=add(pelvis,[-side*hip*Math.cos(phi),-hip*Math.sin(phi),0]);
+  const rearKnee=ik2(rearHip,rearFoot,Lth,Lsh,[0,-1,0]), frontKnee=ik2(frontHip,frontFoot,Lth,Lsh,[0,-1,0.3]);
+  const lean=keyed([[0,-6],[tl,-4],[fc,4],[1,S.lean],[1.35,S.lean+18]],tau)*Math.PI/180, tilt=keyed([[0,0],[fc,S.tilt*0.3],[1,S.tilt],[1.35,S.tilt*0.7]],tau)*Math.PI/180;
+  const up=unit([-side*Math.sin(tilt)*Math.cos(lean), -Math.sin(lean), Math.cos(lean)*Math.cos(tilt)]); const shC=add(pelvis,up,Ltr);
+  const psi=keyed([[0,0],[0.3,0],[fc,85],[fc+0.10,20],[1,0],[1.35,-25]],tau)*Math.PI/180;   // shoulder line: closed at foot contact -> open at release
+  let shLine=[side*Math.cos(psi),Math.sin(psi),0]; shLine=unit(add(shLine,up,-dot(shLine,up))); const shT=add(shC,shLine,SW), shG=add(shC,shLine,-SW); const head=add(shC,up,seg.head*h), eyes=add(head,[0,-0.06*h,0.02*h]);
+  const rd=unit(add(rp.frontal.map(x=>x*Math.cos(S.fwd*Math.PI/180)),rp.tp,Math.sin(S.fwd*Math.PI/180))); const ef=(S.fwd+BODY.release.elbow_flex_deg)*Math.PI/180; const rf=unit(add(rp.frontal.map(x=>x*Math.cos(ef)),rp.tp,Math.sin(ef)));
+  const uKeys=[[0,unit([side*0.15,0,-0.99])],[tl,unit([side*0.15,0,-0.99])],[0.5,unit([side*0.6,0.35,-0.7])],[fc,unit([side*0.95,0.2,0.2])],[mer,unit([side*0.95,0.15,0.25])],[1,rd],[1.35,unit([-side*0.45,-0.55,-0.7])]];
+  const fKeys=[[0,unit([-side*0.4,-0.3,0.87])],[tl,unit([-side*0.4,-0.3,0.87])],[0.5,unit([side*0.3,0.5,-0.8])],[fc,unit([side*0.1,0.35,0.93])],[mer,unit([side*0.15,0.85,0.50])],[1,rf],[1.35,unit([-side*0.6,-0.4,-0.7])]];
+  const u=keyed(uKeys,tau), f=keyed(fKeys,tau); const elbow=add(shT,u,Lua), hand=add(elbow,f,Lfa);
+  const gu=keyed([[0,unit([-side*0.15,0,-0.99])],[tl,unit([-side*0.3,-0.8,0.5])],[fc,unit([-side*0.5,-0.85,0.1])],[1,unit([-side*0.7,-0.2,-0.7])],[1.35,unit([-side*0.5,0.2,-0.85])]],tau);
+  const gf=keyed([[0,unit([side*0.4,-0.3,0.87])],[tl,unit([-side*0.2,-0.9,0.35])],[fc,unit([-side*0.3,-0.95,0])],[1,unit([-side*0.3,-0.5,0.8])],[1.35,unit([0,0.3,0.95])]],tau);
+  const gElbow=add(shG,gu,Lua), gHand=add(gElbow,gf,Lfa); const com=add(add(pelvis.map(x=>x*0.55),shC,0.35),head,0.10);
+  return {rearFoot,rearKnee,rearHip,frontHip,frontKnee,frontFoot,pelvis,shC,shT,shG,elbow,hand,gElbow,gHand,head,eyes,com,up,tau}; }
+function tauOf(t){ return t<0? 1+t/T_DEL : 1+0.35*Math.min(1,t/T_FOLLOW); }
+function phaseName(tau){ const fc=TM.tau_fc,mer=TM.tau_mer; return tau<TM.tau_lift?'와인드업 · 다리 들기':tau<fc?'스트라이드 (골반 닫힘→열림)':tau<mer?'착지 → 최대 외회전 (MER)':tau<1?'가속 (팔 전방 회전)':tau<1.02?'릴리스':'팔로스루'; }
+
+// ---------- state ----------
+const el=id=>document.getElementById(id);
+let hand='R',grip='FF',result=null,scatter=[],anim={playing:false,t:0,raf:0,last:0},spinAngle=0,spinLast=0;
+let SLOW=4; const SLOW_SPIN=40;
+const ids=['height','abd','tilt','lean','stride','fwd','core','mph','wrist_speed','finger_len','grip_force','grip_skill','eff','cmd','rpm','temp','alt','windx','windy','mound','tx','tz'];
+function spec(noise){ const P={hand}; ids.forEach(k=>P[k]=parseFloat(el(k).value)); const g=GRIPS[grip];
+  const pose=releasePose(P); const rel=pose.release.slice(); let arm=pose.armAngle;
+  const ce=chainEff(P.abd,P.tilt,P.lean,P.stride,pose.armAngle,P.core); pose.vmul=ce.vmul; pose.ce=ce; const mphEff=P.mph*g.spd*pose.vmul; const sm=spinModel(mphEff,P.wrist_speed,P.finger_len,P.grip_force,P.grip_skill,grip);
+  let rpm=el('rpmOverride').checked?P.rpm:sm.rpm; let effTot=P.eff*g.eff; let tx=P.tx,tz=P.tz; const cmdSig=P.cmd*pose.cmdMul*(['SL','CU'].includes(grip)?1.25:1);
+  if(noise){ const n=()=>{let u=0,v=0;while(!u)u=Math.random();while(!v)v=Math.random();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);};
+    const pr=PROFILES[el('profile').selectedIndex]; tx+=n()*cmdSig; tz+=n()*cmdSig; arm+=n()*pr.axis_sigma_deg; rel[0]+=n()*pr.release_sigma[0]; rel[2]+=n()*pr.release_sigma[1]; effTot=Math.min(1,Math.max(0.1,effTot+n()*0.03)); rpm*=1+n()*0.03; }
+  const tiltAxis=g.tilt0+g.pron+(90-arm); const gyro=Math.sqrt(Math.max(0,1-effTot*effTot));
+  const sswOn=el('showSSW').checked; const ssw=[ (hand==='L'?-1:1)*g.ssw[0]*(sswOn?1:0), 0, g.ssw[1]*(sswOn?1:0) ];
+  const env={rho:rhoAir(P.temp,P.alt,PARAMS.environment_default.rel_humidity), wind:[P.windx,P.windy,0]};
+  return Object.assign(P,{grip,g,pose,release:rel,armAngle:arm,mphEff,rpm,sm,effTot,gyro,tiltAxis,ssw,env,tx,tz,cmdSig,ext:pose.ext}); }
+function clock(t){ const h=(((t%360)+360)%360)/30; const hh=Math.floor(h)||12,mm=Math.round((h-Math.floor(h))*60); return `${hh}:${String(mm).padStart(2,'0')}`; }
+function fmt(S){ el('o-height').textContent=`${S.height.toFixed(2)} m`; el('o-abd').textContent=`${S.abd}°`; el('o-tilt').textContent=`${S.tilt>0?'+':''}${S.tilt}°`; el('o-lean').textContent=`${S.lean}°`;
+  el('o-stride').textContent=`${S.stride.toFixed(2)} · ${(S.stride*S.height).toFixed(2)} m`; el('o-fwd').textContent=`${S.fwd}°`; el('o-core').textContent=`${Math.round(S.core*100)}`;
+  el('o-mph').textContent=`${S.mph.toFixed(1)} → ${S.mphEff.toFixed(1)} mph`; el('o-wrist').textContent=`${S.wrist_speed}`; el('o-finger').textContent=`${S.finger_len.toFixed(2)}`; el('o-force').textContent=`${S.grip_force} (필요 ${(SM.force_need_base+SM.force_need_slope*(S.mphEff-85)).toFixed(0)})`;
+  el('o-skill').textContent=`${S.grip_skill}`; el('o-eff').textContent=`${Math.round(S.eff*100)}%`; el('o-cmd').textContent=`${(S.cmd*100).toFixed(0)} cm → ${(S.cmdSig*100).toFixed(1)} cm`; el('o-rpm').textContent=`${S.rpm.toFixed(0)} rpm`;
+  el('o-temp').textContent=`${S.temp} °C`; el('o-alt').textContent=`${S.alt} m · ρ ${S.env.rho.toFixed(3)}`; el('o-windx').textContent=`${S.windx} m/s`; el('o-windy').textContent=`${S.windy} m/s`;
+  el('o-mound').textContent=`${S.mound.toFixed(2)} m`; el('o-tx').textContent=`${S.tx>=0?'+':''}${S.tx.toFixed(2)} m`; el('o-tz').textContent=`${S.tz.toFixed(2)} m`;
+  el('derived').innerHTML=`팔 각도 <b>${S.armAngle.toFixed(0)}°</b> = (외전 ${S.abd} − 90) + 측면 ${S.tilt}<br>릴리스 <b>x ${S.release[0]>=0?'+':''}${S.release[0].toFixed(2)} · z ${S.release[2].toFixed(2)} m</b> · 익스텐션 ${S.ext.toFixed(2)} m (키의 ${(S.ext/S.height).toFixed(2)})<br>사슬 구속 ×${S.pose.vmul.toFixed(3)} · 균형 σ ×${S.pose.cmdMul.toFixed(2)} · 다리 도달 ${S.pose.stretch.toFixed(2)}`;
+  el('gripTag').textContent=`${grip} · 구속×${S.g.spd} 회전×${S.g.spin} 효율 ${Math.round(S.g.eff*100)}% · SSW [${S.g.ssw}]`; el('gripName').textContent=`${grip} ${S.g.name}`;
+  el('explain').textContent=`${S.g.name}: ${S.g.desc}`;
+  el('modelnote').textContent=`모델: a = g + (ρA/2m)|v−wind|(−C_D v + C_L ŵ×v) + (ρA/2m)|v|² c_ssw, C_D=${CD}, C_L(S) Nathan 2008, 회전 감쇠 τ=${TAU} s. 회전축 = 그립 오프셋(${S.g.tilt0}°) + 손목 회내(${S.g.pron}°) + (90° − 팔 각도). 회전수 = BU ${S.sm.bu.toFixed(1)} × 구속 × 그립 숙련 ${S.sm.fGrip.toFixed(2)} × 악력 포화 ${S.sm.fForce.toFixed(2)} × 그립 계수 ${S.g.spin}. 인체 사슬: 분절 ${JSON.stringify(BODY.segments)}.`; }
+function checks(S,res){ const items=[]; const fit=1.377+0.0099*S.armAngle; const dz=S.release[2]-fit;
+  items.push([Math.abs(dz)<0.15||S.armAngle<0,`릴리스 높이 vs Statcast 회귀 ${dz>=0?'+':''}${(dz*100).toFixed(0)} cm`]);
+  items.push([S.release[2]<=1.05*S.height,`릴리스 ≤ 1.05·키 (${(S.release[2]/S.height).toFixed(2)})`]);
+  items.push([S.pose.stretch<=1.001,`다리 도달 ${S.pose.stretch.toFixed(2)} ≤ 1.00`]);
+  items.push([S.ext/S.height>=0.95&&S.ext/S.height<=1.15,`익스텐션 키 비 ${(S.ext/S.height).toFixed(2)} (0.95~1.15)`]);
+  items.push([S.sm.bu>=18&&S.sm.bu<=30,`BU ${S.sm.bu.toFixed(1)} (18~30)`]);
+  items.push([S.armAngle>=-40&&S.armAngle<=70,`팔 각도 ${S.armAngle.toFixed(0)}° (실존 −64~70)`]);
+  el('check').innerHTML=items.map(([ok,t])=>`<span class="${ok?'ok':'warn'}">${ok?'✓':'!'} ${t}</span>`).join(''); items.forEach(([ok,t])=>{ if(!ok) console.warn('[check] '+t); }); }
+
+// ---------- canvas helpers ----------
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function setup(c,h){ const dpr=window.devicePixelRatio||1,w=c.clientWidth||400; c.width=w*dpr;c.height=h*dpr;c.style.height=h+'px'; const g=c.getContext('2d'); g.setTransform(dpr,0,0,dpr,0,0); return {g,w,h}; }
+function path(g,pts,color,dash,width){ if(pts.length<2) return; g.save();g.strokeStyle=color;g.lineWidth=width||2;g.setLineDash(dash||[]);g.lineJoin='round';g.beginPath();pts.forEach((q,i)=>i?g.lineTo(q[0],q[1]):g.moveTo(q[0],q[1]));g.stroke();g.restore(); }
+function text(g,s,x,y,o={}){ g.save();g.fillStyle=o.color||css('--muted');g.font=o.font||'11px "IBM Plex Mono", monospace';g.textAlign=o.align||'left';g.textBaseline=o.base||'alphabetic';g.fillText(s,x,y);g.restore(); }
+function ballDot(g,x,y,r){ g.save();g.fillStyle=css('--leather');g.strokeStyle=css('--accent');g.lineWidth=2;g.beginPath();g.arc(x,y,r,0,Math.PI*2);g.fill();g.stroke();g.restore(); }
+function stateAt(tr,t){ if(t<=0) return tr[0]; if(t>=tr[tr.length-1].t) return tr[tr.length-1]; const i=Math.min(tr.length-1,Math.max(1,Math.ceil(t/0.001))); const a=tr[i-1],b=tr[i],f=(t-a.t)/((b.t-a.t)||1); return {t,p:a.p.map((x,k)=>x+f*(b.p[k]-x)),v:a.v,w:a.w}; }
+function drawSkeleton(g,sk,P,opt={}){ const seg=(a,b,w,col)=>{ const A=P(a),B=P(b); if(!A||!B) return; g.strokeStyle=col||css('--bone'); g.lineWidth=w; g.lineCap='round'; g.beginPath(); g.moveTo(A[0],A[1]); g.lineTo(B[0],B[1]); g.stroke(); };
+  const bw=opt.w||3; g.save();
+  seg(sk.rearFoot,sk.rearKnee,bw); seg(sk.rearKnee,sk.rearHip,bw); seg(sk.frontFoot,sk.frontKnee,bw); seg(sk.frontKnee,sk.frontHip,bw);
+  seg(sk.rearHip,sk.frontHip,bw); seg(sk.pelvis,sk.shC,bw+1); seg(sk.shG,sk.shT,bw); seg(sk.shG,sk.gElbow,bw*0.8); seg(sk.gElbow,sk.gHand,bw*0.8);
+  seg(sk.shT,sk.elbow,bw,css('--accent')); seg(sk.elbow,sk.hand,bw,css('--accent'));
+  const H=P(sk.head); if(H){ g.strokeStyle=css('--bone'); g.lineWidth=bw*0.7; g.beginPath(); g.arc(H[0],H[1],opt.headR||7,0,Math.PI*2); g.stroke(); }
+  if(opt.gaze&&el('showCom').checked){ const E=P(sk.eyes),T=P(opt.gaze); if(E&&T){ g.strokeStyle=css('--gaze'); g.setLineDash([2,4]); g.lineWidth=1.5; g.beginPath(); g.moveTo(E[0],E[1]); g.lineTo(T[0],T[1]); g.stroke(); g.setLineDash([]); } }
+  if(el('showCom').checked){ const C=P(sk.com),Cg=P([sk.com[0],sk.com[1],0]); if(C){ g.fillStyle=css('--com'); g.beginPath(); g.arc(C[0],C[1],5,0,Math.PI*2); g.fill(); if(Cg){ g.strokeStyle=css('--com'); g.setLineDash([3,3]); g.lineWidth=1.2; g.beginPath(); g.moveTo(C[0],C[1]); g.lineTo(Cg[0],Cg[1]); g.stroke(); g.setLineDash([]); } }
+    const F1=P([sk.frontFoot[0],sk.frontFoot[1],0]),F2=P([sk.rearFoot[0],sk.rearFoot[1],0]); if(F1&&F2){ g.strokeStyle=css('--com'); g.globalAlpha=0.5; g.lineWidth=4; g.beginPath(); g.moveTo(F1[0],F1[1]); g.lineTo(F2[0],F2[1]); g.stroke(); g.globalAlpha=1; } }
+  g.restore(); }
+function arrow(g,x0,y0,x1,y1,color,w=2){ g.save();g.strokeStyle=color;g.fillStyle=color;g.lineWidth=w;g.beginPath();g.moveTo(x0,y0);g.lineTo(x1,y1);g.stroke(); const a=Math.atan2(y1-y0,x1-x0);g.beginPath();g.moveTo(x1,y1);g.lineTo(x1-8*Math.cos(a-0.45),y1-8*Math.sin(a-0.45));g.lineTo(x1-8*Math.cos(a+0.45),y1-8*Math.sin(a+0.45));g.closePath();g.fill();g.restore(); }
+const SEAM=(()=>{ const pts=[]; const a=1,b=0.35,c=1.2; for(let i=0;i<=240;i++){ const t=i/240*2*Math.PI; pts.push(unit([a*Math.cos(t)+b*Math.cos(3*t),a*Math.sin(t)-b*Math.sin(3*t),c*Math.sin(2*t)])); } return pts; })();
+function rotAxis(p,ax,th){ const c=Math.cos(th),s=Math.sin(th),d=dot(ax,p),cr=cross(ax,p); return p.map((x,i)=>x*c+cr[i]*s+ax[i]*d*(1-c)); }
+function rotX(p,th){ const c=Math.cos(th),s=Math.sin(th); return [p[0],p[1]*c-p[2]*s,p[1]*s+p[2]*c]; }
+function drawBall3D(g,cx,cy,r,proj,seamPts){ g.save(); g.fillStyle=css('--leather'); g.beginPath(); g.arc(cx,cy,r,0,Math.PI*2); g.fill(); g.strokeStyle=css('--line'); g.lineWidth=1; g.stroke();
+  const back=[],front=[]; seamPts.forEach(p=>{ const q=proj(p); (q[2]>=0?front:back).push([cx+q[0]*r,cy-q[1]*r]); });
+  const segs=(arr,color,alpha,w)=>{ g.strokeStyle=color; g.globalAlpha=alpha; g.lineWidth=w; g.beginPath(); let pen=false; for(let i=0;i<arr.length;i++){ const q=arr[i]; if(i>0){ const d=Math.hypot(q[0]-arr[i-1][0],q[1]-arr[i-1][1]); if(d>r*0.5) pen=false; } if(!pen){g.moveTo(q[0],q[1]);pen=true;} else g.lineTo(q[0],q[1]); } g.stroke(); g.globalAlpha=1; };
+  segs(back,css('--seam'),0.18,1.5); segs(front,css('--seam'),0.95,2.2);
+  g.strokeStyle=css('--seam'); g.globalAlpha=0.9; g.lineWidth=1; for(let i=0;i<front.length;i+=6){ const q=front[i],q2=front[Math.min(front.length-1,i+1)]; const dx=q2[0]-q[0],dy=q2[1]-q[1],L=Math.hypot(dx,dy)||1; const nx=-dy/L*3,ny=dx/L*3; g.beginPath();g.moveTo(q[0]-nx,q[1]-ny);g.lineTo(q[0]+nx,q[1]+ny);g.stroke(); } g.globalAlpha=1; g.restore(); }
+
+// ---------- views ----------
+function drawPov(res,tNow){ const c=el('cPov'),{g,w,h}=setup(c,470); g.clearRect(0,0,w,h); const S=res.spec; const mode=el('eye').value;
+  const E=mode==='catcher'?[0,-2.0,0.95]:[mode==='batterR'?-0.75:0.75,0.30,0.90*1.85]; const F=w*2.2,cx=w/2,cy=h*0.48;
+  const proj=P=>{ const d=add(P,E,-1); if(d[1]<0.25) return null; return [cx+F*d[0]/d[1],cy-F*d[2]/d[1],d[1]]; };
+  g.fillStyle=css('--grass'); g.globalAlpha=0.10; g.fillRect(0,cy+F*(-E[2])/60,w,h); g.globalAlpha=1;
+  g.strokeStyle=css('--line-soft'); g.lineWidth=1;
+  for(let y=1;y<=S.mound+1;y+=1){ const a=proj([-4,y,0]),b=proj([4,y,0]); if(a&&b){ g.beginPath();g.moveTo(a[0],a[1]);g.lineTo(b[0],b[1]);g.stroke(); } }
+  [-2,-1,0,1,2].forEach(x=>{ const a=proj([x,0.6,0]),b=proj([x,S.mound+1,0]); if(a&&b){g.beginPath();g.moveTo(a[0],a[1]);g.lineTo(b[0],b[1]);g.stroke();} });
+  const m0=proj([-1.5,S.mound-2.5,0]),m1=proj([-1.2,S.mound,0.254]),m2=proj([1.2,S.mound,0.254]),m3=proj([1.5,S.mound-2.5,0]);
+  if(m0&&m1&&m2&&m3){ g.fillStyle=css('--clay');g.globalAlpha=0.35;g.beginPath();g.moveTo(m0[0],m0[1]);g.lineTo(m1[0],m1[1]);g.lineTo(m2[0],m2[1]);g.lineTo(m3[0],m3[1]);g.closePath();g.fill();g.globalAlpha=1; }
+  const r0=proj([-0.305,S.mound,0.254]),r1=proj([0.305,S.mound,0.254]); if(r0&&r1){ g.fillStyle=css('--ink'); g.fillRect(r0[0],r0[1]-2,r1[0]-r0[0],3); }
+  const sk=skeleton(S,tauOf(tNow)); drawSkeleton(g,sk,p=>proj(p),{w:2,headR:Math.max(2,F*0.10/(proj(sk.head)?proj(sk.head)[2]:20)),gaze:[S.tx,PLATE_Y,S.tz]});
+  const pl=[[-0.2159,PLATE_Y,0],[0.2159,PLATE_Y,0],[0.2159,0.216,0],[0,0,0],[-0.2159,0.216,0]].map(proj);
+  if(pl.every(Boolean)){ g.fillStyle=css('--ink'); g.globalAlpha=0.8; g.beginPath(); pl.forEach((q,i)=>i?g.lineTo(q[0],q[1]):g.moveTo(q[0],q[1])); g.closePath(); g.fill(); g.globalAlpha=1; }
+  const z0=proj([-HALF_W,PLATE_Y,ZONE_B]),z1=proj([HALF_W,PLATE_Y,ZONE_T]); if(z0&&z1){ g.strokeStyle=css('--zone'); g.lineWidth=1.5; g.strokeRect(z0[0],z1[1],z1[0]-z0[0],z0[1]-z1[1]); }
+  const seg=(tr,color,dash,wd)=>{ const pts=[]; for(const st of tr){ const q=proj(st.p); if(!q) break; pts.push([q[0],q[1]]); } path(g,pts,color,dash,wd); };
+  if(baseline){ g.save(); g.globalAlpha=0.5; drawSkeleton(g,skeleton(baseline.spec,tauOf(tNow)),p=>proj(p),{w:1.5,headR:4}); g.restore(); seg(baseline.tr,css('--gaze'),[4,4],1.2); }
+  if(tNow>=0){ if(el('showGhost').checked) seg(res.ghost,css('--ghost'),[5,4],1.2); seg(res.tr,css('--accent'),[],1); seg(res.tr.filter(st=>st.t<=tNow),css('--accent'),[],2.5); }
+  const om=norm(res.w)||1e-9, ax=res.w.map(x=>x/om);
+  if(tNow<0){ const q=proj(sk.hand); if(q) ballDot(g,q[0],q[1],Math.max(2,F*R/q[2])); text(g,`딜리버리 ${Math.round(-tNow*1000)} ms 전 · ${phaseName(sk.tau)}`,8,h-8,{color:css('--ink')}); }
+  else { const st=stateAt(res.tr,tNow); const q=proj(st.p); const theta=om*tNow;
+    if(q){ const rad=Math.max(3,F*R/q[2]); const vv=unit(add(st.p,E,-1)); let rt=unit(cross(vv,[0,0,1])); const up=cross(rt,vv);
+      const bproj=p=>{ const r=rotAxis(p,ax,theta); return [dot(r,rt),dot(r,up),-dot(r,vv)]; };
+      if(rad<6) ballDot(g,q[0],q[1],rad); else { drawBall3D(g,q[0],q[1],rad,bproj,SEAM); const a2=[dot(ax,rt),dot(ax,up)]; g.save();g.strokeStyle=css('--ink');g.setLineDash([3,3]);g.lineWidth=1;g.beginPath();g.moveTo(q[0]-a2[0]*rad*1.3,q[1]+a2[1]*rad*1.3);g.lineTo(q[0]+a2[0]*rad*1.3,q[1]-a2[1]*rad*1.3);g.stroke();g.restore(); }
+      text(g,`t ${Math.round(tNow*1000)} ms · 거리 ${q[2].toFixed(1)} m · 회전 ${(theta/(2*Math.PI)).toFixed(1)}바퀴`,8,h-8,{color:css('--ink')});
+    } else text(g,`t ${Math.round(tNow*1000)} ms · 공이 눈 앞을 지나감`,8,h-8,{color:css('--ink')}); }
+  text(g,mode==='catcher'?'눈 (0, −2.0, 0.95) m':(mode==='batterR'?'우타자 눈 (−0.75, 0.30, 1.67) m':'좌타자 눈 (+0.75, 0.30, 1.67) m'),w-8,14,{align:'right'});
+  el('povInfo').innerHTML=`<span>회전각 = |ω|·t, 축 ${clock(S.tiltAxis)}</span><span>${SLOW===1?'실시간 1×':SLOW+'× 슬로모션'}</span>`; }
+function drawSide(res,tNow){ const c=el('cSide'),{g,w,h}=setup(c,300); g.clearRect(0,0,w,h); const S=res.spec; const yMax=S.mound+1.2,yMin=-0.6,pad={l:44,r:16,t:16,b:30};
+  const X=y=>pad.l+(yMax-y)/(yMax-yMin)*(w-pad.l-pad.r),zMax=2.5,Y=z=>h-pad.b-z/zMax*(h-pad.t-pad.b); const P=p=>[X(p[1]),Y(p[2])];
+  g.strokeStyle=css('--line-soft');g.lineWidth=1; for(let z=0;z<=2;z+=0.5){g.beginPath();g.moveTo(pad.l,Y(z));g.lineTo(w-pad.r,Y(z));g.stroke();text(g,z.toFixed(1),pad.l-6,Y(z)+4,{align:'right'});}
+  for(let y=0;y<=yMax;y+=2){g.beginPath();g.moveTo(X(y),pad.t);g.lineTo(X(y),h-pad.b);g.stroke();text(g,y.toFixed(0),X(y),h-pad.b+14,{align:'center'});}
+  text(g,'z (m)',pad.l-6,pad.t+4,{align:'right'}); text(g,'y (m)  ← 투수 방향',w-pad.r,h-pad.b+14,{align:'right'});
+  // mound profile from ground()
+  g.fillStyle=css('--clay');g.globalAlpha=0.35;g.beginPath();g.moveTo(X(S.mound+1.0),Y(0)); for(let y=S.mound+1.0;y>=S.mound-3.5;y-=0.1) g.lineTo(X(y),Y(groundH(y,S.mound))); g.lineTo(X(S.mound-3.5),Y(0)); g.closePath();g.fill();g.globalAlpha=1;
+  g.strokeStyle=css('--grass');g.lineWidth=2;g.beginPath();g.moveTo(pad.l,Y(0));g.lineTo(w-pad.r,Y(0));g.stroke();
+  g.fillStyle=css('--ink');g.fillRect(X(S.mound)-2,Y(0.254)-3,4,3);text(g,'러버',X(S.mound),Y(0.254)-8,{align:'center'});
+  g.fillRect(X(PLATE_Y),Y(0)-3,X(0)-X(PLATE_Y),3);text(g,'플레이트',X(PLATE_Y/2),Y(0)-8,{align:'center'});
+  g.strokeStyle=css('--zone');g.lineWidth=1.5;g.setLineDash([3,3]);g.strokeRect(X(PLATE_Y)-3,Y(ZONE_T),6,Y(ZONE_B)-Y(ZONE_T));g.setLineDash([]);
+  g.strokeStyle=css('--muted');g.lineWidth=1;g.beginPath();g.moveTo(X(S.mound),Y(2.3));g.lineTo(X(S.release[1]),Y(2.3));g.stroke();[X(S.mound),X(S.release[1])].forEach(x=>{g.beginPath();g.moveTo(x,Y(2.3)-5);g.lineTo(x,Y(2.3)+5);g.stroke();});
+  text(g,`익스텐션 ${S.ext.toFixed(2)} m · 비행 ${(S.release[1]-PLATE_Y).toFixed(2)} m · 러버→플레이트 ${S.mound.toFixed(2)} m`,X(S.release[1])-8,Y(2.3)-6,{align:'right'});
+  if(baseline){ g.save(); g.globalAlpha=0.45; drawSkeleton(g,skeleton(baseline.spec,tauOf(tNow)),P,{w:2,headR:7}); g.restore(); path(g,baseline.tr.map(s=>P(s.p)),css('--gaze'),[4,4],1.5); }
+  const sk=skeleton(S,tauOf(tNow)); drawSkeleton(g,sk,P,{w:3,headR:7,gaze:[S.tx,PLATE_Y,S.tz]});
+  if(tNow>=0){ if(el('showGhost').checked) path(g,res.ghost.map(s=>P(s.p)),css('--ghost'),[6,5],1.8); path(g,res.tr.map(s=>P(s.p)),css('--accent'),[],1); path(g,res.tr.filter(s=>s.t<=tNow).map(s=>P(s.p)),css('--accent'),[],3);
+    const s=stateAt(res.tr,tNow); ballDot(g,X(s.p[1]),Y(s.p[2]),7); } else { const q=P(sk.hand); ballDot(g,q[0],q[1],6); }
+  const rq=P(S.release); g.strokeStyle=css('--accent'); g.lineWidth=1; g.beginPath(); g.arc(rq[0],rq[1],10,0,Math.PI*2); g.stroke(); text(g,`릴리스 z ${S.release[2].toFixed(2)}`,rq[0]+12,rq[1]-10);
+  text(g,phaseName(sk.tau),pad.l+6,pad.t+14,{color:css('--ink'),font:'600 13px "Barlow Condensed", sans-serif'}); }
+function drawBody(res,tNow){ const c=el('cBody'),{g,w,h}=setup(c,300); g.clearRect(0,0,w,h); const S=res.spec; const pad={l:30,r:8,t:8,b:22}; const xr=1.4,zMax=2.4;
+  const sc=Math.min((w-pad.l-pad.r)/(2*xr),(h-pad.t-pad.b)/zMax),cx=pad.l+(w-pad.l-pad.r)/2,X=x=>cx+x*sc,Y=z=>h-pad.b-z*sc; const P=p=>[X(p[0]),Y(p[2])];
+  g.strokeStyle=css('--line-soft');g.lineWidth=1; for(let z=0;z<=2;z+=0.5){g.beginPath();g.moveTo(X(-xr),Y(z));g.lineTo(X(xr),Y(z));g.stroke();text(g,z.toFixed(1),X(-xr)-4,Y(z)+4,{align:'right'});}
+  for(let x=-1;x<=1;x+=1){text(g,(x>0?'+':'')+x.toFixed(0),X(x),h-pad.b+13,{align:'center'});}
+  g.strokeStyle=css('--grass');g.lineWidth=2;g.beginPath();g.moveTo(X(-xr),Y(0));g.lineTo(X(xr),Y(0));g.stroke();
+  if(baseline){ g.save(); g.globalAlpha=0.45; drawSkeleton(g,skeleton(baseline.spec,tauOf(tNow)),P,{w:2,headR:sc*0.07}); g.restore(); const bq=P(baseline.spec.release); g.strokeStyle=css('--gaze'); g.setLineDash([3,3]); g.beginPath(); g.arc(bq[0],bq[1],10,0,Math.PI*2); g.stroke(); g.setLineDash([]); }
+  const sk=skeleton(S,tauOf(tNow)); drawSkeleton(g,sk,P,{w:3,headR:sc*0.07,gaze:[S.tx,PLATE_Y,S.tz]});
+  const rel=P(S.release), sh=P(S.pose.shT); g.strokeStyle=css('--accent'); g.lineWidth=1; g.beginPath(); g.arc(rel[0],rel[1],10,0,Math.PI*2); g.stroke();
+  const side=S.hand==='R'?-1:1; g.save(); g.strokeStyle=css('--ink'); g.setLineDash([3,3]); g.beginPath(); g.moveTo(sh[0],sh[1]); g.lineTo(sh[0]+side*sc*0.5,sh[1]); g.stroke(); g.setLineDash([]);
+  const a1=-S.armAngle*Math.PI/180; g.beginPath(); g.arc(sh[0],sh[1],sc*0.28, side>0?0:Math.PI, side>0?a1:Math.PI-a1, side>0?S.armAngle>0:S.armAngle<0); g.stroke(); g.restore();
+  text(g,`팔 각도 ${S.armAngle.toFixed(0)}° (Statcast식)`,sh[0]+side*sc*0.55,sh[1]+sc*0.30,{align:side>0?'left':'right'});
+  if(tNow<0){ const q=P(sk.hand); ballDot(g,q[0],q[1],6); } else if(tNow<0.06){ ballDot(g,rel[0],rel[1],6); }
+  text(g,`릴리스 (${S.release[0]>=0?'+':''}${S.release[0].toFixed(2)}, ${S.release[2].toFixed(2)}) m`,rel[0],rel[1]-16,{align:'center',color:css('--ink')});
+  text(g,`무게중심 좌우 이탈 ${(S.pose.comX*100).toFixed(0)} cm · 앞발 뒤 ${(S.pose.comB*100).toFixed(0)} cm`,cx,h-pad.b-4,{align:'center'});
+  el('phaseTag').textContent=phaseName(sk.tau); }
+function drawTop(res,tNow){ const c=el('cTop'),{g,w,h}=setup(c,300); g.clearRect(0,0,w,h); const S=res.spec; const yMax=S.mound+1.2,yMin=-0.6,pad={l:40,r:12,t:12,b:26};
+  const X=y=>pad.l+(yMax-y)/(yMax-yMin)*(w-pad.l-pad.r),xr=1.3,Y=x=>pad.t+(xr-x)/(2*xr)*(h-pad.t-pad.b); const P=p=>[X(p[1]),Y(p[0])];
+  g.strokeStyle=css('--line-soft');g.lineWidth=1; for(let x=-1;x<=1;x+=0.5){g.beginPath();g.moveTo(pad.l,Y(x));g.lineTo(w-pad.r,Y(x));g.stroke();text(g,(x>0?'+':'')+x.toFixed(1),pad.l-5,Y(x)+4,{align:'right'});}
+  for(let y=0;y<=yMax;y+=4){g.beginPath();g.moveTo(X(y),pad.t);g.lineTo(X(y),h-pad.b);g.stroke();text(g,y.toFixed(0),X(y),h-pad.b+13,{align:'center'});}
+  text(g,'x (m) +1루측',pad.l-5,pad.t+2,{align:'right'});
+  g.fillStyle=css('--ink');g.fillRect(X(S.mound)-2,Y(0.305),4,Y(-0.305)-Y(0.305));
+  g.beginPath();g.moveTo(X(PLATE_Y),Y(-0.2159));g.lineTo(X(PLATE_Y),Y(0.2159));g.lineTo(X(0.216),Y(0.2159));g.lineTo(X(0),Y(0));g.lineTo(X(0.216),Y(-0.2159));g.closePath();g.fill();
+  const sk=skeleton(S,tauOf(tNow)); drawSkeleton(g,sk,P,{w:2,headR:5});
+  if(tNow>=0){ if(el('showGhost').checked) path(g,res.ghost.map(s=>P(s.p)),css('--ghost'),[6,5],1.8); path(g,res.tr.map(s=>P(s.p)),css('--accent'),[],1); path(g,res.tr.filter(s=>s.t<=tNow).map(s=>P(s.p)),css('--accent'),[],3); const s=stateAt(res.tr,tNow); ballDot(g,X(s.p[1]),Y(s.p[0]),6); } }
+function drawCatch(res,tNow){ const c=el('cCatch'),{g,w,h}=setup(c,220); g.clearRect(0,0,w,h); const pad={l:34,r:8,t:8,b:22},xr=1.0,zMax=2.2;
+  const sc=Math.min((w-pad.l-pad.r)/(2*xr),(h-pad.t-pad.b)/zMax),cx=pad.l+(w-pad.l-pad.r)/2,X=x=>cx+x*sc,Y=z=>h-pad.b-z*sc;
+  g.strokeStyle=css('--line-soft');g.lineWidth=1; for(let z=0;z<=2;z+=0.5){g.beginPath();g.moveTo(X(-xr),Y(z));g.lineTo(X(xr),Y(z));g.stroke();text(g,z.toFixed(1),X(-xr)-5,Y(z)+4,{align:'right'});}
+  for(let x=-1;x<=1;x+=0.5){g.beginPath();g.moveTo(X(x),Y(0));g.lineTo(X(x),Y(zMax));g.stroke();text(g,(x>0?'+':'')+x.toFixed(1),X(x),h-pad.b+13,{align:'center'});}
+  g.fillStyle=css('--ink');g.fillRect(X(-0.2159),Y(0.03),X(0.2159)-X(-0.2159),3);
+  g.strokeStyle=css('--zone');g.lineWidth=1.5;g.strokeRect(X(-HALF_W),Y(ZONE_T),X(HALF_W)-X(-HALF_W),Y(ZONE_B)-Y(ZONE_T));
+  if(el('showScatter').checked){ g.fillStyle=css('--accent'); scatter.forEach(q=>{ g.globalAlpha=0.45; g.beginPath(); g.arc(X(q[0]),Y(q[1]),4,0,Math.PI*2); g.fill(); }); g.globalAlpha=1; }
+  if(baseline) path(g,baseline.tr.map(s=>[X(s.p[0]),Y(s.p[2])]),css('--gaze'),[4,4],1.5);
+  if(el('showGhost').checked) path(g,res.ghost.map(s=>[X(s.p[0]),Y(s.p[2])]),css('--ghost'),[6,5],1.8);
+  path(g,res.tr.map(s=>[X(s.p[0]),Y(s.p[2])]),css('--accent'),[],1); path(g,res.tr.filter(s=>s.t<=Math.max(0,tNow)).map(s=>[X(s.p[0]),Y(s.p[2])]),css('--accent'),[],3);
+  const S=res.spec; g.strokeStyle=css('--ghost');g.lineWidth=1.5;g.beginPath();g.arc(X(S.tx),Y(S.tz),7,0,Math.PI*2);g.stroke();
+  const s=stateAt(res.tr,Math.max(0,tNow)),dist=Math.max(0.6,s.p[1]+1.2); ballDot(g,X(s.p[0]),Y(s.p[2]),Math.min(20,Math.max(4,7*sc/40*(18/dist)))); }
+function drawSpin(res){ const c=el('cBall'),{g,w,h}=setup(c,220); g.clearRect(0,0,w,h); const S=res.spec; const cx=w/2,cy=h/2+6,r=Math.min(w,h)*0.36;
+  const om=norm(res.w)||1e-9, ax=res.w.map(x=>x/om); const proj=p=>{ const q=rotAxis(p,ax,spinAngle); return [q[0],q[2],-q[1]]; }; drawBall3D(g,cx,cy,r,proj,SEAM);
+  const a2=[ax[0],ax[2]]; const L=r*1.35; const ex=cx+a2[0]*L,ey=cy-a2[1]*L,sx=cx-a2[0]*L,sy=cy+a2[1]*L;
+  g.save();g.strokeStyle=css('--ink');g.setLineDash([4,3]);g.lineWidth=1.5;g.beginPath();g.moveTo(sx,sy);g.lineTo(ex,ey);g.stroke();g.restore(); g.fillStyle=css('--ink'); g.beginPath(); g.arc(ex,ey,3,0,Math.PI*2); g.fill();
+  let u=cross(ax,[0,-1,0]); if(norm(u)<1e-3) u=cross(ax,[1,0,0]); u=unit(u); const v=cross(ax,u);
+  const ring=[]; for(let i=0;i<=72;i++){ const t=i/72*2*Math.PI; const p=u.map((x,k)=>x*Math.cos(t)+v[k]*Math.sin(t)); const q=[p[0],p[2],-p[1]]; ring.push({s:[cx+q[0]*r*1.12,cy-q[1]*r*1.12],d:q[2],p}); }
+  g.save();g.strokeStyle=css('--accent');g.lineWidth=2;g.beginPath(); ring.forEach((q,i)=>{ if(q.d<0){g.stroke();g.beginPath();return;} i?g.lineTo(q.s[0],q.s[1]):g.moveTo(q.s[0],q.s[1]); }); g.stroke(); g.restore();
+  let best=ring[0]; ring.forEach(q=>{if(q.d>best.d)best=q;}); const vel=cross(res.w,best.p); const vq=[vel[0],vel[2]]; const vn=Math.hypot(vq[0],vq[1])||1;
+  arrow(g,best.s[0]-vq[0]/vn*10,best.s[1]+vq[1]/vn*10,best.s[0]+vq[0]/vn*14,best.s[1]-vq[1]/vn*14,css('--accent'),3);
+  text(g,`축 ${clock(S.tiltAxis)} · ${Math.round(S.rpm)} rpm (유효 ${Math.round(S.rpm*S.effTot)})`,cx,h-6,{align:'center'}); text(g,`자이로 ${Math.round(S.gyro*100)}% · SSW [${S.ssw[0].toFixed(3)}, ${S.ssw[2].toFixed(3)}]`,cx,14,{align:'center'}); }
+function drawGrip(res){ const c=el('cGrip'),{g,w,h}=setup(c,220); g.clearRect(0,0,w,h); const S=res.spec,G_=S.g; const cx=w/2,cy=h/2+4,r=Math.min(w,h)*0.36;
+  const th=G_.seam*Math.PI/180; const proj=p=>{ const q=rotX(p,th); return [q[0],q[2],q[1]]; }; drawBall3D(g,cx,cy,r,proj,SEAM);
+  const fingers=G_.fingers.map(f=>[S.hand==='R'?f[0]:-f[0],f[1],S.hand==='R'?f[2]:-f[2]]);
+  g.save(); fingers.forEach(f=>{ g.save(); g.translate(cx+f[0]*r,cy-f[1]*r); g.rotate(f[2]*Math.PI/180); g.fillStyle=css('--clay'); g.globalAlpha=0.55; g.beginPath(); g.ellipse(0,0,r*0.16,r*0.34,0,0,Math.PI*2); g.fill(); g.globalAlpha=1; g.strokeStyle=css('--ink'); g.lineWidth=1.2; g.stroke(); g.restore(); });
+  const t=G_.thumb; g.translate(cx+(S.hand==='R'?t[0]:-t[0])*r,cy-t[1]*r); g.fillStyle=css('--clay'); g.globalAlpha=0.55; g.beginPath(); g.ellipse(0,0,r*0.22,r*0.16,0,0,Math.PI*2); g.fill(); g.globalAlpha=1; g.strokeStyle=css('--ink'); g.lineWidth=1.2; g.stroke(); g.restore();
+  text(g,'손가락 = 갈색 타원 · 엄지 = 아래',cx,h-6,{align:'center'}); text(g,`실밥 방향 ${G_.seam}° · 축 오프셋 ${G_.tilt0}° · 회내 ${G_.pron}°`,cx,14,{align:'center'}); }
+function draw(){ if(!result) return; drawPov(result,anim.t); drawSide(result,anim.t); drawBody(result,anim.t); drawTop(result,anim.t); drawCatch(result,anim.t);
+  el('clock').textContent=(anim.t<0?`딜리버리 −${Math.round(-anim.t*1000)} ms`:`비행 t = ${Math.round(anim.t*1000)} ms`)+(SLOW===1?' (실시간)':` (${SLOW}× 슬로모션)`); el('scrub').value=Math.round(anim.t*1000); }
+
+function stats(res){ const S=res.spec; const v0=norm(res.v0)/MPH;
+  el('s-rel').innerHTML=`${S.release[2].toFixed(2)}<span>m</span>`; el('s-rel2').textContent=`x ${S.release[0]>=0?'+':''}${S.release[0].toFixed(2)} · 익스텐션 ${S.ext.toFixed(2)} m · 팔 각도 ${S.armAngle.toFixed(0)}°`;
+  el('s-rpm').innerHTML=`${Math.round(S.rpm)}<span>rpm</span>`; el('s-rpm2').textContent=el('rpmOverride').checked?'오버라이드':`BU ${S.sm.bu.toFixed(1)} × ${S.mphEff.toFixed(1)} mph × 숙련 ${S.sm.fGrip.toFixed(2)} × 악력 ${S.sm.fForce.toFixed(2)} × 그립 ${S.g.spin}`;
+  el('s-axis').innerHTML=`${clock(S.tiltAxis)}<span>${Math.round(S.rpm*S.effTot)} rpm</span>`; el('s-axis2').textContent=`효율 ${Math.round(S.effTot*100)}% · 자이로 ${Math.round(S.gyro*100)}%`+(res.plate?` · 비행 중 ${(norm(res.w)*res.plate.t/(2*Math.PI)).toFixed(1)}회전 · 감쇠 후 ${Math.round(norm(res.plate.w)/RPM)} rpm`:'');
+  if(!res.plate){ el('s-speed').textContent=`${v0.toFixed(1)} → –`; el('s-move').textContent='–'; el('s-call').textContent='땅'; el('s-callbox').classList.add('ball'); el('s-call2').textContent='플레이트 앞에서 지면에 닿음'; return; }
+  const v1=norm(res.plate.v)/MPH; el('s-speed').innerHTML=`${v0.toFixed(1)} → ${v1.toFixed(1)}<span>mph</span>`; el('s-speed2').textContent=`사슬 ×${S.pose.vmul.toFixed(3)} · 그립 ×${S.g.spd} · 항력 −${(v0-v1).toFixed(1)} mph · ${Math.round(res.plate.t*1000)} ms`;
+  const ivb=(res.plate.p[2]-res.gplate.p[2])*39.37,hb=(res.plate.p[0]-res.gplate.p[0])*39.37;
+  el('s-move').innerHTML=`${ivb>=0?'+':''}${ivb.toFixed(1)} / ${hb>=0?'+':''}${hb.toFixed(1)}<span>in</span>`; el('s-move2').textContent=`총 낙차 ${((S.release[2]-res.plate.p[2])*39.37).toFixed(1)} in · HB ${hb<0?'3루측':'1루측'}${el('showSSW').checked&&(S.g.ssw[0]||S.g.ssw[1])?' · 실밥 효과 포함':''}`;
+  const x=res.plate.p[0],z=res.plate.p[2],strike=Math.abs(x)<=HALF_W&&z>=ZONE_B-R&&z<=ZONE_T+R;
+  el('s-call').textContent=strike?'STRIKE':'BALL'; el('s-callbox').classList.toggle('ball',!strike); el('s-call2').textContent=`x ${x>=0?'+':''}${x.toFixed(2)} m, z ${z.toFixed(2)} m · 목표와 ${(Math.hypot(x-S.tx,z-S.tz)*100).toFixed(0)} cm`; }
+
+function statsExtra(res){ const S=res.spec, ce=S.pose.ce; el('s-chain').innerHTML=`×${ce.vmul.toFixed(3)}<span>구속</span>`;
+  el('s-chain2').textContent=`잠재 ${ce.potential.toFixed(3)} · 손실 외전 ${(ce.abdLoss*100).toFixed(1)}% 측면 ${(ce.tiltLoss*100).toFixed(1)}% 슬롯 ${(ce.slotLoss*100).toFixed(1)}% 전방 ${(ce.leanLoss*100).toFixed(1)}% · 코어 ${Math.round(ce.core*100)} · 팔꿈치 부하 ${ce.elbow.toFixed(2)}`;
+  const pc=perceived(res); if(pc){ el('s-perc').innerHTML=`${pc.vaa.toFixed(1)}°<span>VAA</span>`; el('s-perc2').textContent=`수평 접근각 ${pc.haa>=0?'+':''}${pc.haa.toFixed(1)}° · 체감 구속 ${pc.eff.toFixed(1)} mph · 타자 눈에서 릴리스 고도각 ${pc.relElev.toFixed(1)}° 방위각 ${pc.relAz>=0?'+':''}${pc.relAz.toFixed(1)}°`; }
+  if(baseline){ const b=baseline, bs=b.spec, bp=perceived(b); const d=(a,c,u,k=2)=>`${(a-c)>=0?'+':''}${(a-c).toFixed(k)}${u}`;
+    el('delta').innerHTML=`기준 <b>${bs.formName||'사용자 폼'}</b> 대비 변형 효과<br>팔 각도 <b>${d(S.armAngle,bs.armAngle,'°',0)}</b> · 릴리스 x <b>${d(S.release[0],bs.release[0],' m')}</b> z <b>${d(S.release[2],bs.release[2],' m')}</b> · 익스텐션 <b>${d(S.ext,bs.ext,' m')}</b><br>사슬 효율 <b>${d(S.pose.vmul,bs.pose.vmul,'',3)}</b> → 구속 <b>${d(S.mphEff,bs.mphEff,' mph',1)}</b> · 제구 σ <b>${d(S.cmdSig*100,bs.cmdSig*100,' cm',1)}</b> · 팔꿈치 부하 <b>${d(S.pose.ce.elbow,bs.pose.ce.elbow,'',2)}</b>`+(res.plate&&b.plate&&pc&&bp?`<br>플레이트 통과 <b>x ${d(res.plate.p[0],b.plate.p[0],' m')} z ${d(res.plate.p[2],b.plate.p[2],' m')}</b> · VAA <b>${d(pc.vaa,bp.vaa,'°',1)}</b> · 체감 구속 <b>${d(pc.eff,bp.eff,' mph',1)}</b> · 타자 눈 릴리스 고도각 <b>${d(pc.relElev,bp.relElev,'°',1)}</b>`:''); }
+  else el('delta').textContent='기준 폼을 고정하면 슬라이더 변형에 따른 릴리스·구속·궤적 차이가 여기와 그림(점선)에 표시됩니다.'; }
+function recompute(noise){ const S=spec(!!noise); fmt(spec(false)); result=throwPitch(S); statsExtra(result); if(noise&&result.plate){ scatter.push([result.plate.p[0],result.plate.p[2]]); if(scatter.length>30) scatter.shift(); } stats(result); checks(S,result); anim.t=0; el('scrub').max=Math.round(result.tr[result.tr.length-1].t*1000); draw(); }
+function tick(now){ if(!anim.playing) return; anim.t+=(now-anim.last)/1000/SLOW; anim.last=now; const tEnd=result.tr[result.tr.length-1].t; if(anim.t>=tEnd){anim.t=tEnd;anim.playing=false;el('btnPlay').textContent='▶ 다시 재생';} draw(); if(anim.playing) anim.raf=requestAnimationFrame(tick); }
+function play(){ if(anim.playing){anim.playing=false;el('btnPlay').textContent='▶ 딜리버리부터 재생';return;} const tEnd=result.tr[result.tr.length-1].t; if(anim.t>=tEnd||anim.t===0) anim.t=-T_DEL; anim.playing=true; anim.last=performance.now(); el('btnPlay').textContent='❚❚ 일시정지'; anim.raf=requestAnimationFrame(tick); }
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function spinLoop(now){ if(result){ const om=norm(result.w); if(!reduced) spinAngle+=om*((now-spinLast)/1000)/SLOW_SPIN; drawSpin(result); drawGrip(result); } spinLast=now; requestAnimationFrame(spinLoop); }
+
+// ---------- wiring ----------
+function applyProfile(i){ const p=PROFILES[i]; hand=p.hand; el('hand').querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.h===hand));
+  ['height','abd','tilt','lean','stride','fwd','eff','cmd','mph','wrist_speed','finger_len','grip_force','grip_skill'].forEach(k=>el(k).value=p[k]); el('core').value=p.core??0.7; [...el('forms').children].forEach(x=>x.classList.remove('on')); currentForm='';
+  grip=p.repertoire[0]; [...el('grips').children].forEach(x=>x.classList.toggle('on',x.dataset.k===grip)); el('profTag').textContent=`${p.id} · 레퍼토리 ${p.repertoire.join('/')}`; scatter=[]; }
+Object.entries(PARAMS.forms).forEach(([k,f])=>{ const b=document.createElement('button'); b.textContent=f.name; b.dataset.k=k; b.title=f.desc; b.onclick=()=>{ ['abd','tilt','lean','stride','fwd'].forEach(x=>el(x).value=f[x]); [...el('forms').children].forEach(x=>x.classList.toggle('on',x.dataset.k===k)); currentForm=f.name; scatter=[]; recompute(); el('explain').textContent=`${f.name}: ${f.desc}`; }; el('forms').appendChild(b); });
+let currentForm='';
+el('lockBase').addEventListener('change',()=>{ if(el('lockBase').checked){ baseline=throwPitch(spec(false)); baseline.spec.formName=currentForm; } else baseline=null; recompute(); });
+PROFILES.forEach((p,i)=>{ const o=document.createElement('option'); o.value=i; o.textContent=p.name; el('profile').appendChild(o); }); el('profile').selectedIndex=1;
+Object.entries(GRIPS).forEach(([k,g])=>{ const b=document.createElement('button'); b.textContent=`${k} ${g.name}`; b.dataset.k=k; b.onclick=()=>{grip=k;[...el('grips').children].forEach(x=>x.classList.toggle('on',x.dataset.k===k));scatter=[];recompute();}; el('grips').appendChild(b); });
+el('profile').onchange=()=>{applyProfile(el('profile').selectedIndex);recompute();};
+el('hand').querySelectorAll('button').forEach(b=>b.onclick=()=>{hand=b.dataset.h;el('hand').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));scatter=[];recompute();});
+ids.forEach(k=>el(k).addEventListener('input',()=>{ scatter=[]; if(['abd','tilt','lean','stride','fwd'].includes(k)){ [...el('forms').children].forEach(x=>x.classList.remove('on')); currentForm=''; } recompute(); }));
+['showGhost','showScatter','showCom'].forEach(k=>el(k).addEventListener('change',draw)); el('showSSW').addEventListener('change',()=>recompute());
+el('rpmOverride').addEventListener('change',()=>{ el('rpm').disabled=!el('rpmOverride').checked; if(el('rpmOverride').checked) el('rpm').value=Math.round(result.spec.rpm/10)*10; recompute(); });
+el('btnThrow').onclick=()=>recompute(true); el('btnPlay').onclick=play;
+el('btnReset').onclick=()=>{anim.playing=false;anim.t=0;el('btnPlay').textContent='▶ 딜리버리부터 재생';draw();};
+el('btnClear').onclick=()=>{scatter=[];draw();};
+el('slow').onchange=()=>{SLOW=parseFloat(el('slow').value);draw();}; el('eye').onchange=draw;
+el('scrub').addEventListener('input',()=>{ anim.playing=false; el('btnPlay').textContent='▶ 딜리버리부터 재생'; anim.t=parseFloat(el('scrub').value)/1000; draw(); });
+window.addEventListener('resize',draw); document.fonts?.ready.then(draw);
+applyProfile(1); recompute(); requestAnimationFrame(t=>{spinLast=t;spinLoop(t);});
+if(!reduced) setTimeout(play,600);
+</script>
