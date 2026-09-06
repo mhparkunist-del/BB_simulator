@@ -85,4 +85,4 @@
 
 ## 운용
 - 새 지시 → 행 추가 → 산출물 버전 파일명(v{N.M}_{MMDD}) → recent report 갱신(이전 보고는 2_Archieve로) → README 이력표·2_Archieve/README.md 색인 갱신.
-- Artifact URL(2026-09-05 두 차례 재게시, 이전 4f2bf4a9…·bc1d35a5… 링크는 삭제됨. 링크가 지워지면 새 URL로 게시 후 문서 일괄 치환)은 url 파라미터로 갱신합니다: https://claude.ai/code/artifact/da3347b2-cb9b-4047-b1c3-11409dc2cb77
+- Artifact URL(2026-09-05 두 차례 재게시, 이전 4f2bf4a9…·bc1d35a5… 링크는 삭제됨. 링크가 지워지면 새 URL로 게시 후 문서 일괄 치환)은 url 파라미터로 갱신합니다: https://claude.ai/code/artifact/3ce6dff6-4ac4-4c7a-8474-679244f1da06

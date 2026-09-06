@@ -44,6 +44,7 @@
 | /home/mhpark/취미/2_BB_simulator/examples/out/playtest/ | 보고 JSON·로그·캡처 300장 이상 |
 | /home/mhpark/취미/2_BB_simulator/web/app_preview_v2.6.1_0907.html | 단일 파일 미리보기 |
 | https://mhparkunist-del.github.io/BB_simulator/web/app/ | 배포 앱 |
+| https://claude.ai/code/artifact/3ce6dff6-4ac4-4c7a-8474-679244f1da06 | 미리보기 아티팩트(이전 링크는 계정에서 삭제됨) |
 
 ## 5. 검증
 | 항목 | 결과 |
