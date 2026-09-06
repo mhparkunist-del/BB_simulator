@@ -32,6 +32,7 @@ git remote add origin https://github.com/<계정>/BB_simulator.git && git push -
 
 ## 5. 운용 규칙
 - 웹앱을 바꿔 배포할 때는 커밋 전에 `python3 tools/release_app.py`를 실행합니다. 서비스 워커 캐시 이름과 헤더 버전 표시에 `v버전-커밋해시`를 새깁니다. 이 stamp가 바뀌어야 폰의 옛 캐시가 버려집니다(2026-09-06 v2.1이 폰에 안 보이던 원인).
+- 푸시 뒤 `gh api repos/mhparkunist-del/BB_simulator/pages/builds/latest`로 빌드 시각을 확인합니다. 새 빌드가 안 돌면 `gh api -X POST repos/mhparkunist-del/BB_simulator/pages/builds`로 요청합니다(2026-09-06 v2.2 푸시 때 자동 빌드가 안 돌아 수동 요청).
 - 서비스 워커는 셸을 네트워크 우선(오프라인이면 캐시)으로, 투구 은행은 캐시 우선으로 둡니다. 새 워커가 잡으면 페이지가 한 번 자동 새로고침됩니다. 이미 옛 워커가 깔린 폰은 앱을 완전히 닫았다 다시 열면 됩니다.
 - 지시 단위로 커밋합니다. 메시지는 `v{버전}: 한 줄 요약`이고 COMMAND_LOG 행 번호를 덧붙입니다.
 - 버전이 오르면 태그(`v2.0.0`)를 붙입니다.
