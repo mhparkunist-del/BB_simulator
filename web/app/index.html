@@ -44,7 +44,7 @@
     <div class="col">
       <div class="panel"><h2>다음 경기</h2><div id="nextGame"></div></div>
       <div class="panel grow"><h2>구단 일지</h2><div id="log" class="log grow"></div></div>
-      <div class="ctl"><button class="go" id="nextDay">다음 날</button><button id="toGame">다음 경기까지</button><button id="week">일주일</button><button id="reset">새 시즌</button></div>
+      <div class="ctl"><button class="go" id="nextDay">다음 날</button><span class="hint">경기 날은 넘길 수 없습니다 · 경기 화면에서 치르거나 결과 바로보기</span><button id="reset">새 시즌</button></div>
     </div>
   </div>
   <div id="tab-training" class="fit two-col" hidden>
@@ -108,7 +108,7 @@
         <div class="actions">
           <div class="chips" id="offCalls"><button data-call="none" class="call on">자유</button><button data-call="bunt" class="call">번트</button><button data-call="take" class="call">기다려</button><button data-call="power" class="call">강공</button></div>
           <div class="chips" id="defCalls" style="display:none"><button data-dcall="none" class="dcall on">자유</button><button data-dcall="inside" class="dcall">몸쪽</button><button data-dcall="outside" class="dcall">바깥 유인</button><button data-dcall="infield_in" class="dcall">내야 전진</button><button data-dcall="outfield_deep" class="dcall">외야 후퇴</button></div>
-          <div class="big"><button class="go" id="playPitch">한 구</button><button class="go" id="playPA">타석</button><button class="go" id="playInning">이닝</button><label class="spd">배속 <input id="spd" type="number" value="1" step="0.5" min="0.25" max="10"></label><button id="stop">정지</button></div>
+          <div class="big"><button class="go" id="playPitch">한 구</button><button class="go" id="playPA">타석</button><button class="go" id="playInning">이닝</button><button id="playFast" title="남은 경기를 애니메이션 없이 끝까지 진행하고 결과를 보입니다">결과 바로보기</button><label class="spd">배속 <input id="spd" type="number" value="1" step="0.5" min="0.25" max="10"></label><button id="stop">정지</button></div>
         </div>
         <div id="adminPanel" class="adminover" hidden><div id="admin" class="hint tiny"></div></div>
       </div>

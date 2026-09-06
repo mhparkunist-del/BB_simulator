@@ -110,3 +110,6 @@ bbsim/
 
 ## 13. 예산·이적·협상 (v2.5)
 - 규칙과 사례 조사는 `docs/TRANSFER_MARKET.md`에 있습니다. `js/club/market.js`는 `window.ClubInt` 다리로 구단 상태를 읽고 씁니다. 돈은 `S.budget`(잔액)과 `S.fin`(장부·제재 이력·상대 명단 변경·받은 제안·협상 상태)에 있습니다. 하루 진행(advanceDay)이 홈 경기 입장 수입, 주간 결산, 시즌 말 제재금을 호출합니다.
+
+## 14. 장면 연출 (v2.6)
+- `js/render/cutscene.js`가 등판·이닝 교체·종료 장면을 그립니다. 프레임 함수 `CUT.draw(kind, t, opts)`는 순수 함수이고 `CUT.play`가 requestAnimationFrame으로 돌립니다. 인체는 기존 `runPose`·`standPose`에 응원·낙담 자세 두 개를 더했고, 구장은 `drawBallpark`를 "cut" 캐시 키로 씁니다. `window.NOCUT`이 참이면 건너뜁니다(점검 모드).

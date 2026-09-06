@@ -10,7 +10,7 @@ import os
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 APP = os.path.join(ROOT, "web", "app")
-ORDER = ["js/render/math.js", "js/render/park.js", "js/render/person.js", "js/render/pitcher.js", "js/render/figures.js", "js/render/play.js", "js/render/seam.js", "js/game/game.js", "js/club/club.js", "js/club/market.js"]
+ORDER = ["js/render/math.js", "js/render/park.js", "js/render/person.js", "js/render/pitcher.js", "js/render/figures.js", "js/render/play.js", "js/render/seam.js", "js/render/cutscene.js", "js/game/game.js", "js/club/club.js", "js/club/market.js"]
 
 
 def main():

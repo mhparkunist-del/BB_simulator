@@ -21,8 +21,10 @@ function roster(){const R=BANK;applyNames();const CL=window.APP.clubLineup;if(CL
 function check(){$("order").textContent="선택 "+pick.order.length+"/9";$("start").disabled=!(pick.pitcher!==null&&pick.order.length==9)}
 $("clearOrder").onclick=()=>{pick.order=[];document.querySelectorAll("[data-b]").forEach(x=>{x.classList.remove("sel");$("ord"+x.dataset.b).textContent=""});check()};
 $("autoOrder").onclick=()=>{$("clearOrder").onclick();const sc=b=>({S:5,A:4,B:3,C:2,D:1}[b.contact]+{S:5,A:4,B:3,C:2,D:1}[b.eye]+{S:5,A:4,B:3,C:2,D:1}[b.power]);[...BANK.batters].sort((a,b)=>sc(b)-sc(a)).slice(0,9).forEach(b=>{pick.order.push(b.id);document.querySelector("[data-b='"+b.id+"']").classList.add("sel");$("ord"+b.id).textContent=pick.order.length});if(pick.pitcher===null){pick.pitcher=1;document.querySelector("[data-p='1']").classList.add("sel")}check()};
-$("start").onclick=()=>{const seed=+$("seed").value||1;rng=mulberry(seed);G={inning:1,half:"top",outs:0,runners:[false,false,false],total:+$("innings").value||3,over:false,score:{us:[0],them:[]},hits:{us:0,them:0},errors:{us:0,them:0},idx:{us:0,them:0},lineup:pick.order.slice(),oppLineup:BANK.opp.batters.map(b=>b.id),ourPitcher:pick.pitcher,oppPitcher:seed%5,pitcher:seed%5,pitches:{us:0,them:0},mph:{us:[0,0],them:[0,0]},box:{us:{},them:{}},pline:{us:{outs:0,H:0,R:0,K:0,BB:0},them:{outs:0,H:0,R:0,K:0,BB:0}},used:{},balls:0,strikes:0,paPitches:0};setScene("pitch");
- $("setup").hidden=true;$("game").hidden=false;$("feed").innerHTML="";if(window.APP&&window.APP.onGameStart)window.APP.onGameStart();feed("플레이 볼 · 우리 선발 "+BANK.pitchers[G.ourPitcher].name+" · 상대 선발 "+BANK.opp.pitchers[G.oppPitcher].name+" · 1번 "+BANK.batters[G.lineup[0]].name,true);render();drawAll(null,-2)};
+$("start").onclick=async()=>{const seed=+$("seed").value||1;rng=mulberry(seed);G={inning:1,half:"top",outs:0,runners:[false,false,false],total:+$("innings").value||3,over:false,score:{us:[0],them:[]},hits:{us:0,them:0},errors:{us:0,them:0},idx:{us:0,them:0},lineup:pick.order.slice(),oppLineup:BANK.opp.batters.map(b=>b.id),ourPitcher:pick.pitcher,oppPitcher:seed%5,pitcher:seed%5,pitches:{us:0,them:0},mph:{us:[0,0],them:[0,0]},box:{us:{},them:{}},pline:{us:{outs:0,H:0,R:0,K:0,BB:0},them:{outs:0,H:0,R:0,K:0,BB:0}},used:{},balls:0,strikes:0,paPitches:0};setScene("pitch");
+ $("setup").hidden=true;$("game").hidden=false;$("feed").innerHTML="";if(window.APP&&window.APP.onGameStart)window.APP.onGameStart();feed("플레이 볼 · 우리 선발 "+BANK.pitchers[G.ourPitcher].name+" · 상대 선발 "+BANK.opp.pitchers[G.oppPitcher].name+" · 1번 "+BANK.batters[G.lineup[0]].name,true);render();
+ if(window.CUT&&!window.NOCUT){setScene("play");await window.CUT.play("intro",{pitcher:BANK.opp.pitchers[G.oppPitcher].name,club:BANK.oppClub||"상대",side:"them"});setScene("pitch")}drawAll(null,-2)};
+async function endingCut(){if(!window.CUT||window.NOCUT)return;setScene("play");await window.CUT.play("ending",{win:sum(G.score.us)>sum(G.score.them),us:sum(G.score.us),them:sum(G.score.them),fielding:G.half=="top"?"them":"us"});setScene("break")}
 document.querySelectorAll(".call").forEach(b=>b.onclick=()=>{call=b.dataset.call;document.querySelectorAll(".call").forEach(x=>x.classList.toggle("on",x===b));if(G&&!G.over)feed("벤치 사인: "+CALLKO[call]+" (다음 투구부터)",false)});
 document.querySelectorAll(".dcall").forEach(b=>b.onclick=()=>{dcall=b.dataset.dcall;document.querySelectorAll(".dcall").forEach(x=>x.classList.toggle("on",x===b));if(G&&!G.over)feed("수비 사인: "+CALLKO[dcall]+" (다음 투구부터)",false)});
 function feed(t,big,badge){const d=document.createElement("div");d.className="l"+(big?" big":"");d.innerHTML=(G?"<span class='t'>"+G.inning+"회"+(G.half=="top"?"초":"말")+"</span>":"")+t+(badge?"<span class='bs'>benchsign!</span>":"");$("feed").prepend(d)}
@@ -82,7 +84,7 @@ async function onePitch(){let p;try{p=await pickPitch()}catch(e){feed("이 조�
  else if(p.result=="in_play"){paOver=p.kind||"out"}
  const res=paOver?applyOutcome(paOver,p.la===undefined?null:p.la,p.dist||0):null;
  p.runnersAnim={before,after:G.runners.slice(),runs:res?res.runs:0,batterBases:BASES_OF[paOver]||0,dp:!!(res&&res.ev.dp)};
- await animate(p);const d=defense();G.pitches[d]++;G.paPitches++;G.mph[d][0]+=p.mph;G.mph[d][1]++;$("speed").textContent=p.mph.toFixed(0);feed(p.text+(BANK.admin?" ["+p.code+"]":""),false,used);if(BANK.admin)adminInfo(p);
+ if(G.fast){G.fastN=(G.fastN||0)+1;if(G.fastN%8===0)await new Promise(r=>setTimeout(r,0))}else await animate(p);const d=defense();G.pitches[d]++;G.paPitches++;G.mph[d][0]+=p.mph;G.mph[d][1]++;$("speed").textContent=p.mph.toFixed(0);feed(p.text+(BANK.admin?" ["+p.code+"]":""),false,used);if(BANK.admin)adminInfo(p);
  render();
  if(paOver){const {runs,outs,ev}=res;addRuns(runs);G.outs+=outs;
   const o=offense();const nm=batter().name;const bx=G.box[o][nm]||(G.box[o][nm]={PA:0,H:0,BB:0,K:0});bx.PA++;const hit=["single","double","triple","HR","single_out","double_out"].includes(paOver);bx.H+=hit?1:0;if(hit)G.hits[o]++;if(paOver=="error")G.errors[d]++;bx.BB+=(paOver=="walk"||paOver=="hbp")?1:0;bx.K+=paOver=="strikeout"?1:0;const L=G.pline[d];L.outs+=outs;L.R+=runs;if(hit)L.H++;if(paOver=="strikeout")L.K++;if(paOver=="walk"||paOver=="hbp")L.BB++;
@@ -91,10 +93,12 @@ async function onePitch(){let p;try{p=await pickPitch()}catch(e){feed("이 조�
   if(G.outs>=3)return endHalf();
   render();return "pa"}
  return "pitch"}
-async function run(mode){if(busy||!G||G.over)return;busy=true;stopFlag=false;render();
- try{while(true){const r=await onePitch();if(G.over||stopFlag)break;if(mode=="pitch")break;if(mode=="pa"&&r!="pitch")break;if(mode=="inning"&&r=="inning")break;await new Promise(res=>setTimeout(res,350))}}
- finally{busy=false;render()}}
-$("playPitch").onclick=()=>run("pitch");$("playPA").onclick=()=>run("pa");$("playInning").onclick=()=>run("inning");$("stop").onclick=()=>{stopFlag=true};$("stop2").onclick=()=>{stopFlag=true};
+async function run(mode){if(busy||!G||G.over)return;busy=true;stopFlag=false;G.fast=mode=="fast";if(G.fast){feed("결과 바로보기 · 남은 경기를 바로 진행합니다 (정지로 멈추면 그 자리부터 지휘)",true);$("playFast").textContent="진행 중…"}render();
+ try{while(true){const r=await onePitch();if(G.over){await endingCut();break}if(stopFlag)break;
+  if(r=="inning"&&window.CUT&&!window.NOCUT&&!G.fast){setScene("play");await window.CUT.play("inning",{incoming:G.half=="top"?"them":"us",inning:G.inning,half:G.half});setScene("break")}
+  if(mode=="pitch")break;if(mode=="pa"&&r!="pitch")break;if(mode=="inning"&&r=="inning")break;if(mode!="fast")await new Promise(res=>setTimeout(res,350))}}
+ finally{if(G){G.fast=false;if(!G.over&&stopFlag&&mode=="fast"){setScene("pitch");drawAll(null,-2);feed("결과 바로보기 중단 · "+Math.min(G.inning,G.total)+"회"+(G.half=="top"?"초":"말")+"부터 지휘합니다",true)}}$("playFast").textContent="결과 바로보기";busy=false;if(G)render()}}
+$("playPitch").onclick=()=>run("pitch");$("playPA").onclick=()=>run("pa");$("playInning").onclick=()=>run("inning");$("playFast").onclick=()=>run("fast");$("stop").onclick=()=>{stopFlag=true};$("stop2").onclick=()=>{stopFlag=true};
 function adminInfo(p){$("adminPanel").hidden=false;const f=p.fielding;const c=p.contact;
  const rows=[["구종·목표",p.code+" @ "+p.zone+" ("+(100*p.target_xz[0]).toFixed(0)+", "+(100*p.target_xz[1]).toFixed(0)+" cm), 제구 σ "+(100*p.sigma).toFixed(0)+" cm, "+p.rpm+" rpm"],
   ["투수 의도",p.intent.join("@")+(p.intent_reasons.length?" · "+p.intent_reasons.join(", "):"")],
@@ -136,4 +140,4 @@ function drawAll(p,t){const T=p?p.flight.t[p.flight.t.length-1]:0.42;const tb=Ma
 function animate(p){return new Promise(res=>{const t0=performance.now();const spd=parseFloat($("spd").value)||1;const T=p.flight.t[p.flight.t.length-1];const PRE=1.9;const evs=playEvents(p);const tEnd=evs.reduce((m,e)=>Math.max(m,e.t1||0,e.t||0,(e.arrive&&e.arrive.length)?e.arrive[e.arrive.length-1]:0,e.out_t||0),0);const TB=Math.max(p.batted?p.batted.flight.t[p.batted.flight.t.length-1]-T:0,tEnd>0?contactTime(p)+tEnd-T:0)+0.9;$("speed").textContent="—";drawKz(p,false);
   const tC=contactTime(p);const hasPlay=!!(p.fielding&&evs.length);
   function fr(now){const t=(now-t0)/1000*spd-PRE;if(hasPlay&&scene=="pitch"&&t>=tC+0.35){setScene("play");$("playText").textContent=p.text}drawAll(p,t);if(t<T+TB&&!stopFlag)requestAnimationFrame(fr);else{if(scene=="play")setScene("pitch");drawKz(p,true);res()}}requestAnimationFrame(fr)})}
-window.GameUI={roster,drawIdle:()=>drawAll(null,-2),setScene,state:()=>G,pick,pickPitch,drawAll,renderBreak};
+window.GameUI={roster,drawIdle:()=>drawAll(null,-2),setScene,state:()=>G,pick,pickPitch,drawAll,renderBreak,fast:()=>run("fast")};

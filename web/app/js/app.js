@@ -19,7 +19,7 @@ window.APP = window.APP || {};
     { name: "도심 늑대", city: "도심", color: "#c9c2ae", motto: "떼로 사냥한다" },
     { name: "남부 사자", city: "남부", color: "#d98c3a", motto: "포효 한 번에 한 점" },
   ];
-  const TUTORIAL = ["먼저 선수단을 둘러보세요. 이름을 누르면 카드가 열리고, 포지션 셀렉트로 수비 위치를 정합니다.", "훈련 화면에서 코치에게 방침을 맡기거나(균형·타격·투수·유망주·회복) 선수마다 직접 프로그램을 고릅니다.", "일정에서 다음 날을 진행하세요. 경기 날에 경기 버튼을 누르면 직접 지휘하고, 그냥 넘기면 빠른 시뮬로 처리됩니다. 경기가 시작되면 끝날 때까지 정비 화면으로 나갈 수 없습니다."];
+  const TUTORIAL = ["먼저 선수단을 둘러보세요. 이름을 누르면 카드가 열리고, 포지션 셀렉트로 수비 위치를 정합니다.", "훈련 화면에서 코치에게 방침을 맡기거나(균형·타격·투수·유망주·회복) 선수마다 직접 프로그램을 고릅니다.", "일정에서 다음 날을 진행하세요. 경기 날은 넘길 수 없고 경기 화면에서 직접 지휘합니다. 급하면 결과 바로보기로 남은 경기를 바로 끝냅니다. 경기가 시작되면 끝날 때까지 정비 화면으로 나갈 수 없습니다."];
   function loadScript(src) {
     return new Promise((res, rej) => { const s = document.createElement("script"); s.src = A.base + src; s.onload = res; s.onerror = () => rej(new Error("script " + src)); document.head.appendChild(s) });
   }
@@ -146,7 +146,7 @@ window.APP = window.APP || {};
       A.club = await A.fetchJSON("data/club.json");
       try { A.kbo = await A.fetchJSON("data/kbo.json") } catch (e) { A.kbo = null }
       status.textContent = "렌더러 불러오는 중…";
-      if (!A.bundled) for (const f of ["js/render/math.js", "js/render/park.js", "js/render/person.js", "js/render/pitcher.js", "js/render/figures.js", "js/render/play.js", "js/render/seam.js", "js/game/game.js", "js/club/club.js", "js/club/market.js"]) await loadScript(f);
+      if (!A.bundled) for (const f of ["js/render/math.js", "js/render/park.js", "js/render/person.js", "js/render/pitcher.js", "js/render/figures.js", "js/render/play.js", "js/render/seam.js", "js/render/cutscene.js", "js/game/game.js", "js/club/club.js", "js/club/market.js"]) await loadScript(f);
       else if (A.bundledInit) A.bundledInit();
       status.hidden = true;
       document.querySelectorAll(".nav [data-screen]").forEach(b => b.onclick = () => A.show(b.dataset.screen));
@@ -173,6 +173,7 @@ window.APP = window.APP || {};
     const box = document.createElement("div"); box.style.cssText = "position:fixed;left:0;right:0;top:0;z-index:99;background:rgba(0,102,51,.9);color:#fff;padding:2px 6px;font:12px monospace;white-space:pre-wrap";
     document.body.appendChild(box);
     const errs = []; window.addEventListener("error", e => errs.push(e.message));
+    window.NOCUT = !mode.startsWith("cut");             // cutscenes only in the cut* capture modes
     try {
       if (mode === "flow") {
         await new Promise(r => { const t = setInterval(() => { if (window.ClubUI && window.ClubUI.state()) { clearInterval(t); r() } }, 50) });
@@ -187,7 +188,7 @@ window.APP = window.APP || {};
       } else if (mode === "market") {                     // budget, a signing negotiation and a trade proposal on a KBO club
         await new Promise(r => { const t = setInterval(() => { if (window.ClubUI && window.ClubUI.state() && window.ClubMarket) { clearInterval(t); r() } }, 50) });
         const t40s = teamList().map(t => { window.ClubUI.fresh(t); return Math.round(window.ClubInt.top40()) });
-        window.ClubUI.fresh(teamList()[4]); for (let i = 0; i < 8; i++) window.ClubUI.advanceDay();
+        window.ClubUI.fresh(teamList()[4]); for (let i = 0; i < 8; i++) window.ClubUI.simDay();
         const M = window.ClubMarket, S = window.ClubUI.state(), fa = S.fa[0];
         M.startNego(fa.id); M.offer(Math.round(fa.asking * 0.5 * 10) / 10, 1); const low = M.fin().nego.msg; M.offer(M.fin().nego.ask, M.fin().nego.years); const signed = S.players.some(p => p.id === fa.id);
         $("negoModal").hidden = true;
@@ -197,6 +198,21 @@ window.APP = window.APP || {};
         const give = mine.filter(x => x.v >= target.v * 1.2).pop() || mine[0]; const r2 = M.proposeTrade(opp.code, [target.p.id], [give.p.id], 0);
         A.show("market");
         box.textContent = "SMOKE OK market: cash=" + S.budget + " top40=" + window.ClubInt.top40().toFixed(1) + " allClubs=" + t40s.join("/") + " ask=" + fa.asking + " ledger=" + M.fin().ledger.length + " att=" + M.fin().att + " | nego low='" + low.slice(0, 40) + "' signed=" + signed + " | trade1=" + r1.msg.slice(0, 44) + " | trade2=" + r2.msg.slice(0, 60) + " ok=" + r2.ok + " errs=" + errs.length;
+      } else if (mode === "cut" || mode === "cutinn" || mode === "cutend") {   // one frame of a cutscene: intro (starter to the mound), half change, ending
+        await new Promise(r => { const t = setInterval(() => { if (window.ClubUI && window.ClubUI.state()) { clearInterval(t); r() } }, 50) });
+        if (A.kbo) window.ClubUI.fresh(teamList()[3]);
+        window.NOCUT = true; A.show("game"); $("autoOrder").onclick(); if (window.GameUI.pick.pitcher === null) document.querySelector("[data-p]").onclick(); await $("start").onclick();
+        window.GameUI.setScene("play");
+        if (mode === "cut") window.CUT.draw("intro", 2.6, { pitcher: "양현종", club: "KIA 타이거즈", side: "us" });
+        else if (mode === "cutinn") window.CUT.draw("inning", 1.5, { incoming: "us", inning: 3, half: "bottom" });
+        else window.CUT.draw("ending", 3.1, { win: true, us: 5, them: 3, fielding: "us" });
+        box.textContent = "SMOKE OK " + mode + ": drawn on #play " + $("play").width + "x" + $("play").height + " errs=" + errs.length;
+      } else if (mode === "fast") {                       // 결과 바로보기: the rest of the game without animation, then the final screen
+        await new Promise(r => { const t = setInterval(() => { if (window.ClubUI && window.ClubUI.state()) { clearInterval(t); r() } }, 50) });
+        if (A.kbo) window.ClubUI.fresh(teamList()[2]);
+        A.show("game"); $("autoOrder").onclick(); if (window.GameUI.pick.pitcher === null) document.querySelector("[data-p]").onclick(); $("start").onclick();
+        const t0 = performance.now(); await window.GameUI.fast(); const G = window.GameUI.state();
+        box.textContent = "SMOKE OK fast: over=" + G.over + " inning=" + G.inning + "/" + G.total + " score=" + G.score.us.reduce((a, b) => a + b, 0) + ":" + G.score.them.reduce((a, b) => a + b, 0) + " pitches=" + (G.pitches ? G.pitches.us + G.pitches.them : "-") + " ms=" + Math.round(performance.now() - t0) + " scene=" + !$("sceneBreak").hidden + " nextDayLabel=" + $("nextDay").textContent + " errs=" + errs.length;
       } else if (mode === "team") {                       // club select with a card chosen: the whole page previews that club's colours
         await new Promise(r => { const t = setInterval(() => { if (window.ClubUI && window.ClubUI.state()) { clearInterval(t); r() } }, 50) });
         A.show("title"); $("btnNew").onclick(); $("teamCards").querySelectorAll(".tc")[6].onclick();
@@ -232,7 +248,7 @@ window.APP = window.APP || {};
         }
       } else if (mode === "club") {
         await new Promise(r => { const t = setInterval(() => { if (window.ClubUI && window.ClubUI.state()) { clearInterval(t); r() } }, 50) });
-        window.ClubUI.fresh(A.kbo ? teamList()[2] : undefined); for (let i = 0; i < 9; i++) window.ClubUI.advanceDay();
+        window.ClubUI.fresh(A.kbo ? teamList()[2] : undefined); for (let i = 0; i < 9; i++) window.ClubUI.simDay();
         A.show("roster");
         const S = window.ClubUI.state();
         const tb = $("training"); box.textContent = "SMOKE OK club: day=" + S.day + " record=" + S.W + "-" + S.L + " errs=" + errs.length + " | training box " + tb.clientHeight + "/" + tb.scrollHeight + " rows=" + tb.querySelectorAll("tr").length + " pager=" + !!tb.querySelector(".pager");
@@ -250,5 +266,13 @@ window.APP = window.APP || {};
     } catch (e) { box.style.background = "#900"; box.textContent = "SMOKE ERR: " + e.message + "\n" + (e.stack || "").slice(0, 400) }
     document.title = box.textContent.slice(0, 40);
   }
+  /* button press feedback: ripple at the touch point, spring-back pop on release, a light haptic tap on touch devices */
+  document.addEventListener("pointerdown", e => {
+    const b = e.target.closest && e.target.closest("button"); if (!b || b.disabled) return;
+    const r = b.getBoundingClientRect(), d = Math.max(r.width, r.height) * 1.1, sp = document.createElement("span"); sp.className = "ripple";
+    sp.style.cssText = "width:" + d + "px;height:" + d + "px;left:" + (e.clientX - r.left - d / 2) + "px;top:" + (e.clientY - r.top - d / 2) + "px"; b.appendChild(sp); setTimeout(() => sp.remove(), 600);
+    if (e.pointerType === "touch" && navigator.vibrate) { try { navigator.vibrate(6) } catch (_) {} }
+  }, { passive: true });
+  document.addEventListener("pointerup", e => { const b = e.target.closest && e.target.closest("button"); if (!b || b.disabled) return; b.classList.remove("pop"); void b.offsetWidth; b.classList.add("pop"); b.addEventListener("animationend", () => b.classList.remove("pop"), { once: true }) }, { passive: true });
   document.addEventListener("DOMContentLoaded", boot);
 })();

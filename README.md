@@ -93,6 +93,7 @@ python3 examples/run_batter_attributes.py  # 능력치 저/고 × 평온/부담 
 | v2.3.0 | 2026-09-06 | KBO 10구단 실명 선수단(위키백과 명단 틀 + KBO 등록명단, 944명, 능력치는 추정) 구단 선택·타순·경기 화면 반영, 선발 카드 체력 바, 이닝 교체 화면 다음 타순 3명 | web/app/data/kbo.json, tools/build_kbo.py, web/app_preview_v2.3_0906.html, docs/APP_FLOW.md §3 |
 | v2.4.0 | 2026-09-06 | 렌더링 부드럽게(관중 스프라이트 타일, 이동 카메라 직접 도색, 3차 보간, 카메라 스무딩, 야수 가감속, 공 잔상; 수비 장면 6.0→3.0 ms/frame), 게임 글꼴(Black Han Sans·Jua·Gothic A1)과 조명 글로우 배경·유리 패널·입체 버튼 | web/app/, docs/RENDER_SMOOTHNESS.md, web/app_preview_v2.4_0906.html |
 | v2.5.0 | 2026-09-06 | 구단 예산·이적 시장·협상: KBO 샐러리캡 137.4억(제재금)·하한·트레이드 마감·FA 계약금 구조, 입장·광고·모기업 수입과 연봉·운영 주간 결산, ZenGM식 가치 판정 트레이드(역제안·AI 제안), OOTP식 요구·인내 영입 협상, 방출 정산, 예산·이적 화면. 화면 색은 선택한 KBO 구단의 주색·강조색을 따름(타이틀은 리그 남색·빨강) | web/app/js/club/market.js, docs/TRANSFER_MARKET.md, web/app_preview_v2.5_0906.html |
+| v2.6.0 | 2026-09-06 | 경기 날 스킵 삭제(오늘 경기 시작만), 경기 화면 결과 바로보기(무애니메이션 완주·정지 가능), 장면 연출(등판·이닝 교체·승패), 버튼 누름 효과(눌림·스프링·물결·진동) | web/app/js/club/club.js, web/app/js/game/game.js, web/app_preview_v2.6_0906.html |
 
 ## 다음 단계 (docs/ARCHITECTURE.md §5)
 - v0.2 야수 에이전트·주루·이닝 루프 (결과 확률표 제거)

@@ -19,7 +19,15 @@ body{color:var(--ink);font:13px/1.45 var(--txt);display:flex;flex-direction:colu
 button{background:linear-gradient(180deg,rgba(255,255,255,.11),rgba(255,255,255,.02)),linear-gradient(rgba(var(--team-rgb),.32),rgba(var(--team-rgb),.32)),#151a22;color:var(--ink);border:1px solid var(--line2);padding:5px 12px;border-radius:var(--r);
  font:14px/1 var(--ui);letter-spacing:.02em;cursor:pointer;min-height:34px;box-shadow:0 2px 0 rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.12);transition:transform .08s,filter .15s,box-shadow .08s}
 button:hover{filter:brightness(1.12)}
-button:active{transform:translateY(2px);box-shadow:0 0 0 rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.12)}
+button:active{transform:translateY(2px) scale(.96);box-shadow:0 0 0 rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.12)}
+/* press feedback (refs: hover.css push/pop, Material ripple): squash on press, spring back with overshoot, ripple from the touch point */
+button{position:relative;overflow:hidden;transition:transform .12s cubic-bezier(.2,.9,.3,1.4),filter .15s,box-shadow .12s}
+button.pop{animation:bpop .34s cubic-bezier(.2,.9,.3,1.4)}
+@keyframes bpop{0%{transform:translateY(2px) scale(.96)}55%{transform:translateY(-1px) scale(1.045)}100%{transform:none}}
+.ripple{position:absolute;border-radius:50%;pointer-events:none;background:rgba(255,255,255,.38);transform:scale(0);animation:ripple .55s ease-out forwards}
+@keyframes ripple{to{transform:scale(2.8);opacity:0}}
+.teams .tc:active,.roster .pc:active{transform:scale(.985)}
+@media (prefers-reduced-motion:reduce){button.pop{animation:none}.ripple{display:none}button{transition:none}}
 button:focus-visible{outline:2px solid var(--bulb2);outline-offset:1px}
 button.go{background:linear-gradient(180deg,var(--go2),var(--go));border-color:var(--go2);color:var(--go-ink);text-shadow:0 1px 0 rgba(0,0,0,.18);box-shadow:0 3px 0 var(--go-dark),0 8px 16px rgba(var(--team-rgb),.35)}
 button.go:active{box-shadow:0 0 0 var(--go-dark)}
@@ -128,6 +136,7 @@ main{flex:1 1 auto;min-height:0;padding:6px 8px}
   .strip b{font-size:14px} .panel{padding:5px 8px;border-radius:11px} h2{font-size:12.5px;margin-bottom:2px} button{min-height:30px;padding:3px 9px;font-size:12.5px}
   th,td{padding:2px 5px;font-size:11px} .gamefit{grid-template-columns:minmax(0,1fr) 210px} .fieldinset{width:110px} .feedlast{left:124px}
   .roster{grid-template-columns:repeat(6,minmax(0,1fr))} .roster .pc{padding:2px 5px;font-size:10px} main{padding:4px 6px}
+  #tab-schedule .ctl .hint{display:none}
 }
 
 /* ---- game HUD: the view fills the whole area, everything else floats over it (sports-game convention) ---- */
