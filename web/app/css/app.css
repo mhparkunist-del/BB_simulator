@@ -1,145 +1,142 @@
-/* bbsim app · shell, navigation, landscape / portrait layouts (club css, then the game page css, then app rules) */
-
+/* bbsim app · one landscape screen at a time: nothing scrolls the page; long lists page with 이전/다음 */
 :root{--bg:#0f1a14;--panel:#14241b;--panel2:#0d1712;--line:#24382c;--ink:#e8e4d8;--mute:#8a9a8e;--bulb:#f2b441;--red:#e0524b;--green:#8ad1a8;--blue:#4fa3e0}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 "IBM Plex Sans KR",system-ui,sans-serif}
-header{display:flex;align-items:baseline;gap:14px;padding:12px 20px;border-bottom:1px solid var(--line)}
-header h1{margin:0;font:700 22px "Oswald";letter-spacing:.06em;color:var(--bulb)}
-header .v{color:var(--mute);font-size:12px}
-main{padding:14px 20px;max-width:1360px;margin:0 auto}
-.panel{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px 14px}
-.panel h2{margin:0 0 8px;font:600 13px "Oswald";letter-spacing:.1em;color:var(--mute);text-transform:uppercase}
-.top{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:12px}
-.top .cell{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:8px 12px}
-.top small{display:block;color:var(--mute);font:500 11px "Oswald";letter-spacing:.12em}
-.top b{font:700 22px "Oswald";color:var(--bulb)}
-.tabs{display:flex;gap:6px;margin-bottom:12px}
-.tabs button{background:var(--panel2);color:var(--ink);border:1px solid var(--line);padding:8px 16px;border-radius:5px;font:600 14px "IBM Plex Sans KR";cursor:pointer}
-.tabs button.on{background:var(--bulb);color:#1a1409;border-color:var(--bulb)}
-button{background:var(--panel2);color:var(--ink);border:1px solid var(--line);padding:6px 12px;border-radius:5px;font:500 13px "IBM Plex Sans KR";cursor:pointer}
-button.go{background:var(--red);border-color:var(--red);color:#fff;font-weight:600}
+[hidden]{display:none!important}
+html,body{height:100%;margin:0;overflow:hidden}
+body{background:var(--bg);color:var(--ink);font:13px/1.4 "IBM Plex Sans KR",system-ui,sans-serif;display:flex;flex-direction:column}
+button{background:var(--panel2);color:var(--ink);border:1px solid var(--line);padding:5px 10px;border-radius:5px;font:600 12px "IBM Plex Sans KR";cursor:pointer;min-height:34px}
+button.go{background:var(--red);border-color:var(--red);color:#fff}
+button.on{background:var(--bulb);color:#1a1409;border-color:var(--bulb)}
 button:disabled{opacity:.4;cursor:default}
-select,input{background:var(--panel2);color:var(--ink);border:1px solid var(--line);border-radius:4px;padding:4px 6px;font:13px "IBM Plex Sans KR"}
-table{border-collapse:collapse;width:100%;font-size:13px}
-th,td{padding:5px 8px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
-th{color:var(--mute);font-weight:600;font-size:12px}
+select,input{background:var(--panel2);color:var(--ink);border:1px solid var(--line);border-radius:4px;padding:3px 6px;font:12px "IBM Plex Sans KR";min-height:30px}
+input[type=number]{width:54px}
+h2{margin:0 0 4px;font:600 12px "Oswald";letter-spacing:.08em;color:var(--mute)}
+h2 .hint{font:400 11px "IBM Plex Sans KR";letter-spacing:0;text-transform:none}
+table{border-collapse:collapse;width:100%;font-size:12px}
+th,td{padding:3px 6px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
+th{color:var(--mute);font-weight:600;font-size:11px}
 td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.grid3{display:grid;grid-template-columns:2fr 1fr;gap:12px}
-.hint{color:var(--mute);font-size:12px}
-i.g{font-style:normal;display:inline-block;min-width:18px;text-align:center;border-radius:3px;padding:0 4px;font:700 11px "Oswald";color:#111}
+.hint{color:var(--mute);font-size:11px}
+.tiny{font-size:10.5px}
+i.g,i.S,i.A,i.B,i.C,i.D{font-style:normal;display:inline-block;min-width:16px;text-align:center;border-radius:3px;padding:0 3px;font:700 10px "Oswald";color:#111;margin-right:3px}
 i.S{background:#f2b441}i.A{background:#8ad1a8}i.B{background:#7fb3e0}i.C{background:#c9c2ae}i.D{background:#8a8a8a}
-.bar{display:inline-block;height:8px;background:var(--line);border-radius:4px;width:70px;vertical-align:middle;overflow:hidden}
+.g{font-size:11px;color:var(--mute)}
+.bar{display:inline-block;height:7px;background:var(--line);border-radius:4px;width:56px;vertical-align:middle;overflow:hidden}
 .bar span{display:block;height:100%;background:var(--green)}
 .bar.f span{background:var(--red)}
-.log{max-height:260px;overflow:auto;font-size:12.5px}
-.log div{padding:3px 0;border-bottom:1px dotted var(--line)}
-.log .d{color:var(--mute);font:500 11px "IBM Plex Mono";margin-right:8px}
-.win{color:var(--green)}.loss{color:var(--red)}
-.today{background:rgba(242,180,65,.12)}
-.inj{color:var(--red)}
+.win{color:var(--green)}.loss{color:var(--red)}.today{background:rgba(242,180,65,.12)}.inj{color:var(--red)}
 .sel{outline:2px solid var(--bulb)}
-.ctl{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.card{background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:10px 12px;margin-top:8px}
-.card h3{margin:0 0 6px;font:600 15px "IBM Plex Sans KR"}
-.badge{display:inline-block;padding:1px 6px;border-radius:3px;background:var(--line);font-size:11px;margin-left:4px}
-
-/* ---- game page css ---- */
-
-:root{--ground:#0d1a13;--panel:#132419;--panel2:#0a1510;--line:#24382c;--ink:#ece7d8;--mute:#8ea394;--bulb:#f2b441;--strike:#e0524b;--ball:#4fa3e0;--hit:#5fcb7a}
-html,body{background:var(--ground);color:var(--ink);margin:0}
-body{font:14px/1.5 "Noto Sans KR",system-ui,sans-serif}
-.num{font-family:"Oswald","Noto Sans KR",sans-serif;font-variant-numeric:tabular-nums}
-header{display:flex;align-items:baseline;gap:14px;padding:10px 20px;border-bottom:1px solid var(--line);background:var(--panel2)}
-header h1{margin:0;font:700 22px/1 "Oswald",sans-serif;letter-spacing:.06em;color:var(--bulb)}
-header .v{color:var(--mute);font-size:12px;letter-spacing:.04em}
-main{max-width:1320px;margin:0 auto;padding:16px;display:grid;gap:14px}
-.panel{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:14px}
-.panel h2{margin:0 0 10px;font:500 12px/1 "Oswald",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
-.hint{color:var(--mute);font-size:12px}
-.grid{display:grid;grid-template-columns:1fr 380px;gap:14px}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.roster{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}
-.pc{border:1px solid var(--line);border-radius:6px;padding:8px 10px;cursor:pointer;background:var(--panel2);position:relative}
-.pc:hover{border-color:var(--mute)}
-.pc.sel{border-color:var(--bulb);box-shadow:inset 0 0 0 1px var(--bulb)}
-.pc b{display:block;font-size:13px}
-.pc .ord{position:absolute;right:8px;top:6px;font:700 16px "Oswald";color:var(--bulb)}
-.g{display:flex;gap:5px;margin-top:4px;font-size:11px;color:var(--mute);align-items:center}
-.g i{font-style:normal;display:inline-block;min-width:16px;text-align:center;padding:0 4px;border-radius:3px;font:700 11px "Oswald";color:#0b1510;background:#7f8c84}
-.g i.S{background:#e9c46a}.g i.A{background:#8ad1a8}.g i.B{background:#9fb8ff}.g i.C{background:#d6a874}.g i.D{background:#8a8f95}
-button{font:inherit;padding:8px 14px;border:1px solid var(--line);background:var(--panel2);color:var(--ink);border-radius:4px;cursor:pointer}
-button:hover{border-color:var(--mute)}
-button:focus-visible{outline:2px solid var(--bulb);outline-offset:2px}
-button.on{background:var(--bulb);color:#0b1510;border-color:var(--bulb);font-weight:700}
-button.go{background:var(--strike);border-color:var(--strike);color:#fff;font:700 16px "Noto Sans KR";padding:12px 22px}
-button:disabled{opacity:.4;cursor:default}
-select,input{font:inherit;background:var(--panel2);color:var(--ink);border:1px solid var(--line);border-radius:4px;padding:6px 8px}
-.ctl{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.board{display:grid;grid-template-columns:auto auto auto auto auto 1fr auto auto;gap:22px;align-items:center;padding:10px 18px;background:var(--panel2);border:1px solid var(--line);border-radius:6px}
-.cell{display:flex;flex-direction:column;align-items:center;gap:2px}
-.cell small{font:500 10px "Oswald";letter-spacing:.16em;color:var(--mute)}
-.cell b{font:700 34px/1 "Oswald";color:var(--bulb)}
-.lamps{display:flex;gap:6px}
-.lamps span{width:12px;height:12px;border-radius:50%;background:#2a3d31;border:1px solid #3a5242}
-.lamps span.on{background:var(--strike);box-shadow:0 0 6px var(--strike)}
-.lamps.balls span.on{background:var(--hit);box-shadow:0 0 6px var(--hit)}
-.diamond{width:46px;height:46px;position:relative}
-.base{position:absolute;width:12px;height:12px;background:#2a3d31;border:1px solid #3a5242;transform:rotate(45deg)}
-.base.on{background:var(--bulb);box-shadow:0 0 6px var(--bulb)}
-.readout{text-align:right}
-.readout b{font:700 44px/1 "Oswald";color:var(--ink)}
-.readout small{display:block;font:500 10px "Oswald";letter-spacing:.16em;color:var(--mute)}
-.sign{font:700 16px "Oswald";letter-spacing:.08em;color:#0b1510;background:var(--bulb);padding:6px 10px;border-radius:4px;visibility:hidden}
-.sign.on{visibility:visible;animation:pop .5s ease-out}
-@keyframes pop{0%{transform:scale(.6)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
-canvas{width:100%;display:block;background:var(--panel2);border:1px solid var(--line);border-radius:6px}
-#feed{max-height:300px;overflow:auto;font-size:13.5px}
-#feed .l{padding:6px 10px;border-top:1px solid var(--line)}
-#feed .l.big{background:var(--panel2);font-weight:700}
-#feed .l .t{color:var(--mute);font:500 11px "IBM Plex Mono";margin-right:8px}
-#feed .l .bs{color:var(--bulb);font:700 11px "Oswald";margin-left:6px}
-table.box{border-collapse:collapse;width:100%;font-size:13px}
-table.box th,table.box td{padding:4px 8px;border-bottom:1px solid var(--line);text-align:center}
-table.box td:first-child,table.box th:first-child{text-align:left}
-.line{display:flex;gap:2px;margin-top:8px}
-.line span{min-width:28px;padding:4px 0;text-align:center;background:var(--panel2);border:1px solid var(--line);font:700 14px "Oswald";color:var(--bulb)}
-.line span.h{background:var(--line);color:var(--mute);font:500 11px "Oswald";letter-spacing:.1em}
-.sub{font:600 12px "Oswald";letter-spacing:.08em;color:var(--mute);margin:6px 0}
-#scenePitch[hidden],#scenePlay[hidden],#sceneBreak[hidden]{display:none!important}
-@media (prefers-reduced-motion: reduce){*{animation:none!important}}
-
-/* ---- app shell ---- */
-.apphead{display:flex;align-items:center;gap:14px;padding:8px 14px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--bg);z-index:5}
-.apphead h1{margin:0;font:700 18px "Oswald";letter-spacing:.08em;color:var(--bulb)}
-.apphead .v{margin-left:auto;color:var(--mute);font-size:11px}
-.nav{display:flex;gap:6px}
-.nav button{padding:6px 12px;font:600 13px "IBM Plex Sans KR"}
-.nav button.on{background:var(--bulb);color:#1a1409;border-color:var(--bulb)}
+.ctl{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.card h3{margin:0 0 6px;font:600 14px "IBM Plex Sans KR"}
+.badge{display:inline-block;padding:0 5px;border-radius:3px;background:var(--line);font-size:10px;margin-left:4px}
+.pager{display:flex;gap:6px;align-items:center;justify-content:flex-end;font-size:11px;color:var(--mute);margin-top:4px}
+.pager button{min-height:28px;padding:2px 8px}
+/* header */
+.apphead{flex:0 0 auto;height:42px;display:flex;align-items:center;gap:10px;padding:0 10px;border-bottom:1px solid var(--line);background:var(--bg)}
+.apphead h1{margin:0;font:700 16px "Oswald";letter-spacing:.08em;color:var(--bulb);white-space:nowrap}
+.apphead .v{margin-left:auto;color:var(--mute);font-size:10px;white-space:nowrap}
+.nav{display:flex;gap:4px}
+.nav button{padding:4px 9px;min-height:30px}
 .nav button.gamebtn{border-color:var(--red)}
-.boot{margin:12px 20px;padding:10px 14px;background:var(--panel);border:1px solid var(--line);border-radius:6px;color:var(--mute)}
+.strip{display:flex;align-items:center;gap:10px;margin-left:8px;overflow:hidden}
+.strip .s{display:flex;flex-direction:column;align-items:center;line-height:1}
+.strip small{font:500 8px "Oswald";letter-spacing:.12em;color:var(--mute)}
+.strip b{font:700 16px "Oswald";color:var(--bulb)}
+.strip b.txt{font:600 12px "IBM Plex Sans KR";color:var(--ink);max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lamps{display:inline-flex;gap:3px}
+.lamps span{width:9px;height:9px;border-radius:50%;background:var(--line)}
+.lamps span.on{background:var(--bulb)}.lamps.balls span.on{background:var(--green)}
+.diamond{position:relative;width:26px;height:26px;display:inline-block}
+.base{position:absolute;width:9px;height:9px;background:var(--line);transform:rotate(45deg)}
+.base.on{background:var(--bulb)}
+#b2{left:8px;top:0}#b3{left:0;top:8px}#b1{left:16px;top:8px}
+.sign{font:700 10px "Oswald";color:var(--bulb);opacity:0;transition:opacity .2s}
+.sign.on{opacity:1}
+.boot{margin:8px 12px;padding:8px 12px;background:var(--panel);border:1px solid var(--line);border-radius:6px;color:var(--mute);font-size:12px}
 .boot.err{color:var(--red)}
-main{padding:12px 14px;max-width:1400px;margin:0 auto}
-canvas{max-width:100%;height:auto;display:block}
-.viewsel{display:none;gap:6px;margin-bottom:8px}
-.viewsel button.on{background:var(--bulb);color:#1a1409;border-color:var(--bulb)}
-/* phones and tablets: one 3D view at a time, panels stacked; landscape puts the view left and the controls right */
-@media (max-width:1099px){
-  .viewsel{display:flex}
-  .two.views{display:block}
-  .two.views .panel{margin-bottom:10px}
-  .grid{display:grid;grid-template-columns:1fr;gap:10px}
-  .grid3{grid-template-columns:1fr}
-  .grid2{grid-template-columns:1fr}
-  .top{grid-template-columns:repeat(3,1fr)}
-  .board{flex-wrap:wrap}
-  button{min-height:40px}
-  select{min-height:36px}
+/* screens fill the rest of the viewport */
+main{flex:1 1 auto;min-height:0;padding:6px 8px}
+.screen{height:100%;display:flex;flex-direction:column;min-height:0}
+.fit{flex:1 1 auto;min-height:0;display:grid;gap:8px}
+.two-col{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}
+.three-col{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr) minmax(0,1.2fr)}
+.col{display:flex;flex-direction:column;min-height:0;gap:8px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:8px 10px;min-height:0;display:flex;flex-direction:column}
+.grow{flex:1 1 auto;min-height:0;overflow:hidden}
+.log{font-size:11.5px}
+.log div{padding:2px 0;border-bottom:1px dotted var(--line);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.log .d{color:var(--mute);font:500 10px "IBM Plex Mono";margin-right:6px}
+.scrollbox{overflow:auto;max-height:100%}
+/* setup: compact roster cards */
+.roster{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:5px;margin-bottom:6px}
+.roster .pc{background:var(--panel2);border:1px solid var(--line);border-radius:5px;padding:4px 6px;cursor:pointer;font-size:11px;position:relative;overflow:hidden}
+.roster .pc b{display:block;font-size:11.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.roster .pc.sel{border-color:var(--bulb);box-shadow:inset 0 0 0 1px var(--bulb)}
+.roster .ord{position:absolute;right:4px;top:2px;font:700 12px "Oswald";color:var(--bulb)}
+/* game: view left, controls right */
+.gamefit{flex:1 1 auto;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:8px}
+.gamefit.one{grid-template-columns:minmax(0,1fr)}
+.viewcol{display:flex;flex-direction:column;min-height:0;gap:4px}
+.viewsel{display:flex;gap:4px;align-items:center}
+.viewsel button{min-height:28px;padding:2px 10px}
+.viewbox{position:relative;flex:1 1 auto;min-height:0;display:flex;align-items:center;justify-content:center;background:#050d09;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.viewbox .vw{width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+.viewbox .vw[hidden]{display:none}
+.viewbox canvas{max-width:100%;max-height:100%;width:auto;height:auto;display:block}
+.fieldinset{position:absolute;left:6px;bottom:6px;width:140px;height:auto;opacity:.92;border:1px solid var(--line);border-radius:4px;background:#0a1510}
+.feedlast{position:absolute;right:6px;bottom:6px;left:154px;font-size:11.5px;background:rgba(5,13,9,.72);padding:4px 8px;border-radius:4px;max-height:3.1em;overflow:hidden;line-height:1.35}
+.bodynote{position:absolute;right:6px;top:4px;background:rgba(5,13,9,.6);padding:2px 6px;border-radius:4px}
+.ctlcol{display:flex;flex-direction:column;gap:6px;min-height:0;overflow:hidden}
+.ctlcol .ctl button{flex:1 1 auto;padding:5px 6px}
+.kz{width:100%;height:auto;max-height:42%;border:1px solid var(--line);border-radius:6px;background:#0a1510}
+.feedfull{position:fixed;left:8px;right:8px;top:48px;bottom:8px;background:rgba(10,20,15,.97);overflow:auto;padding:10px 14px;z-index:20;border:1px solid var(--line);border-radius:6px;font-size:12.5px}
+.feedfull .l{padding:3px 0;border-bottom:1px dotted var(--line)}
+.feedfull .l.big{font-weight:600}
+.feedfull .t{color:var(--mute);font:500 10px "IBM Plex Mono";margin-right:6px}
+.feedfull .bs{color:var(--bulb);font:700 10px "Oswald";margin-left:6px}
+.bpages{overflow:hidden}
+.bpage h3{margin:4px 0;font:600 12px "Oswald";color:var(--mute)}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:30}
+.modal[hidden]{display:none}
+.modalbox{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:10px 12px;width:min(560px,92vw);max-height:90vh;overflow:auto}
+/* rotate prompt on portrait phones */
+#rotate{display:none}
+@media (orientation:portrait) and (max-width:900px){#rotate{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--bg);z-index:50;color:var(--ink)} #rotate .ico{font-size:56px;color:var(--bulb)} #rotate p{margin:4px 0;font-size:16px}}
+/* short viewports (phones in landscape) */
+@media (max-height:520px){
+  body{font-size:12px} .apphead{height:36px} .apphead h1{font-size:14px} .nav button{padding:2px 7px;min-height:26px}
+  .strip b{font-size:14px} .panel{padding:5px 8px} h2{font-size:10.5px;margin-bottom:2px} button{min-height:30px;padding:3px 8px;font-size:11.5px}
+  th,td{padding:2px 5px;font-size:11px} .gamefit{grid-template-columns:minmax(0,1fr) 210px} .fieldinset{width:110px} .feedlast{left:124px}
+  .roster{grid-template-columns:repeat(6,minmax(0,1fr))} .roster .pc{padding:2px 5px;font-size:10px} main{padding:4px 6px}
 }
-@media (max-width:1099px) and (orientation:landscape){
-  .grid{grid-template-columns:minmax(0,1fr) 300px}
-  #screen-club .grid3{grid-template-columns:minmax(0,1fr) 300px}
-  .top{grid-template-columns:repeat(6,1fr)}
+
+/* ---- game HUD: the view fills the whole area, everything else floats over it (sports-game convention) ---- */
+.hud{flex:1 1 auto;min-height:0;display:flex}
+.viewbox.full{flex:1 1 auto;width:100%;height:100%;background:#050d09}
+.viewbox.full .vw canvas,.viewbox.full > canvas#play{width:100%;height:100%;max-width:100%;max-height:100%;object-fit:contain}
+.bug{position:absolute;left:8px;top:8px;display:flex;align-items:center;gap:10px;background:rgba(5,13,9,.78);border:1px solid var(--line);border-radius:6px;padding:4px 10px;backdrop-filter:blur(2px)}
+.bug .s{display:flex;flex-direction:column;align-items:center;line-height:1}
+.bug small{font:500 8px "Oswald";letter-spacing:.12em;color:var(--mute)}
+.bug b{font:700 16px "Oswald";color:var(--bulb)}
+.bug b.txt{font:600 12px "IBM Plex Sans KR";color:var(--ink);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bug .cnt{display:flex;flex-direction:column;gap:2px}
+.bug .cnt .row{display:flex;align-items:center;gap:4px}
+.bug .cnt small{width:8px}
+.viewbox.full .viewsel{position:absolute;left:50%;top:8px;transform:translateX(-50%);background:rgba(5,13,9,.6);border-radius:6px;padding:3px}
+.viewbox.full .viewsel button{min-height:26px;padding:2px 9px;font-size:11px}
+.viewbox.full .kzinset{position:absolute;right:8px;top:8px;width:130px;height:auto;border:1px solid var(--line);border-radius:6px;background:rgba(10,21,16,.85)}
+.viewbox.full .fieldinset{left:8px;bottom:8px;width:120px}
+.viewbox.full .feedlast{left:136px;right:auto;width:min(46%,420px);bottom:8px}
+.viewbox.full .bodynote{right:146px;top:8px;left:auto}
+.actions{position:absolute;right:8px;bottom:8px;display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.chips{display:flex;gap:4px;background:rgba(5,13,9,.6);border-radius:6px;padding:3px}
+.chips button{min-height:28px;padding:2px 9px;font-size:11px}
+.big{display:flex;gap:6px;align-items:center;background:rgba(5,13,9,.6);border-radius:6px;padding:4px}
+.big button.go{min-height:40px;min-width:64px;font-size:14px}
+.big .spd{font-size:11px;color:var(--mute)}
+.big .spd input{width:46px;min-height:28px}
+.adminover{position:absolute;left:8px;top:64px;width:min(46%,460px);max-height:40%;overflow:auto;background:rgba(5,13,9,.85);border:1px solid var(--line);border-radius:6px;padding:6px 8px}
+.breakbox{margin:auto;width:min(96%,900px);max-height:100%}
+@media (max-height:520px){
+  .bug{padding:3px 8px;gap:8px} .bug b{font-size:14px} .big button.go{min-height:34px;min-width:56px;font-size:13px} .viewbox.full .kzinset{width:104px} .viewbox.full .fieldinset{width:100px} .viewbox.full .feedlast{left:112px}
 }
-body.wide .viewsel{display:none}
-body.wide .two.views{display:grid;grid-template-columns:1fr 1fr 340px;gap:12px}
