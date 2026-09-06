@@ -12,10 +12,46 @@ function gauss(){let u=0,v=0;while(u===0)u=rng();while(v===0)v=rng();return Math
 function poisson(l){let L=Math.exp(-l),k=0,p=1;do{k++;p*=rng()}while(p>L);return k-1}
 function grade(v){return v>=0.85?"S":v>=0.7?"A":v>=0.55?"B":v>=0.4?"C":"D"}
 function gi(g){return "<i class='g "+g+"'>"+g+"</i>"}
+function hash32(str){let h=2166136261;for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
+function srng(seed){let a=seed>>>0;return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return ((t^t>>>14)>>>0)/4294967296}}
+function sgauss(r){let u=0,v=0;while(u===0)u=r();while(v===0)v=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)}
+function grade(v){return v>=0.85?"S":v>=0.7?"A":v>=0.55?"B":v>=0.4?"C":"D"}
+const POS_OF_GROUP={C:["C"],IF:["SS","2B","3B","1B"],OF:["CF","LF","RF"]};
+function kboPlayer(kp,club,id){const r=srng(hash32(club.code+"|"+kp.name+"|"+kp.num));const kind=kp.group==="P"?"P":"B";const keys=kind==="B"?DATA.bat_keys:DATA.pit_keys;
+ const peak=Math.max(0.25,Math.min(0.92,0.55+(kp.active?0.05:-0.06)+0.12*sgauss(r)));const attrs={},pot={},grades={};const head=Math.max(0,(30-kp.age)/11);
+ keys.forEach(k=>{attrs[k]=Math.max(0.12,Math.min(0.96,peak+0.10*sgauss(r)));pot[k]=Math.max(attrs[k],Math.min(0.98,attrs[k]+(0.02+0.30*r())*head+0.03*sgauss(r)));grades[k]=grade(Math.max(0,Math.min(1,attrs[k]+0.06*sgauss(r))))});
+ if(kind==="B"&&kp.pos==="C")attrs.speed=Math.min(attrs.speed,0.45);
+ const potAvg=Object.values(pot).reduce((a,b)=>a+b,0)/keys.length;const salary=Math.round(10*Math.max(0.4,Math.min(15,(Object.values(attrs).reduce((a,b)=>a+b,0)/keys.length-0.3)*18+1.2*sgauss(r)+(kp.age>30?0.8:0))))/10;
+ return {id,name:kp.name,num:kp.num,age:kp.age,hand:kind==="B"?(kp.bats==="S"?"L":kp.bats):kp.throws,bats:kp.bats,throws:kp.throws,type:kind,pos:kind==="B"?kp.pos:null,role:kind==="P"?(kp.active?"SP":"RP"):null,
+  grades,attrs:Object.fromEntries(keys.map(k=>[k,Math.round(attrs[k]*1000)/1000])),pot:Object.fromEntries(keys.map(k=>[k,Math.round(pot[k]*1000)/1000])),pot_grade:grade(potAvg),
+  personality:{ambition:Math.round((0.2+0.7*r())*100)/100,loyalty:Math.round((0.2+0.7*r())*100)/100,pro:Math.round((0.3+0.65*r())*100)/100},
+  morale:{playing_time:0.6,team_success:0.6,salary_fairness:0.6,relationships:0.6,role_fit:0.6},condition:Math.round(65+27*r()),fatigue:Math.round((0.05+0.2*r())*100)/100,injury:0,
+  contract:{salary,years:1+Math.floor(r()*3),status:kp.age<=23?"rookie":(kp.age<=27?"arbitration":"veteran")},stats:{G:0,PA:0,H:0,HR:0,RBI:0,BB:0,K:0,IP:0,ER:0,W:0,L:0,SV:0,KP:0},height:kp.height,active:!!kp.active,real:!kp.est}}
+function buildKboClub(code){const K=window.APP.kbo;if(!K)return null;const club=K.clubs.find(c=>c.code===code);if(!club)return null;
+ const R=window.APP.roster;const ourArch={L:R.batters.filter(b=>b.hand==="L").map(b=>b.id),R:R.batters.filter(b=>b.hand!=="L").map(b=>b.id)};
+ let id=1;const players=club.players.map(kp=>kboPlayer(kp,club,id++));
+ // starting nine + bench from the active roster: one per position first, then best remaining; map onto the physics batter archetypes by hand
+ const bats=players.filter(p=>p.type=="B");const act=bats.filter(p=>p.active);
+ const need=["C","SS","2B","CF","3B","1B","LF","RF"];const chosen=[];need.forEach(ps=>{const c=act.filter(p=>p.pos===ps&&!chosen.includes(p)).sort((a,b)=>ovr(b)-ovr(a))[0];if(c)chosen.push(c)});
+ act.filter(p=>!chosen.includes(p)).sort((a,b)=>ovr(b)-ovr(a)).forEach(p=>{if(chosen.length<12)chosen.push(p)});
+ if(chosen[8])chosen[8].pos="DH";                                     // ninth starter bats as the designated hitter (KBO uses the DH)
+ const pools={L:ourArch.L.slice(),R:ourArch.R.slice()};chosen.forEach(p=>{const pool=pools[p.hand==="L"?"L":"R"].length?pools[p.hand==="L"?"L":"R"]:(pools.L.length?pools.L:pools.R);if(pool.length)p.engine_id=pool.shift()});
+ const pits=players.filter(p=>p.type=="P");const sps=pits.filter(p=>p.active).sort((a,b)=>ovr(b)-ovr(a));
+ R.pitchers.forEach((ap,i)=>{const cand=sps.filter(p=>p.engine_id===undefined&&(ap.hand==="L")===(p.hand==="L"))[0]||sps.filter(p=>p.engine_id===undefined)[0];if(cand){cand.engine_id=ap.id;cand.role="SP"}});
+ pits.forEach(p=>{if(p.role==="SP"&&p.engine_id===undefined)p.role="RP"});
+ bats.forEach(p=>{p.active=chosen.includes(p)||(p.active&&bats.filter(x=>x.active).length<13)});
+ let nb=bats.filter(p=>p.active).length,np=pits.filter(p=>p.active).length;
+ bats.forEach(p=>{if(p.active&&!chosen.includes(p)&&nb>14){p.active=false;nb--}});pits.forEach(p=>{if(p.active&&p.role!=="SP"&&np>12){p.active=false;np--}});
+ const lineup=chosen.slice(0,9).map(p=>p.id);const rotation=pits.filter(p=>p.role==="SP"&&p.engine_id!==undefined).sort((a,b)=>a.engine_id-b.engine_id).map(p=>p.id);
+ const opps=K.clubs.filter(c=>c.code!==code).map((c,j)=>{const r=srng(hash32("club|"+c.code+"|2026"));return {id:j+1,code:c.code,name:c.name,short:c.short,color:c.color,bat:Math.round((0.46+0.16*r())*100)/100,pitch:Math.round((0.46+0.16*r())*100)/100,def:Math.round((0.46+0.14*r())*100)/100,W:0,L:0,starter:j%5}});
+ const d0=new Date(DATA.date0+"T00:00:00");const sched=[];let g=1,day=0;while(g<=30){const d=new Date(d0);d.setDate(d0.getDate()+day);if(d.getDay()!==1){const oi=Math.floor((g-1)/3)%opps.length;sched.push({g,date:d.toISOString().slice(0,10),opp:opps[oi].id,home:Math.floor((g-1)/3)%2===0,result:null});g++}day++}
+ return {players,lineup,rotation,opps,sched,club:{name:club.name,short:club.short,color:club.color,city:club.city,code}}}
 function fresh(identity){const d=JSON.parse(JSON.stringify(DATA));if(identity){d.club.name=identity.name;d.club.color=identity.color;d.club.city=identity.city}
  const bats=d.players.filter(p=>p.type=="B"&&p.active), sps=d.players.filter(p=>p.type=="P"&&p.role=="SP"&&p.active);
  S={seed:20260403,day:0,players:d.players,fa:d.free_agents,opps:d.opponents,sched:d.schedule,budget:d.club.budget,staff:d.club.staff,
     lineup:bats.slice(0,9).map(p=>p.id),rotation:sps.slice(0,5).map(p=>p.id),rotIdx:0,program:{},log:[],trainLog:[],W:0,L:0,runs:0,ra:0,weekGames:{},club:d.club,policy:"manual",played:[]};
+ if(identity&&identity.code){const K=buildKboClub(identity.code);if(K){S.players=K.players;S.lineup=K.lineup;S.rotation=K.rotation;S.opps=K.opps;S.sched=K.sched;S.club=K.club;S.kbo=true;
+   const fa=[];const others=window.APP.kbo.clubs.filter(c=>c.code!==identity.code);for(let k=0;k<8;k++){const c=others[(k*3)%others.length];const cand=c.players.filter(p=>!p.active)[(k*7)%Math.max(1,c.players.filter(p=>!p.active).length)];if(cand){const q=kboPlayer(cand,c,5000+k);q.active=false;q.asking=Math.round(q.contract.salary*12.5)/10;q.from=c.short;fa.push(q)}}S.fa=fa}}
  S.players.forEach(p=>{S.program[p.id]=p.type=="B"?"bat":"control";S.weekGames[p.id]=0});
  addLog((S.club&&S.club.name?S.club.name+" · ":"")+"시즌 개막 준비. 예산 "+S.budget+"억, 선수 "+S.players.length+"명.");save()}
 function save(){window.APP.kv.set("club",S)}
@@ -141,6 +177,6 @@ function recordExternalGame(res){const g=gameToday();if(!g||g.result)return fals
  (res.box||[]).forEach(b=>{const p=S.players.find(x=>x.name===b.name);if(!p)return;p.stats.G++;p.stats.PA+=b.PA||0;p.stats.H+=b.H||0;p.stats.BB+=b.BB||0;p.stats.K+=b.K||0;p.fatigue=Math.min(1,p.fatigue+0.07)});
  if(res.sp){const p=S.players.find(x=>x.name===res.sp);if(p){p.stats.G++;p.stats.IP=Math.round((p.stats.IP+(res.ip||0))*10)/10;p.stats.ER+=res.er||0;if(res.us>res.them)p.stats.W++;else p.stats.L++;p.fatigue=Math.min(1,p.fatigue+0.45)}}
  addLog((res.us>res.them?"승 ":"패 ")+res.us+":"+res.them+" vs "+opp.name+" · 직접 경기");save();render();return true}
-window.ClubUI={state:()=>S,render,advanceDay,fresh,setState:s=>{S=s;save();render()},recordExternalGame,gameToday:()=>{const g=gameToday();return g?{g:g.g,opp:S.opps.find(o=>o.id===g.opp).name,home:g.home,starter:S.opps.find(o=>o.id===g.opp).starter}:null},lineupForGame:()=>{if(!S)return null;const ids=S.lineup.map(id=>{const p=S.players.find(x=>x.id===id);return p&&p.engine_id!==undefined?p.engine_id:null});const sp=S.rotation.map(id=>S.players.find(x=>x.id===id)).filter(p=>p&&p.engine_id!==undefined&&!p.injury)[S.rotIdx%Math.max(1,S.rotation.length)];return {order:ids.every(x=>x!==null)?ids:null,pitcher:sp?sp.engine_id:null}}};
+window.ClubUI={state:()=>S,render,advanceDay,fresh,setState:s=>{S=s;save();render()},recordExternalGame,gameToday:()=>{const g=gameToday();return g?{g:g.g,opp:S.opps.find(o=>o.id===g.opp).name,home:g.home,starter:S.opps.find(o=>o.id===g.opp).starter}:null},lineupForGame:()=>{if(!S)return null;let names=null,oppNames=null,oppClub=null;if(S.kbo&&window.APP.kbo){names={};S.players.filter(p=>p.engine_id!==undefined).forEach(p=>{names[(p.type=="B"?"b":"p")+p.engine_id]={name:p.name,pos:p.pos,num:p.num}});const g=gameToday()||S.sched.find(x=>!x.result);const oc=g?S.opps.find(o=>o.id===g.opp):null;const kc=oc?window.APP.kbo.clubs.find(c=>c.code===oc.code):null;if(kc){oppClub={name:kc.name,short:kc.short,color:kc.color};const R=window.APP.roster;const ob=kc.players.filter(p=>p.group!=="P"&&p.active);const used=new Set();oppNames={};R.opp.batters.forEach(ab=>{let c=ob.find(p=>!used.has(p.name)&&(p.bats==="L")===(ab.hand==="L"))||ob.find(p=>!used.has(p.name));if(c){used.add(c.name);oppNames[ab.id]={name:c.name,pos:c.pos,num:c.num}}});const op=kc.players.filter(p=>p.group==="P"&&p.active);R.opp.pitchers.forEach((ap,i)=>{const c=op.filter(p=>(p.throws==="L")===(ap.hand==="L"))[i%Math.max(1,op.length)]||op[i%Math.max(1,op.length)];if(c)oppNames["p"+ap.id]={name:c.name,num:c.num}})}}const pitcherState={};S.players.filter(p=>p.type=="P"&&p.engine_id!==undefined).forEach(p=>{pitcherState[p.engine_id]={fatigue:p.fatigue,condition:p.condition,injury:p.injury}});const ids=S.lineup.map(id=>{const p=S.players.find(x=>x.id===id);return p&&p.engine_id!==undefined?p.engine_id:null});const sp=S.rotation.map(id=>S.players.find(x=>x.id===id)).filter(p=>p&&p.engine_id!==undefined&&!p.injury)[S.rotIdx%Math.max(1,S.rotation.length)];return {order:ids.every(x=>x!==null)?ids:null,pitcher:sp?sp.engine_id:null,pitcherState,names,oppNames,oppClub,clubName:S.club&&S.club.name}}};
 
 })();

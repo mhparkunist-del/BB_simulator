@@ -26,7 +26,8 @@ def main():
     html = html.replace('<link rel="manifest" href="manifest.webmanifest">', "")
     roster = json.load(open(os.path.join(APP, "data", "roster.json"), encoding="utf-8"))
     club = json.load(open(os.path.join(APP, "data", "club.json"), encoding="utf-8"))
-    emb = {"data/roster.json": roster, "data/club.json": club}
+    kbo = json.load(open(os.path.join(APP, "data", "kbo.json"), encoding="utf-8"))
+    emb = {"data/roster.json": roster, "data/club.json": club, "data/kbo.json": kbo}
     bank_dir = os.path.join(APP, "data", "bank")
     n = 0
     for f in sorted(os.listdir(bank_dir)):

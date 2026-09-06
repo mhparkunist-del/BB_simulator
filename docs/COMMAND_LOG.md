@@ -69,6 +69,9 @@
 | 62 | 2026-09-06 | 팀 타자·투수 포지션을 따로 정할 수 있게 | v2.2.0: 선수단 목록 셀렉트(야수 11종, 투수 SP/RP/CL), 타순 포지션 경고, 빠른 시뮬 수비 강도 −5 %/자리 | web/app/, bbsim/engine/fielding.py, docs/APP_FLOW.md | 완료 |
 | 63 | 2026-09-06 | 주루 능력치에 타구 판단 추가, 판단이 나쁘면 아웃 타이밍에도 뜀 | v2.2.0: BatterProfile.run_iq + 로스터 등급 '판단', fielding._hit_bases가 송구 여유를 σ=0.08+0.55(1−iq)로 흐리게 읽고 과감성으로 밀어 2루·3루 주루사(single_out/double_out) 판정, inning/game/page 결과 처리, 은행 재생성 | web/app/, bbsim/engine/fielding.py, docs/APP_FLOW.md | 완료 |
 | 64 | 2026-09-06 | 타자 타격 자세가 부자연스럽다 · 모바일 앱 인터페이스 계획(타이틀→새로 시작/불러오기/저장→팀 선택→이벤트→튜토리얼→훈련 위임/개별 훈련·폼 조정) | v2.2.0: 스탠스(무릎 굽힘·배트 45°·뒤 팔꿈치)·로드·플랜트·접촉(앞다리 고정·어깨 72°)·팔로스루(손 높이) 키프레임 재조정. docs/APP_FLOW.md 계획 + 타이틀/구단 선택/이벤트/튜토리얼/저장 슬롯/훈련 방침 6종/개별 훈련·투구 폼 슬라이더(엔진 연결 예정) 구현 | web/app/, bbsim/engine/fielding.py, docs/APP_FLOW.md | 완료 |
+| 65 | 2026-09-06 | 실제 KBO 구단과 선수명을 가져오기, 선수 풀은 많게 | v2.3.0: tools/build_kbo.py가 위키백과 구단 명단 틀 + KBO 공식 등록명단(1군 투타·생년월일·신체)을 합쳐 web/app/data/kbo.json(10구단 944명, 146 KB) 생성. 구단 선택 화면이 10구단 카드, club.js buildKboClub이 1군 명단에서 포지션별 선발 9명(9번 DH)·선발 5명·2군을 짜고 이름 해시 시드로 능력치 추정(est 표시), 상대 9구단 일정, 경기 화면에 실명·등번호·포지션 오버레이(applyNames) | tools/build_kbo.py, web/app/data/kbo.json, web/app/js/club/club.js, web/app/js/app.js, web/app/js/game/game.js, docs/APP_FLOW.md | 완료 |
+| 66 | 2026-09-06 | 선발 고를 때 투수 현재 체력 표시 | v2.3.0: 경기 준비 투수 카드에 체력 바(100·(1−피로) %)와 컨디션 | web/app/js/game/game.js, web/app/css/app.css | 완료 |
+| 67 | 2026-09-06 | 이닝 교체 때 다음 타순 3명을 KBO 중계처럼 표시 | v2.3.0: 이닝 교체 화면 상단에 "공격 · 다음 타순" 칩 3개(타순·이름·좌우·포지션), 점수 버그에 대기 타자 2명 | web/app/js/game/game.js, web/app/index.html, web/app/css/app.css | 완료 |
 
 ## 운용
 - 새 지시 → 행 추가 → 산출물 버전 파일명(v{N.M}_{MMDD}) → recent report 갱신(이전 보고는 2_Archieve로) → README 이력표·2_Archieve/README.md 색인 갱신.

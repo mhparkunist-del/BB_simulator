@@ -90,6 +90,7 @@ python3 examples/run_batter_attributes.py  # 능력치 저/고 × 평온/부담 
 | v2.0.0 | 2026-09-06 | 웹앱(PWA) 전환: web/app/에 셸(index.html·app.css·app.js·kv.js·sw.js·manifest), 렌더러 7모듈, 게임·구단 모듈, 데이터 분리(roster.json·club.json·투수×타자 조합별 은행 105파일, 타석마다 100 KB 수신), IndexedDB 저장, 가로/세로 레이아웃(폰은 3D 뷰 하나씩 선택), 구단 타순·선발이 경기에 연결, 단일 파일 미리보기 번들 | web/app/, web/app_preview_v2.0_0906.html, tools/build_app.py, tools/bundle_app.py, tools/app_smoke.py |
 | v2.1.0 | 2026-09-06 | 가로 한 화면 UI: 스크롤 없는 화면(긴 목록은 이전/다음 페이지), 경기 화면을 스포츠 게임식 HUD(꽉 찬 3D 뷰 위에 점수판·카운트·베이스·K-zone·미니맵·사인 칩·큰 진행 버튼)로, 세로면 회전 안내, 첫 탭에서 전체화면·가로 잠금 시도, 매니페스트 landscape | web/app/, web/app_preview_v2.1_0906.html |
 | v2.2.0 | 2026-09-06 | 앱 흐름: 타이틀(계속·새로 시작·불러오기)·구단 선택·부임 이벤트·튜토리얼·저장 슬롯, 경기 중 화면 잠금과 결과의 시즌 반영, 훈련 방침 위임, 포지션 편집과 수비 강도 반영, 타구 판단(run_iq)과 주루사, 타자 스윙 자세 개선 | web/app/, docs/APP_FLOW.md |
+| v2.3.0 | 2026-09-06 | KBO 10구단 실명 선수단(위키백과 명단 틀 + KBO 등록명단, 944명, 능력치는 추정) 구단 선택·타순·경기 화면 반영, 선발 카드 체력 바, 이닝 교체 화면 다음 타순 3명 | web/app/data/kbo.json, tools/build_kbo.py, web/app_preview_v2.3_0906.html, docs/APP_FLOW.md §3 |
 
 ## 다음 단계 (docs/ARCHITECTURE.md §5)
 - v0.2 야수 에이전트·주루·이닝 루프 (결과 확률표 제거)

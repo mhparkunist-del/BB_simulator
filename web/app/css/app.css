@@ -167,3 +167,12 @@ select.posSel{min-height:26px;padding:1px 4px;font-size:11px}
 .warn{color:var(--red);font-size:11px}
 .form{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:11px;margin-top:6px}
 .form input[type=range]{width:100%;min-height:20px}
+
+/* on-deck line in the score bug, next-three strip at the break, starter stamina on setup cards */
+.bug .ondeck{font:500 9px "IBM Plex Sans KR";letter-spacing:0;color:var(--mute);margin-top:1px}
+.nextup{display:flex;gap:10px;align-items:center;margin:2px 0 6px;font-size:12px}
+.nextup .nb{background:var(--panel2);border:1px solid var(--line);border-radius:5px;padding:3px 8px}
+.nextup .nb small{color:var(--bulb);font:700 10px "Oswald";margin-right:4px}
+.nextup .nb em{font-style:normal;color:var(--mute);font-size:10px}
+.roster .stam{font-size:10px;color:var(--mute);margin-top:2px}
+.roster .stam .bar{width:44px;height:5px}

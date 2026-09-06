@@ -1,7 +1,7 @@
 /* bbsim app · service worker: shell network-first (cache fallback), banks cached as fetched, one cache per release */
 const VERSION = "bbsim-app-v2.2.0-8f4fcc5";
 const SHELL = ["index.html", "css/app.css", "js/kv.js", "js/app.js", "js/render/math.js", "js/render/park.js", "js/render/person.js", "js/render/pitcher.js",
-  "js/render/figures.js", "js/render/play.js", "js/render/seam.js", "js/game/game.js", "js/club/club.js", "data/roster.json", "data/club.json", "manifest.webmanifest"];
+  "js/render/figures.js", "js/render/play.js", "js/render/seam.js", "js/game/game.js", "js/club/club.js", "data/roster.json", "data/club.json", "data/kbo.json", "manifest.webmanifest"];
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(VERSION).then(c => c.addAll(SHELL.map(f => new URL(f, self.registration.scope).toString()))).then(() => self.skipWaiting()));
 });

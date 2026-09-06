@@ -76,16 +76,21 @@ window.APP = window.APP || {};
     $("saveBtn").onclick = () => { slotList($("saveSlots"), "save"); $("saveModal").hidden = false }; $("saveClose").onclick = () => { $("saveModal").hidden = true };
     $("titleBtn").onclick = () => { A.autosave(); A.show("title"); refreshContinue() };
     $("teamStart").onclick = async () => {
-      const t = TEAMS[A.teamPick]; window.ClubUI.fresh(t); await A.kv.set("tutorial_done", false);
+      const t = teamList()[A.teamPick]; window.ClubUI.fresh(t); await A.kv.set("tutorial_done", false);
       A.show("schedule");
-      A.event("구단주 인사", "<b>" + t.name + "</b> 감독으로 부임하신 것을 환영합니다.<br>" + t.motto + " — 올 시즌 30경기, 선수단과 훈련은 감독님께 맡깁니다.<br>먼저 선수들을 둘러보시죠.", () => tutorial(0));
+      A.event("구단주 인사", "<b>" + t.name + "</b> 감독으로 부임하신 것을 환영합니다.<br>" + (t.code ? "실제 " + t.name + " 선수단(2026 등록명단 기준)으로 시즌을 치릅니다. 능력치는 이 게임의 추정값입니다." : t.motto) + "<br>올 시즌 30경기, 선수단과 훈련은 감독님께 맡깁니다. 먼저 선수들을 둘러보시죠.", () => tutorial(0));
       A.autosave();
     };
   }
+  function teamList() {
+    if (A.kbo && A.kbo.clubs) return A.kbo.clubs.map(c => ({ name: c.name, city: c.city, color: c.color, code: c.code, motto: "1군 " + c.n_active + "명 · 전체 " + c.players.length + "명 (KBO " + A.kbo.season + ")" }));
+    return TEAMS;
+  }
   function renderTeams() {
     A.teamPick = null; $("teamStart").disabled = true;
-    $("teamCards").innerHTML = TEAMS.map((t, i) => "<div class='tc' data-i='" + i + "'><b><span class='sw' style='background:" + t.color + "'></span>" + t.name + "</b><span class='hint'>" + t.city + " · " + t.motto + "</span></div>").join("");
-    $("teamCards").querySelectorAll(".tc").forEach(c => c.onclick = () => { A.teamPick = +c.dataset.i; $("teamCards").querySelectorAll(".tc").forEach(x => x.classList.toggle("sel", x === c)); $("teamPick").textContent = TEAMS[A.teamPick].name + " 선택"; $("teamStart").disabled = false });
+    const L = teamList();
+    $("teamCards").innerHTML = L.map((t, i) => "<div class='tc' data-i='" + i + "'><b><span class='sw' style='background:" + t.color + "'></span>" + t.name + "</b><span class='hint'>" + t.city + " · " + t.motto + "</span></div>").join("");
+    $("teamCards").querySelectorAll(".tc").forEach(c => c.onclick = () => { A.teamPick = +c.dataset.i; $("teamCards").querySelectorAll(".tc").forEach(x => x.classList.toggle("sel", x === c)); $("teamPick").textContent = L[A.teamPick].name + " 선택"; $("teamStart").disabled = false });
   }
   async function refreshContinue() { const sv = await A.kv.get("autosave"); const has = !!(sv && sv.S); $("btnContinue").hidden = !has; if (has && window.ClubUI && window.ClubUI.setState && !(window.ClubUI.state() && window.ClubUI.state().day === sv.S.day)) window.ClubUI.setState(sv.S) }
   function viewSel(v) {                           // small screens: one 3D view at a time
@@ -126,6 +131,7 @@ window.APP = window.APP || {};
       status.textContent = "데이터 불러오는 중…";
       A.roster = await A.fetchJSON("data/roster.json");
       A.club = await A.fetchJSON("data/club.json");
+      try { A.kbo = await A.fetchJSON("data/kbo.json") } catch (e) { A.kbo = null }
       status.textContent = "렌더러 불러오는 중…";
       if (!A.bundled) for (const f of ["js/render/math.js", "js/render/park.js", "js/render/person.js", "js/render/pitcher.js", "js/render/figures.js", "js/render/play.js", "js/render/seam.js", "js/game/game.js", "js/club/club.js"]) await loadScript(f);
       else if (A.bundledInit) A.bundledInit();
@@ -157,22 +163,35 @@ window.APP = window.APP || {};
     try {
       if (mode === "flow") {
         await new Promise(r => { const t = setInterval(() => { if (window.ClubUI && window.ClubUI.state()) { clearInterval(t); r() } }, 50) });
-        A.show("title"); $("btnNew").onclick(); $("teamCards").querySelectorAll(".tc")[1].onclick(); await $("teamStart").onclick();
-        const S = window.ClubUI.state();
-        box.textContent = "SMOKE OK flow: club=" + (S.club && S.club.name) + " event=" + !$("eventModal").hidden + " title='" + $("eventTitle").textContent + "' screen=" + (!$("screen-club").hidden) + " locked=" + !!A.locked + " errs=" + errs.length;
+        A.show("title"); $("btnNew").onclick(); $("teamCards").querySelectorAll(".tc")[3].onclick(); await $("teamStart").onclick();
+        const S = window.ClubUI.state(); const eng = S.players.filter(p => p.engine_id !== undefined);
+        box.textContent = "SMOKE OK flow: club=" + (S.club && S.club.name) + " players=" + S.players.length + " active=" + S.players.filter(p => p.active).length + " engine=" + eng.length + " lineup=" + S.lineup.map(id => (S.players.find(p => p.id === id) || {}).name).join("/") + " rot=" + S.rotation.length + " opps=" + S.opps.length + " event=" + !$("eventModal").hidden + " errs=" + errs.length;
       } else if (mode === "lock") {
         await new Promise(r => { const t = setInterval(() => { if (window.ClubUI && window.ClubUI.state()) { clearInterval(t); r() } }, 50) });
         A.show("game"); $("autoOrder").onclick(); if (window.GameUI.pick.pitcher === null) document.querySelector("[data-p]").onclick(); $("start").onclick();
         A.show("schedule");
         box.textContent = "SMOKE OK lock: locked=" + !!A.locked + " gameVisible=" + !$("screen-game").hidden + " clubHidden=" + $("screen-club").hidden + " navDisabled=" + [...document.querySelectorAll(".nav [data-screen]")].filter(b => b.disabled).length + " errs=" + errs.length;
+      } else if (mode === "setup" || mode === "break") {   // setup: starter cards with stamina; break: inning-change screen with the next three batters
+        await new Promise(r => { const t = setInterval(() => { if (window.ClubUI && window.ClubUI.state()) { clearInterval(t); r() } }, 50) });
+        if (A.kbo) window.ClubUI.fresh(teamList()[1]);
+        A.show("game"); $("autoOrder").onclick();
+        if (mode === "setup") {
+          const stam = [...document.querySelectorAll("[data-p] .stam")].map(e => e.textContent.trim());
+          box.textContent = "SMOKE OK setup: pitchers=" + document.querySelectorAll("[data-p]").length + " stamina=" + stam.join("|") + " batters=" + document.querySelectorAll("[data-b]").length + " errs=" + errs.length;
+        } else {
+          if (window.GameUI.pick.pitcher === null) document.querySelector("[data-p]").onclick(); $("start").onclick();
+          window.GameUI.setScene("break"); window.GameUI.renderBreak(false);
+          box.textContent = "SMOKE OK break: nextUp=" + $("nextUp").textContent.trim() + " pages=" + document.querySelectorAll(".bpage").length + " errs=" + errs.length;
+        }
       } else if (mode === "club") {
         await new Promise(r => { const t = setInterval(() => { if (window.ClubUI && window.ClubUI.state()) { clearInterval(t); r() } }, 50) });
-        window.ClubUI.fresh(); for (let i = 0; i < 9; i++) window.ClubUI.advanceDay();
-        A.show("training");
+        window.ClubUI.fresh(A.kbo ? teamList()[2] : undefined); for (let i = 0; i < 9; i++) window.ClubUI.advanceDay();
+        A.show("roster");
         const S = window.ClubUI.state();
         const tb = $("training"); box.textContent = "SMOKE OK club: day=" + S.day + " record=" + S.W + "-" + S.L + " errs=" + errs.length + " | training box " + tb.clientHeight + "/" + tb.scrollHeight + " rows=" + tb.querySelectorAll("tr").length + " pager=" + !!tb.querySelector(".pager");
       } else {
         await new Promise(r => { const t = setInterval(() => { if (window.ClubUI && window.ClubUI.state()) { clearInterval(t); r() } }, 50) });
+        if (A.kbo) window.ClubUI.fresh(teamList()[0]);
         A.show("game");
         $("autoOrder").onclick(); if (window.GameUI.pick.pitcher === null) document.querySelector("[data-p]").onclick(); $("start").onclick();
         const GU = window.GameUI, G = GU.state();
