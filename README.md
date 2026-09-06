@@ -1,5 +1,8 @@
 # BB_simulator — 물리 기반 야구 시뮬레이션 게임 엔진
 
+웹앱(PWA): https://mhparkunist-del.github.io/BB_simulator/web/app/ · 저장소: https://github.com/mhparkunist-del/BB_simulator
+
+
 - 생성일: 2026-09-05
 - 위치: /home/mhpark/취미/2_BB_simulator
 - 목적: Football Manager식 구단·선수 관리 위에, 실제 역학(투구 궤적·배트-공 충돌·타구 비행)과

@@ -2,8 +2,8 @@
 
 ## 결론
 - 저장소는 `/home/mhpark/취미/2_BB_simulator`에서 `main` 브랜치로 관리합니다. 빌드 산출물(web/*.html, examples/out, 아카이브 HTML)은 추적하지 않고, 배포용 웹앱 `web/app/`은 추적합니다.
-- 원격은 GitHub입니다. 서버에서 GitHub에 올리려면 이 계정으로 인증된 자격이 한 번 필요합니다(아래 §2). 그 뒤로는 Claude가 커밋·푸시·태그를 맡습니다.
-- 배포는 GitHub Pages입니다. main 브랜치 루트를 Pages 소스로 두면 앱 주소는 `https://<계정>.github.io/<저장소>/web/app/`입니다.
+- 원격은 https://github.com/mhparkunist-del/BB_simulator (공개)입니다. 서버의 gh 인증은 끝났고(계정 mhparkunist-del), 저장소 안에서 git 자격을 gh로 넘깁니다. Claude가 커밋·푸시·태그를 맡습니다.
+- 배포는 GitHub Pages(main 루트)입니다. 앱 주소는 https://mhparkunist-del.github.io/BB_simulator/web/app/ 이고, main에 푸시하면 1~2분 뒤 반영됩니다.
 
 ## 1. 무엇을 추적하나
 | 추적 | 제외 |
