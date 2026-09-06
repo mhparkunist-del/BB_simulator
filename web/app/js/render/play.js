@@ -16,6 +16,7 @@ function fieldPositions(p) {
 }
 function sprintDist(u, v, tau) { return u <= 0 ? 0 : v * (u - tau * (1 - Math.exp(-u / tau))) }
 function unit2(a, b) { const d = [b[0] - a[0], b[1] - a[1]], n = Math.hypot(d[0], d[1]) || 1; return [d[0] / n, d[1] / n] }
+function easeRun(f) { f = Math.max(0, Math.min(1, f)); return f - 0.6 * Math.sin(2 * Math.PI * f) / (2 * Math.PI) }   // accelerate out, settle in (velocity 0.4–1.6×, never a hard start/stop)
 function lerp2(a, b, f) { return [a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f] }
 
 /* batter-runner state at tp seconds after contact */
@@ -79,7 +80,7 @@ function fielderState(pos, evs, home, tp) {
     if (e.kind !== "move") return;
     if (tp >= e.t0) {
       const L = Math.hypot(e.to[0] - e.from[0], e.to[1] - e.from[1]);
-      if (tp <= e.t1) { const f = (tp - e.t0) / Math.max(e.t1 - e.t0, 0.05); xy = lerp2(e.from, e.to, f); dir = unit2(e.from, e.to); mode = "run"; runDist = f * L; phase = Math.min(1, L / 3) }
+      if (tp <= e.t1) { const f = easeRun((tp - e.t0) / Math.max(e.t1 - e.t0, 0.05)); xy = lerp2(e.from, e.to, f); dir = unit2(e.from, e.to); mode = "run"; runDist = f * L; phase = Math.min(1, L / 3) }
       else { xy = e.to; if (mode === "run") mode = "ready"; dir = unit2(e.from, e.to); runDist = L }
     }
   });
@@ -289,7 +290,34 @@ function drawBody(p, t) {
 /* broadcast camera: centre field for the pitch, then a high home-plate camera that follows the play */
 const CAM_CF = { C: [2.4, 118, 9.5], T: [0.1, 9.0, 1.05], fov: 8.3 };
 const CAM_HIGH = { C: [6.0, -22.0, 16.0], T: [0.0, 30.0, 1.0], fov: 46 };
+/* camera smoothing: the raw camera re-frames the action every frame (targets enter and leave), which reads as jitter;
+   position, direction and focal length chase the raw camera with short time constants, and a large jump (a deliberate
+   cut: centre-field -> high home, high home -> behind a throw) snaps instead of sweeping */
+let _camS = { p: null, key: null, t: -9, C: null, f: null, fl: 0 };
 function playCam(p, t, w, hgt) {
+  const raw = playCamRaw(p, t, w, hgt), S = _camS, key = w + "x" + hgt, dt = t - S.t;
+  const jump = S.C ? Math.hypot(raw.C[0] - S.C[0], raw.C[1] - S.C[1], raw.C[2] - S.C[2]) : 1e9;
+  if (S.p !== p || S.key !== key || dt < 0 || dt > 0.5 || jump > 30) { S.p = p; S.key = key; S.t = t; S.C = raw.C.slice(); S.f = raw.f.slice(); S.fl = raw.fl; return raw }
+  const k = 1 - Math.exp(-dt / 0.16), kf = 1 - Math.exp(-dt / 0.28);
+  S.C = lerp3(S.C, raw.C, k); S.f = norm(lerp3(S.f, raw.f, k)); S.fl += (raw.fl - S.fl) * kf; S.t = t;
+  return cameraFrom(S.C, S.f, S.fl, w, hgt);
+}
+function ballTrack(p, t) {                          // ball position for the tracer only: pitch flight, batted flight, ground path; null once held
+  if (!p || t < p.flight.t[0]) return null; const T = p.flight.t[p.flight.t.length - 1];
+  if (p.batted && t >= p.batted.flight.t[0]) { const bb = battedBall(p, t, t - contactTime(p), playEvents(p)); return (bb && !bb.held) ? bb.xyz : null }
+  return t <= T ? interp(p.flight, t) : null;
+}
+function drawTracer(g, cam, p, t) {                 // the last ~0.17 s of ball path fading behind the ball (motion between frames reads as continuous)
+  if (!p || t <= p.flight.t[0] || !ballTrack(p, t)) return;
+  g.save(); g.fillStyle = "#ffffff";
+  for (let k = 6; k >= 1; k--) {
+    const b = ballTrack(p, t - k * 0.028); if (!b) continue; const q = cam.proj(b); if (!q) continue;
+    const r = Math.max(1.2, cam.fl * 0.0366 / q[2]) * (1 - k * 0.09);
+    g.globalAlpha = 0.34 * (1 - k / 7.5); g.beginPath(); g.arc(q[0], q[1], r, 0, 7); g.fill();
+  }
+  g.restore();
+}
+function playCamRaw(p, t, w, hgt) {
   const tc = throwCam(p, t, w, hgt); if (tc) return tc;
   const evs = playEvents(p);
   const tC = contactTime(p), tp = t - tC;
@@ -299,7 +327,7 @@ function playCam(p, t, w, hgt) {
   if (p.batted) { const bb = battedBall(p, t, tp, evs); if (bb) pts.push([bb.xyz[0], bb.xyz[1]]) }
   evs.forEach(e => {
     if (e.kind === "run" && e.who === "BR") pts.push(runnerState(e, tp).xy);
-    if (e.kind === "move" && tp >= e.t0 - 0.2 && tp <= e.t1 + 0.6) pts.push(lerp2(e.from, e.to, Math.max(0, Math.min(1, (tp - e.t0) / Math.max(e.t1 - e.t0, 0.05)))));
+    if (e.kind === "move" && tp >= e.t0 - 0.2 && tp <= e.t1 + 0.6) pts.push(lerp2(e.from, e.to, easeRun(Math.max(0, Math.min(1, (tp - e.t0) / Math.max(e.t1 - e.t0, 0.05))))));
     if (e.kind === "throw" && tp >= e.t0 - 0.6 && tp <= e.t1 + 0.8) { pts.push(e.from); pts.push(e.to) }
     if (e.kind === "call" && tp >= e.t - 1.0 && tp <= e.t + 1.6) pts.push(BASEXY[e.base]);
   });
@@ -325,6 +353,7 @@ function drawCam(p, t, id) {
   drawBallpark(g, cam, w, hgt, "cam");
   const S = sceneAt(p, t);
   const people = scenePeople(S, true);
+  drawTracer(g, cam, p, t);
   drawPeople(g, cam, people, S.ball, t, p ? p.flight.rpm : 0);
   // zoom inset on the fielding action while the wide shot is wide
   const evsA = playEvents(p);

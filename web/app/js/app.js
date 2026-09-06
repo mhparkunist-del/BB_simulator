@@ -171,6 +171,23 @@ window.APP = window.APP || {};
         A.show("game"); $("autoOrder").onclick(); if (window.GameUI.pick.pitcher === null) document.querySelector("[data-p]").onclick(); $("start").onclick();
         A.show("schedule");
         box.textContent = "SMOKE OK lock: locked=" + !!A.locked + " gameVisible=" + !$("screen-game").hidden + " clubHidden=" + $("screen-club").hidden + " navDisabled=" + [...document.querySelectorAll(".nav [data-screen]")].filter(b => b.disabled).length + " errs=" + errs.length;
+      } else if (mode === "title") {
+        await new Promise(r => { const t = setInterval(() => { if (window.ClubUI && window.ClubUI.state()) { clearInterval(t); r() } }, 50) });
+        A.show("title"); box.textContent = "SMOKE OK title: fonts=" + (document.fonts ? document.fonts.size : "-") + " errs=" + errs.length;
+      } else if (mode === "perf") {                       // frame cost: ms per drawAll in the pitch scene and the play scene
+        await new Promise(r => { const t = setInterval(() => { if (window.ClubUI && window.ClubUI.state()) { clearInterval(t); r() } }, 50) });
+        if (A.kbo) window.ClubUI.fresh(teamList()[0]);
+        A.show("game"); $("autoOrder").onclick(); if (window.GameUI.pick.pitcher === null) document.querySelector("[data-p]").onclick(); $("start").onclick();
+        const GU = window.GameUI; let p = null, tries = 0;
+        while (tries++ < 12) { p = await GU.pickPitch(); if (p.batted && p.fielding) break }
+        const T = p.flight.t[p.flight.t.length - 1];
+        const time = (ts, scene) => { GU.setScene(scene); const a = performance.now(); ts.forEach(t => GU.drawAll(p, t)); return ((performance.now() - a) / ts.length).toFixed(1) };
+        const pitchTs = Array.from({ length: 30 }, (_, i) => -1.5 + i * (T + 1.5) / 30);
+        const tb = p.batted ? p.batted.flight.t[p.batted.flight.t.length - 1] : T + 2;
+        const playTs = Array.from({ length: 30 }, (_, i) => T + 0.4 + i * (tb - T) / 30);
+        const c1 = time(pitchTs, "pitch"), c2 = p.batted ? time(playTs, "play") : "-";
+        GU.setScene("pitch"); GU.drawAll(p, 0.1);
+        box.textContent = "SMOKE OK perf: pitch=" + c1 + "ms/frame play=" + c2 + "ms/frame batted=" + !!p.batted + " dpr=" + devicePixelRatio + " cam=" + $("cam").width + "x" + $("cam").height + " errs=" + errs.length;
       } else if (mode === "setup" || mode === "break") {   // setup: starter cards with stamina; break: inning-change screen with the next three batters
         await new Promise(r => { const t = setInterval(() => { if (window.ClubUI && window.ClubUI.state()) { clearInterval(t); r() } }, 50) });
         if (A.kbo) window.ClubUI.fresh(teamList()[1]);

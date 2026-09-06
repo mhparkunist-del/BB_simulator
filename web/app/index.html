@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
-<meta name="theme-color" content="#0f1a14">
+<meta name="theme-color" content="#07120d">
 <link rel="manifest" href="manifest.webmanifest">
 <title>덕아웃 나이트 게임</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=IBM+Plex+Sans+KR:wght@400;600&family=IBM+Plex+Mono&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Jua&family=Gothic+A1:wght@400;600;800&family=IBM+Plex+Mono&display=swap">
 <link rel="stylesheet" href="css/app.css">
 </head>
 <body>
@@ -27,7 +27,7 @@
   <div class="titlebox">
     <div class="logo">DUGOUT NIGHT</div>
     <div class="tag">투수·타자·포수·야수가 각자 판단하는 야구 · 구단을 맡아 시즌을 치릅니다</div>
-    <div class="ctl col-btns"><button class="go big" id="btnContinue" hidden>계속하기</button><button class="big" id="btnNew">새로 시작</button><button class="big" id="btnLoad">불러오기</button></div>
+    <div class="ctl col-btns"><button class="go big" id="btnContinue" hidden>계속하기</button><button class="big on" id="btnNew">새로 시작</button><button class="big" id="btnLoad">불러오기</button></div>
     <div id="loadSlots" class="slots" hidden></div>
     <div class="hint" id="titleNote">가로 화면 전용 · 진행은 기기 안에 저장됩니다</div>
   </div>
@@ -80,7 +80,7 @@
   <div id="game" class="fit" hidden>
     <div id="scenePitch" class="hud">
       <div class="viewbox full">
-        <div class="vw" id="vw-cam"><canvas id="cam" width="640" height="400"></canvas></div>
+        <div class="vw" id="vw-cam"><canvas id="cam" width="800" height="500"></canvas></div>
         <div class="vw" id="vw-body" hidden><canvas id="body" width="640" height="400"></canvas></div>
         <div class="vw" id="vw-seam" hidden><canvas id="seam" width="340" height="270"></canvas></div>
         <div class="bug" id="strip">

@@ -72,6 +72,8 @@
 | 65 | 2026-09-06 | 실제 KBO 구단과 선수명을 가져오기, 선수 풀은 많게 | v2.3.0: tools/build_kbo.py가 위키백과 구단 명단 틀 + KBO 공식 등록명단(1군 투타·생년월일·신체)을 합쳐 web/app/data/kbo.json(10구단 944명, 146 KB) 생성. 구단 선택 화면이 10구단 카드, club.js buildKboClub이 1군 명단에서 포지션별 선발 9명(9번 DH)·선발 5명·2군을 짜고 이름 해시 시드로 능력치 추정(est 표시), 상대 9구단 일정, 경기 화면에 실명·등번호·포지션 오버레이(applyNames) | tools/build_kbo.py, web/app/data/kbo.json, web/app/js/club/club.js, web/app/js/app.js, web/app/js/game/game.js, docs/APP_FLOW.md | 완료 |
 | 66 | 2026-09-06 | 선발 고를 때 투수 현재 체력 표시 | v2.3.0: 경기 준비 투수 카드에 체력 바(100·(1−피로) %)와 컨디션 | web/app/js/game/game.js, web/app/css/app.css | 완료 |
 | 67 | 2026-09-06 | 이닝 교체 때 다음 타순 3명을 KBO 중계처럼 표시 | v2.3.0: 이닝 교체 화면 상단에 "공격 · 다음 타순" 칩 3개(타순·이름·좌우·포지션), 점수 버그에 대기 타자 2명 | web/app/js/game/game.js, web/app/index.html, web/app/css/app.css | 완료 |
+| 68 | 2026-09-06 | 경기 렌더링이 뚝딱임 · 더 부드럽게 하는 오픈소스 방법 조사·적용 | v2.4.0: 원인=수비 장면의 매 프레임 구장 재도색(관중 점 12,000개)·직선 보간·카메라 목표 튐. 관중 스프라이트 타일(프레임 6.0→3.0 ms), 이동 카메라 무캐시 직접 도색, 3차 Hermite 보간(바운드 모서리 보존), 카메라 지수 스무딩(30 m 이상은 컷), 야수 가감속, 공 잔상 6개, 투구 캔버스 800×500. 조사 기록 docs/RENDER_SMOOTHNESS.md | web/app/js/render/math.js, park.js, play.js, web/app/js/app.js(perf·title 점검 모드) | 완료 |
+| 69 | 2026-09-06 | 화면 구성요소가 딱딱함 · 게임에서 자주 쓰는 글꼴과 배경 디자인으로 | v2.4.0: Black Han Sans(숫자·로고)·Jua(버튼·라벨)·Gothic A1(본문) 글꼴, 경기장 조명 글로우 + 사선 결 배경, 유리 패널·둥근 입체 버튼·빛나는 램프·점수 버그·비네트, 타이틀 로고 그라데이션, prefers-reduced-motion | web/app/css/app.css, web/app/index.html, docs/APP_FLOW.md §5 | 완료 |
 
 ## 운용
 - 새 지시 → 행 추가 → 산출물 버전 파일명(v{N.M}_{MMDD}) → recent report 갱신(이전 보고는 2_Archieve로) → README 이력표·2_Archieve/README.md 색인 갱신.

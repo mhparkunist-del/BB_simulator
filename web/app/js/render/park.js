@@ -58,17 +58,32 @@ function ring3(g, cam, cx, cy, r, col, w) {
 }
 
 /* ---------------- ballpark (cached to an offscreen canvas per camera) ---------------- */
-let _parkCache = {};
+let _parkCache = {}, _parkLast = {}, _crowd = null;
+function crowdSprites() {                             // 6 transparent 48×48 tiles of seated-crowd dots (same palette as before)
+  if (_crowd) return _crowd;
+  _crowd = [];
+  for (let n = 0; n < 6; n++) {
+    const c = document.createElement("canvas"); c.width = 48; c.height = 48; const g = c.getContext("2d");
+    for (let i = 0; i < 150; i++) {
+      const v = hash01(n * 977 + i * 1.3), x = 48 * hash01(n * 131 + i * 3.1), y = 48 * hash01(n * 577 + i * 7.7);
+      g.fillStyle = v > 0.80 ? "#eef0f4" : (v > 0.62 ? "#c9ced8" : (v > 0.40 ? "#8f96a3" : (v > 0.30 ? "#b8433e" : (v > 0.20 ? "#3b6db3" : "#5b616c"))));
+      g.globalAlpha = 0.45 + 0.45 * v; g.fillRect(x, y, 2.2, 2.8);
+    }
+    _crowd.push(c);
+  }
+  return _crowd;
+}
 function drawBallpark(g, cam, w, h, key) {
   const ck = (key || "body") + "|" + w + "x" + h + "|" + cam.C.map(v => v.toFixed(2)).join(",") + "|" + cam.f.map(v => v.toFixed(3)).join(",") + "|" + cam.fl.toFixed(1);
   let c = _parkCache[key];
-  if (!c || c.key !== ck) {
-    const ks = Object.keys(_parkCache); if (ks.length > 5) delete _parkCache[ks[0]];
-    const off = document.createElement("canvas"); off.width = w; off.height = h;
-    paintPark(off.getContext("2d"), cam, w, h);
-    c = _parkCache[key] = { key: ck, canvas: off };
-  }
-  g.drawImage(c.canvas, 0, 0);
+  if (c && c.key === ck) { g.drawImage(c.canvas, 0, 0); return }
+  const last = _parkLast[key]; _parkLast[key] = ck;
+  if (last !== ck) { paintPark(g, cam, w, h); return }               // camera moving: draw straight to the view, no cache churn
+  const ks = Object.keys(_parkCache); if (ks.length > 5) delete _parkCache[ks[0]];   // held still for two frames: cache the backdrop
+  const off = (c && c.canvas.width === w && c.canvas.height === h) ? c.canvas : document.createElement("canvas"); off.width = w; off.height = h;
+  paintPark(off.getContext("2d"), cam, w, h);
+  _parkCache[key] = { key: ck, canvas: off };
+  g.drawImage(off, 0, 0);
 }
 function paintPark(g, cam, w, h) {
   // sky
@@ -107,16 +122,19 @@ function paintPark(g, cam, w, h) {
     fill3(g, cam, q, (Math.floor((a + 200) / 8) % 2) ? PARK.seats : PARK.seatsHi);
     fill3(g, cam, [az(a, bowlR(a) + 15, 7.4), az(a + 4, bowlR(a + 4) + 15, 7.4), az(a + 4, bowlR(a + 4) + 16.6, 8.1), az(a, bowlR(a) + 16.6, 8.1)], PARK.concourse);
   }
-  // crowd
-  for (let i = 0; i < 12000; i++) {
-    const a = -180 + 360 * hash01(i * 3.1), t = hash01(i * 7.7);
-    const P = az(a + 0.9 * (hash01(i * 5.3) - 0.5), bowlR(a) + 0.7 + t * 32, 1.3 + t * 13.6);
-    const q = cam.proj(P); if (!q) continue;
-    const v = hash01(i * 1.3);
-    g.fillStyle = v > 0.80 ? "#eef0f4" : (v > 0.62 ? "#c9ced8" : (v > 0.40 ? "#8f96a3" : (v > 0.30 ? "#b8433e" : (v > 0.20 ? "#3b6db3" : "#5b616c"))));
-    g.globalAlpha = 0.45 + 0.45 * v;
-    const s2 = Math.max(1.1, 46 / q[2]);
-    g.fillRect(q[0], q[1], s2, s2 * 1.25);
+  // crowd: pre-rendered dot sprites stretched over each 4° bowl segment × 3 tiers (≈270 drawImage calls instead of 12,000 projected dots per frame)
+  const sp = crowdSprites();
+  for (let a = -180; a < 180; a += 4) {
+    for (let tier = 0; tier < 3; tier++) {
+      const r0 = bowlR(a) + 0.7 + tier * 10.7, r1 = r0 + 10.7, z0 = 1.3 + tier * 4.53, z1 = z0 + 4.53;
+      const q = [az(a, r0, z0), az(a + 4, r0, z0), az(a + 4, r1, z1), az(a, r1, z1)].map(P => cam.proj(P));
+      if (q.some(v => !v)) continue;
+      let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9;
+      q.forEach(v => { x0 = Math.min(x0, v[0]); x1 = Math.max(x1, v[0]); y0 = Math.min(y0, v[1]); y1 = Math.max(y1, v[1]) });
+      if (x1 < 0 || x0 > w || y1 < 0 || y0 > h || x1 - x0 < 1 || y1 - y0 < 1) continue;
+      g.globalAlpha = Math.min(0.92, 0.5 + 40 / q[0][2]);
+      g.drawImage(sp[(Math.floor((a + 180) / 4) * 3 + tier) % sp.length], x0, y0, x1 - x0, y1 - y0);
+    }
   }
   g.globalAlpha = 1;
   // scoreboard in centre field

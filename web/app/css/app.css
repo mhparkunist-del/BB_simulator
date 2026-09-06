@@ -1,58 +1,75 @@
-/* bbsim app · one landscape screen at a time: nothing scrolls the page; long lists page with 이전/다음 */
-:root{--bg:#0f1a14;--panel:#14241b;--panel2:#0d1712;--line:#24382c;--ink:#e8e4d8;--mute:#8a9a8e;--bulb:#f2b441;--red:#e0524b;--green:#8ad1a8;--blue:#4fa3e0}
+/* bbsim app · one landscape screen at a time: nothing scrolls the page; long lists page with 이전/다음.
+   Look: night-game glow (stadium light from above, grass green ground), glass panels, rounded game buttons,
+   fonts Black Han Sans (numbers, logo) · Jua (labels, buttons) · Gothic A1 (text, tables). */
+:root{--bg:#07120d;--bg1:#12302a;--panel:rgba(18,36,28,.84);--panel2:rgba(9,20,15,.86);--line:rgba(255,255,255,.09);--line2:rgba(255,255,255,.16);
+ --ink:#f1ecdf;--mute:#98a99c;--bulb:#ffc94a;--bulb2:#ffe08a;--red:#ff6b5b;--red2:#e5473a;--green:#7fe0a8;--blue:#5db2f0;
+ --ui:"Jua","Gothic A1",system-ui,sans-serif;--num:"Black Han Sans","Jua",system-ui,sans-serif;--txt:"Gothic A1",system-ui,sans-serif;--mono:"IBM Plex Mono",ui-monospace,monospace;
+ --r:12px;--shadow:0 8px 22px rgba(0,0,0,.38),inset 0 1px 0 rgba(255,255,255,.06)}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 html,body{height:100%;margin:0;overflow:hidden}
-body{background:var(--bg);color:var(--ink);font:13px/1.4 "IBM Plex Sans KR",system-ui,sans-serif;display:flex;flex-direction:column}
-button{background:var(--panel2);color:var(--ink);border:1px solid var(--line);padding:5px 10px;border-radius:5px;font:600 12px "IBM Plex Sans KR";cursor:pointer;min-height:34px}
-button.go{background:var(--red);border-color:var(--red);color:#fff}
-button.on{background:var(--bulb);color:#1a1409;border-color:var(--bulb)}
-button:disabled{opacity:.4;cursor:default}
-select,input{background:var(--panel2);color:var(--ink);border:1px solid var(--line);border-radius:4px;padding:3px 6px;font:12px "IBM Plex Sans KR";min-height:30px}
+body{color:var(--ink);font:13px/1.45 var(--txt);display:flex;flex-direction:column;
+ background:radial-gradient(120% 70% at 50% -12%,rgba(255,214,120,.17),transparent 60%),
+  radial-gradient(55% 45% at 6% 104%,rgba(63,150,105,.24),transparent 70%),
+  radial-gradient(55% 45% at 94% 104%,rgba(46,96,150,.20),transparent 70%),
+  repeating-linear-gradient(135deg,rgba(255,255,255,.022) 0 2px,transparent 2px 16px),
+  linear-gradient(180deg,#0c2018 0%,var(--bg) 100%)}
+button{background:linear-gradient(180deg,rgba(255,255,255,.11),rgba(255,255,255,.02)),#1a2f25;color:var(--ink);border:1px solid var(--line2);padding:5px 12px;border-radius:var(--r);
+ font:14px/1 var(--ui);letter-spacing:.02em;cursor:pointer;min-height:34px;box-shadow:0 2px 0 rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.12);transition:transform .08s,filter .15s,box-shadow .08s}
+button:hover{filter:brightness(1.12)}
+button:active{transform:translateY(2px);box-shadow:0 0 0 rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.12)}
+button:focus-visible{outline:2px solid var(--bulb2);outline-offset:1px}
+button.go{background:linear-gradient(180deg,#ff8f74,var(--red2));border-color:#ffa892;color:#fff;text-shadow:0 1px 0 rgba(0,0,0,.28);box-shadow:0 3px 0 #8f2a22,0 8px 16px rgba(229,71,58,.35)}
+button.go:active{box-shadow:0 0 0 #8f2a22}
+button.on{background:linear-gradient(180deg,#ffd97a,#f2b441);color:#2a1d05;border-color:#ffe6a3;box-shadow:0 3px 0 #9a6b12,inset 0 1px 0 rgba(255,255,255,.35);text-shadow:none}
+button:disabled{opacity:.4;cursor:default;transform:none}
+select,input{background:var(--panel2);color:var(--ink);border:1px solid var(--line2);border-radius:9px;padding:3px 8px;font:12px var(--txt);min-height:30px}
 input[type=number]{width:54px}
-h2{margin:0 0 4px;font:600 12px "Oswald";letter-spacing:.08em;color:var(--mute)}
-h2 .hint{font:400 11px "IBM Plex Sans KR";letter-spacing:0;text-transform:none}
+h2{margin:0 0 5px;font:14px/1.2 var(--ui);letter-spacing:.02em;color:var(--bulb2)}
+h2 .hint{font:400 11px var(--txt);letter-spacing:0;color:var(--mute)}
 table{border-collapse:collapse;width:100%;font-size:12px}
 th,td{padding:3px 6px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
-th{color:var(--mute);font-weight:600;font-size:11px}
+tr:nth-child(even) td{background:rgba(255,255,255,.025)}
+th{color:var(--mute);font:12px var(--ui);letter-spacing:.03em}
 td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
 .hint{color:var(--mute);font-size:11px}
 .tiny{font-size:10.5px}
-i.g,i.S,i.A,i.B,i.C,i.D{font-style:normal;display:inline-block;min-width:16px;text-align:center;border-radius:3px;padding:0 3px;font:700 10px "Oswald";color:#111;margin-right:3px}
-i.S{background:#f2b441}i.A{background:#8ad1a8}i.B{background:#7fb3e0}i.C{background:#c9c2ae}i.D{background:#8a8a8a}
+i.g,i.S,i.A,i.B,i.C,i.D{font-style:normal;display:inline-block;min-width:17px;text-align:center;border-radius:6px;padding:1px 3px 0;font:11px/1.2 var(--num);color:#111;margin-right:3px;box-shadow:inset 0 -2px 0 rgba(0,0,0,.18)}
+i.S{background:#ffcf57}i.A{background:#8ee6b3}i.B{background:#8ec6f0}i.C{background:#d6cfb9}i.D{background:#9a9a9a}
 .g{font-size:11px;color:var(--mute)}
-.bar{display:inline-block;height:7px;background:var(--line);border-radius:4px;width:56px;vertical-align:middle;overflow:hidden}
-.bar span{display:block;height:100%;background:var(--green)}
-.bar.f span{background:var(--red)}
-.win{color:var(--green)}.loss{color:var(--red)}.today{background:rgba(242,180,65,.12)}.inj{color:var(--red)}
+.bar{display:inline-block;height:7px;background:rgba(255,255,255,.10);border-radius:4px;width:56px;vertical-align:middle;overflow:hidden;box-shadow:inset 0 1px 2px rgba(0,0,0,.4)}
+.bar span{display:block;height:100%;background:linear-gradient(90deg,#5fcf94,var(--green));border-radius:4px}
+.bar.f span{background:linear-gradient(90deg,#ff8a7a,var(--red))}
+.win{color:var(--green)}.loss{color:var(--red)}.today{background:rgba(255,201,74,.12)}.inj{color:var(--red)}
 .sel{outline:2px solid var(--bulb)}
 .ctl{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
-.card h3{margin:0 0 6px;font:600 14px "IBM Plex Sans KR"}
-.badge{display:inline-block;padding:0 5px;border-radius:3px;background:var(--line);font-size:10px;margin-left:4px}
+.card h3{margin:0 0 6px;font:16px var(--ui)}
+.badge{display:inline-block;padding:0 6px;border-radius:999px;background:rgba(255,255,255,.10);font-size:10px;margin-left:4px}
 .pager{display:flex;gap:6px;align-items:center;justify-content:flex-end;font-size:11px;color:var(--mute);margin-top:4px}
-.pager button{min-height:28px;padding:2px 8px}
+.pager button{min-height:28px;padding:2px 10px;font-size:12px}
 /* header */
-.apphead{flex:0 0 auto;height:42px;display:flex;align-items:center;gap:10px;padding:0 10px;border-bottom:1px solid var(--line);background:var(--bg)}
-.apphead h1{margin:0;font:700 16px "Oswald";letter-spacing:.08em;color:var(--bulb);white-space:nowrap}
+.apphead{flex:0 0 auto;height:42px;display:flex;align-items:center;gap:10px;padding:0 10px;border-bottom:1px solid var(--line2);
+ background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,0)),rgba(7,18,13,.85);box-shadow:0 4px 18px rgba(0,0,0,.35)}
+.apphead h1{margin:0;font:20px/1 var(--num);letter-spacing:.04em;white-space:nowrap;background:linear-gradient(180deg,var(--bulb2),#e9a52e);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 8px rgba(255,201,74,.25))}
 .apphead .v{margin-left:auto;color:var(--mute);font-size:10px;white-space:nowrap}
 .nav{display:flex;gap:4px}
-.nav button{padding:4px 9px;min-height:30px}
-.nav button.gamebtn{border-color:var(--red)}
+.nav button{padding:4px 11px;min-height:30px;font-size:13px}
+.nav button.gamebtn{border-color:#ff9c86;color:#ffd3c9}
 .strip{display:flex;align-items:center;gap:10px;margin-left:8px;overflow:hidden}
 .strip .s{display:flex;flex-direction:column;align-items:center;line-height:1}
-.strip small{font:500 8px "Oswald";letter-spacing:.12em;color:var(--mute)}
-.strip b{font:700 16px "Oswald";color:var(--bulb)}
-.strip b.txt{font:600 12px "IBM Plex Sans KR";color:var(--ink);max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.strip small{font:9px var(--ui);letter-spacing:.12em;color:var(--mute)}
+.strip b{font:17px/1 var(--num);color:var(--bulb)}
+.strip b.txt{font:600 12px var(--txt);color:var(--ink);max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .lamps{display:inline-flex;gap:3px}
-.lamps span{width:9px;height:9px;border-radius:50%;background:var(--line)}
-.lamps span.on{background:var(--bulb)}.lamps.balls span.on{background:var(--green)}
+.lamps span{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.12);box-shadow:inset 0 1px 1px rgba(0,0,0,.5)}
+.lamps span.on{background:var(--bulb);box-shadow:0 0 6px var(--bulb)}.lamps.balls span.on{background:var(--green);box-shadow:0 0 6px var(--green)}
 .diamond{position:relative;width:26px;height:26px;display:inline-block}
-.base{position:absolute;width:9px;height:9px;background:var(--line);transform:rotate(45deg)}
-.base.on{background:var(--bulb)}
+.base{position:absolute;width:9px;height:9px;background:rgba(255,255,255,.14);transform:rotate(45deg);border-radius:1px}
+.base.on{background:var(--bulb);box-shadow:0 0 6px var(--bulb)}
 #b2{left:8px;top:0}#b3{left:0;top:8px}#b1{left:16px;top:8px}
-.sign{font:700 10px "Oswald";color:var(--bulb);opacity:0;transition:opacity .2s}
+.sign{font:11px var(--ui);color:var(--bulb);opacity:0;transition:opacity .2s}
 .sign.on{opacity:1}
-.boot{margin:8px 12px;padding:8px 12px;background:var(--panel);border:1px solid var(--line);border-radius:6px;color:var(--mute);font-size:12px}
+.boot{margin:8px 12px;padding:8px 12px;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);color:var(--mute);font-size:12px}
 .boot.err{color:var(--red)}
 /* screens fill the rest of the viewport */
 main{flex:1 1 auto;min-height:0;padding:6px 8px}
@@ -61,51 +78,52 @@ main{flex:1 1 auto;min-height:0;padding:6px 8px}
 .two-col{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}
 .three-col{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr) minmax(0,1.2fr)}
 .col{display:flex;flex-direction:column;min-height:0;gap:8px}
-.panel{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:8px 10px;min-height:0;display:flex;flex-direction:column}
+.panel{background:linear-gradient(165deg,rgba(255,255,255,.07),rgba(255,255,255,.015)),var(--panel);border:1px solid var(--line2);border-radius:14px;padding:8px 10px;min-height:0;display:flex;flex-direction:column;box-shadow:var(--shadow);overflow:hidden}
 .grow{flex:1 1 auto;min-height:0;overflow:hidden}
 .log{font-size:11.5px}
 .log div{padding:2px 0;border-bottom:1px dotted var(--line);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.log .d{color:var(--mute);font:500 10px "IBM Plex Mono";margin-right:6px}
+.log .d{color:var(--mute);font:500 10px var(--mono);margin-right:6px}
 .scrollbox{overflow:auto;max-height:100%}
 /* setup: compact roster cards */
 .roster{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:5px;margin-bottom:6px}
-.roster .pc{background:var(--panel2);border:1px solid var(--line);border-radius:5px;padding:4px 6px;cursor:pointer;font-size:11px;position:relative;overflow:hidden}
+.roster .pc{background:linear-gradient(170deg,rgba(255,255,255,.06),rgba(255,255,255,.01)),var(--panel2);border:1px solid var(--line2);border-radius:10px;padding:4px 7px;cursor:pointer;font-size:11px;position:relative;overflow:hidden;transition:transform .1s,border-color .15s}
+.roster .pc:hover{transform:translateY(-1px)}
 .roster .pc b{display:block;font-size:11.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.roster .pc.sel{border-color:var(--bulb);box-shadow:inset 0 0 0 1px var(--bulb)}
-.roster .ord{position:absolute;right:4px;top:2px;font:700 12px "Oswald";color:var(--bulb)}
+.roster .pc.sel{border-color:var(--bulb);box-shadow:inset 0 0 0 1px var(--bulb),0 0 12px rgba(255,201,74,.25)}
+.roster .ord{position:absolute;right:5px;top:2px;font:13px var(--num);color:var(--bulb)}
 /* game: view left, controls right */
 .gamefit{flex:1 1 auto;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:8px}
 .gamefit.one{grid-template-columns:minmax(0,1fr)}
 .viewcol{display:flex;flex-direction:column;min-height:0;gap:4px}
 .viewsel{display:flex;gap:4px;align-items:center}
-.viewsel button{min-height:28px;padding:2px 10px}
-.viewbox{position:relative;flex:1 1 auto;min-height:0;display:flex;align-items:center;justify-content:center;background:#050d09;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.viewsel button{min-height:28px;padding:2px 10px;font-size:12px}
+.viewbox{position:relative;flex:1 1 auto;min-height:0;display:flex;align-items:center;justify-content:center;background:#050d09;border:1px solid var(--line2);border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}
 .viewbox .vw{width:100%;height:100%;display:flex;align-items:center;justify-content:center}
 .viewbox .vw[hidden]{display:none}
 .viewbox canvas{max-width:100%;max-height:100%;width:auto;height:auto;display:block}
-.fieldinset{position:absolute;left:6px;bottom:6px;width:140px;height:auto;opacity:.92;border:1px solid var(--line);border-radius:4px;background:#0a1510}
-.feedlast{position:absolute;right:6px;bottom:6px;left:154px;font-size:11.5px;background:rgba(5,13,9,.72);padding:4px 8px;border-radius:4px;max-height:3.1em;overflow:hidden;line-height:1.35}
-.bodynote{position:absolute;right:6px;top:4px;background:rgba(5,13,9,.6);padding:2px 6px;border-radius:4px}
+.fieldinset{position:absolute;left:6px;bottom:6px;width:140px;height:auto;opacity:.94;border:1px solid var(--line2);border-radius:10px;background:#0a1510;box-shadow:0 4px 14px rgba(0,0,0,.4)}
+.feedlast{position:absolute;right:6px;bottom:6px;left:154px;font-size:11.5px;background:rgba(5,13,9,.76);border:1px solid var(--line);padding:4px 10px;border-radius:10px;max-height:3.1em;overflow:hidden;line-height:1.35}
+.bodynote{position:absolute;right:6px;top:4px;background:rgba(5,13,9,.65);padding:2px 8px;border-radius:8px}
 .ctlcol{display:flex;flex-direction:column;gap:6px;min-height:0;overflow:hidden}
 .ctlcol .ctl button{flex:1 1 auto;padding:5px 6px}
-.kz{width:100%;height:auto;max-height:42%;border:1px solid var(--line);border-radius:6px;background:#0a1510}
-.feedfull{position:fixed;left:8px;right:8px;top:48px;bottom:8px;background:rgba(10,20,15,.97);overflow:auto;padding:10px 14px;z-index:20;border:1px solid var(--line);border-radius:6px;font-size:12.5px}
+.kz{width:100%;height:auto;max-height:42%;border:1px solid var(--line2);border-radius:10px;background:#0a1510}
+.feedfull{position:fixed;left:8px;right:8px;top:48px;bottom:8px;background:rgba(10,20,15,.97);overflow:auto;padding:10px 14px;z-index:20;border:1px solid var(--line2);border-radius:14px;font-size:12.5px;box-shadow:var(--shadow)}
 .feedfull .l{padding:3px 0;border-bottom:1px dotted var(--line)}
 .feedfull .l.big{font-weight:600}
-.feedfull .t{color:var(--mute);font:500 10px "IBM Plex Mono";margin-right:6px}
-.feedfull .bs{color:var(--bulb);font:700 10px "Oswald";margin-left:6px}
+.feedfull .t{color:var(--mute);font:500 10px var(--mono);margin-right:6px}
+.feedfull .bs{color:var(--bulb);font:11px var(--num);margin-left:6px}
 .bpages{overflow:hidden}
-.bpage h3{margin:4px 0;font:600 12px "Oswald";color:var(--mute)}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:30}
+.bpage h3{margin:4px 0;font:13px var(--ui);color:var(--bulb2)}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:30;backdrop-filter:blur(3px)}
 .modal[hidden]{display:none}
-.modalbox{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:10px 12px;width:min(560px,92vw);max-height:90vh;overflow:auto}
+.modalbox{background:linear-gradient(165deg,rgba(255,255,255,.08),rgba(255,255,255,.02)),#132a20;border:1px solid var(--line2);border-radius:16px;padding:12px 14px;width:min(560px,92vw);max-height:90vh;overflow:auto;box-shadow:0 18px 50px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.08)}
 /* rotate prompt on portrait phones */
 #rotate{display:none}
-@media (orientation:portrait) and (max-width:900px){#rotate{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--bg);z-index:50;color:var(--ink)} #rotate .ico{font-size:56px;color:var(--bulb)} #rotate p{margin:4px 0;font-size:16px}}
+@media (orientation:portrait) and (max-width:900px){#rotate{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--bg);z-index:50;color:var(--ink)} #rotate .ico{font-size:56px;color:var(--bulb)} #rotate p{margin:4px 0;font-size:16px;font-family:var(--ui)}}
 /* short viewports (phones in landscape) */
 @media (max-height:520px){
-  body{font-size:12px} .apphead{height:36px} .apphead h1{font-size:14px} .nav button{padding:2px 7px;min-height:26px}
-  .strip b{font-size:14px} .panel{padding:5px 8px} h2{font-size:10.5px;margin-bottom:2px} button{min-height:30px;padding:3px 8px;font-size:11.5px}
+  body{font-size:12px} .apphead{height:36px} .apphead h1{font-size:17px} .nav button{padding:2px 8px;min-height:26px;font-size:12px}
+  .strip b{font-size:14px} .panel{padding:5px 8px;border-radius:11px} h2{font-size:12.5px;margin-bottom:2px} button{min-height:30px;padding:3px 9px;font-size:12.5px}
   th,td{padding:2px 5px;font-size:11px} .gamefit{grid-template-columns:minmax(0,1fr) 210px} .fieldinset{width:110px} .feedlast{left:124px}
   .roster{grid-template-columns:repeat(6,minmax(0,1fr))} .roster .pc{padding:2px 5px;font-size:10px} main{padding:4px 6px}
 }
@@ -113,55 +131,58 @@ main{flex:1 1 auto;min-height:0;padding:6px 8px}
 /* ---- game HUD: the view fills the whole area, everything else floats over it (sports-game convention) ---- */
 .hud{flex:1 1 auto;min-height:0;display:flex}
 .viewbox.full{flex:1 1 auto;width:100%;height:100%;background:#050d09}
+.viewbox.full::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;box-shadow:inset 0 0 90px rgba(0,0,0,.42);z-index:0}
 .viewbox.full .vw canvas,.viewbox.full > canvas#play{width:100%;height:100%;max-width:100%;max-height:100%;object-fit:contain}
-.bug{position:absolute;left:8px;top:8px;display:flex;align-items:center;gap:10px;background:rgba(5,13,9,.78);border:1px solid var(--line);border-radius:6px;padding:4px 10px;backdrop-filter:blur(2px)}
+.bug,.viewbox.full .viewsel,.viewbox.full .kzinset,.viewbox.full .fieldinset,.viewbox.full .feedlast,.viewbox.full .bodynote,.actions,.adminover{z-index:1}
+.bug{position:absolute;left:8px;top:8px;display:flex;align-items:center;gap:10px;background:linear-gradient(180deg,rgba(14,32,23,.94),rgba(6,14,10,.90));border:1px solid var(--line2);border-left:4px solid var(--bulb);border-radius:12px;padding:4px 12px 4px 10px;box-shadow:0 6px 18px rgba(0,0,0,.45)}
 .bug .s{display:flex;flex-direction:column;align-items:center;line-height:1}
-.bug small{font:500 8px "Oswald";letter-spacing:.12em;color:var(--mute)}
-.bug b{font:700 16px "Oswald";color:var(--bulb)}
-.bug b.txt{font:600 12px "IBM Plex Sans KR";color:var(--ink);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bug small{font:9px var(--ui);letter-spacing:.12em;color:var(--mute)}
+.bug b{font:18px/1 var(--num);color:var(--bulb)}
+.bug b.txt{font:600 12px var(--txt);color:var(--ink);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .bug .cnt{display:flex;flex-direction:column;gap:2px}
 .bug .cnt .row{display:flex;align-items:center;gap:4px}
 .bug .cnt small{width:8px}
-.viewbox.full .viewsel{position:absolute;left:50%;top:8px;transform:translateX(-50%);background:rgba(5,13,9,.6);border-radius:6px;padding:3px}
-.viewbox.full .viewsel button{min-height:26px;padding:2px 9px;font-size:11px}
-.viewbox.full .kzinset{position:absolute;right:8px;top:8px;width:130px;height:auto;border:1px solid var(--line);border-radius:6px;background:rgba(10,21,16,.85)}
+.viewbox.full .viewsel{position:absolute;left:50%;top:8px;transform:translateX(-50%);background:rgba(5,13,9,.62);border:1px solid var(--line);border-radius:999px;padding:3px}
+.viewbox.full .viewsel button{min-height:26px;padding:2px 11px;font-size:12px;border-radius:999px}
+.viewbox.full .kzinset{position:absolute;right:8px;top:8px;width:130px;height:auto;border:1px solid var(--line2);border-radius:10px;background:rgba(10,21,16,.85);box-shadow:0 4px 14px rgba(0,0,0,.4)}
 .viewbox.full .fieldinset{left:8px;bottom:8px;width:120px}
 .viewbox.full .feedlast{left:136px;right:auto;width:min(46%,420px);bottom:8px}
 .viewbox.full .bodynote{right:146px;top:8px;left:auto}
 .actions{position:absolute;right:8px;bottom:8px;display:flex;flex-direction:column;align-items:flex-end;gap:6px}
-.chips{display:flex;gap:4px;background:rgba(5,13,9,.6);border-radius:6px;padding:3px}
-.chips button{min-height:28px;padding:2px 9px;font-size:11px}
-.big{display:flex;gap:6px;align-items:center;background:rgba(5,13,9,.6);border-radius:6px;padding:4px}
-.big button.go{min-height:40px;min-width:64px;font-size:14px}
+.chips{display:flex;gap:4px;background:rgba(5,13,9,.62);border:1px solid var(--line);border-radius:999px;padding:3px}
+.chips button{min-height:28px;padding:2px 11px;font-size:12px;border-radius:999px}
+.big{display:flex;gap:6px;align-items:center;background:rgba(5,13,9,.62);border:1px solid var(--line);border-radius:14px;padding:5px}
+.big button.go{min-height:42px;min-width:66px;font-size:16px}
 .big .spd{font-size:11px;color:var(--mute)}
 .big .spd input{width:46px;min-height:28px}
-.adminover{position:absolute;left:8px;top:64px;width:min(46%,460px);max-height:40%;overflow:auto;background:rgba(5,13,9,.85);border:1px solid var(--line);border-radius:6px;padding:6px 8px}
+.adminover{position:absolute;left:8px;top:64px;width:min(46%,460px);max-height:40%;overflow:auto;background:rgba(5,13,9,.86);border:1px solid var(--line2);border-radius:12px;padding:6px 8px}
 .breakbox{margin:auto;width:min(96%,900px);max-height:100%}
 @media (max-height:520px){
-  .bug{padding:3px 8px;gap:8px} .bug b{font-size:14px} .big button.go{min-height:34px;min-width:56px;font-size:13px} .viewbox.full .kzinset{width:104px} .viewbox.full .fieldinset{width:100px} .viewbox.full .feedlast{left:112px}
+  .bug{padding:3px 9px 3px 8px;gap:8px} .bug b{font-size:15px} .big button.go{min-height:34px;min-width:56px;font-size:14px} .viewbox.full .kzinset{width:104px} .viewbox.full .fieldinset{width:100px} .viewbox.full .feedlast{left:112px}
 }
 
 /* ---- title / team / events / tutorial / save ---- */
 .screen.title{align-items:center;justify-content:center}
-.titlebox{display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center}
-.logo{font:700 44px "Oswald";letter-spacing:.14em;color:var(--bulb)}
-.tag{color:var(--mute);font-size:13px}
+.titlebox{display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center}
+.logo{font:64px/1 var(--num);letter-spacing:.04em;background:linear-gradient(180deg,#fff3c4 0%,var(--bulb) 55%,#e08f1e 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 4px 0 rgba(0,0,0,.35)) drop-shadow(0 0 22px rgba(255,201,74,.35))}
+.tag{color:var(--mute);font:15px var(--ui)}
 .col-btns{flex-direction:row}
-button.big{min-height:46px;min-width:150px;font-size:15px}
+button.big{min-height:48px;min-width:156px;font-size:17px}
 .slots{display:flex;flex-direction:column;gap:6px;min-width:360px}
-.slots .slot{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:6px 10px}
+.slots .slot{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line2);border-radius:12px;padding:6px 10px}
 .slots .slot span{flex:1;font-size:12px}
 .teams{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;overflow:hidden}
-.teams .tc{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:10px 12px;cursor:pointer;display:flex;flex-direction:column;gap:4px}
-.teams .tc.sel{outline:2px solid var(--bulb)}
-.teams .tc b{font:700 16px "Oswald";letter-spacing:.06em}
-.teams .sw{display:inline-block;width:14px;height:14px;border-radius:3px;margin-right:6px;vertical-align:middle}
-.modalbox.event h3{margin:0 0 8px;font:700 16px "IBM Plex Sans KR";color:var(--bulb)}
+.teams .tc{background:linear-gradient(170deg,rgba(255,255,255,.07),rgba(255,255,255,.01)),var(--panel2);border:1px solid var(--line2);border-radius:14px;padding:10px 12px;cursor:pointer;display:flex;flex-direction:column;gap:4px;box-shadow:var(--shadow);transition:transform .12s,border-color .15s}
+.teams .tc:hover{transform:translateY(-2px)}
+.teams .tc.sel{outline:2px solid var(--bulb);box-shadow:0 0 18px rgba(255,201,74,.25),var(--shadow)}
+.teams .tc b{font:18px/1.2 var(--num);letter-spacing:.02em}
+.teams .sw{display:inline-block;width:14px;height:14px;border-radius:4px;margin-right:6px;vertical-align:middle;box-shadow:0 0 0 1px rgba(255,255,255,.25)}
+.modalbox.event h3{margin:0 0 8px;font:19px var(--ui);color:var(--bulb)}
 .tutor{position:fixed;inset:0;z-index:40;pointer-events:none}
-.tutor .tbox{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);background:var(--panel);border:1px solid var(--bulb);border-radius:8px;padding:10px 14px;width:min(560px,92vw);pointer-events:auto;font-size:13px}
-.lock{align-self:center;margin-left:8px;color:var(--red);font:700 11px "Oswald";letter-spacing:.06em}
+.tutor .tbox{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);background:linear-gradient(165deg,rgba(255,255,255,.08),rgba(255,255,255,.02)),#132a20;border:1px solid var(--bulb);border-radius:14px;padding:10px 14px;width:min(560px,92vw);pointer-events:auto;font-size:13px;box-shadow:0 0 24px rgba(255,201,74,.22),var(--shadow)}
+.lock{align-self:center;margin-left:8px;color:var(--red);font:12px var(--ui);letter-spacing:.03em}
 .ctlmini{display:flex;gap:4px;margin-left:10px}
-.ctlmini button{min-height:26px;padding:2px 8px;font-size:11px}
+.ctlmini button{min-height:26px;padding:2px 9px;font-size:12px}
 .nav button:disabled{opacity:.35}
 select.posSel{min-height:26px;padding:1px 4px;font-size:11px}
 .warn{color:var(--red);font-size:11px}
@@ -169,10 +190,11 @@ select.posSel{min-height:26px;padding:1px 4px;font-size:11px}
 .form input[type=range]{width:100%;min-height:20px}
 
 /* on-deck line in the score bug, next-three strip at the break, starter stamina on setup cards */
-.bug .ondeck{font:500 9px "IBM Plex Sans KR";letter-spacing:0;color:var(--mute);margin-top:1px}
+.bug .ondeck{font:500 9.5px var(--txt);letter-spacing:0;color:var(--mute);margin-top:1px}
 .nextup{display:flex;gap:10px;align-items:center;margin:2px 0 6px;font-size:12px}
-.nextup .nb{background:var(--panel2);border:1px solid var(--line);border-radius:5px;padding:3px 8px}
-.nextup .nb small{color:var(--bulb);font:700 10px "Oswald";margin-right:4px}
+.nextup .nb{background:var(--panel2);border:1px solid var(--line2);border-radius:10px;padding:3px 10px}
+.nextup .nb small{color:var(--bulb);font:11px var(--num);margin-right:4px}
 .nextup .nb em{font-style:normal;color:var(--mute);font-size:10px}
 .roster .stam{font-size:10px;color:var(--mute);margin-top:2px}
 .roster .stam .bar{width:44px;height:5px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
