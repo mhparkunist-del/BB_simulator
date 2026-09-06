@@ -75,7 +75,11 @@ window.APP = window.APP || {};
       window.addEventListener("resize", applyLayout);
       applyLayout(); wireGameExtras();
       A.show((location.hash || "#schedule").slice(1));
-      if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register(A.base + "sw.js").catch(() => {});
+      if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
+        let hadController = !!navigator.serviceWorker.controller;
+        navigator.serviceWorker.addEventListener("controllerchange", () => { if (hadController && !A.reloaded) { A.reloaded = true; location.reload() } hadController = true });
+        navigator.serviceWorker.register(A.base + "sw.js").then(reg => { reg.update().catch(() => {}); setInterval(() => reg.update().catch(() => {}), 10 * 60 * 1000) }).catch(() => {});
+      }
       if (smokeMode) smoke(smokeMode);
     } catch (e) {
       status.hidden = false; status.textContent = "불러오기 실패: " + e.message; status.className = "boot err";

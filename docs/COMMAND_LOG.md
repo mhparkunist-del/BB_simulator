@@ -64,6 +64,7 @@
 | 57 | 2026-09-06 | 공개로 해 | 저장소 공개 전환, GitHub Pages(main 루트) 활성화, 앱 주소 https://mhparkunist-del.github.io/BB_simulator/web/app/ | docs/GIT_DEPLOY.md | 완료 |
 | 58 | 2026-09-06 | 창을 내릴 필요 없이 다음 버튼으로 다 보거나 한 화면에 담기게, 화면은 가로 | v2.1.0: html/body overflow 숨김, 화면마다 viewport 그리드(fit), 긴 목록(일정·훈련·선수단·FA·기록)은 pageTable로 이전/다음 페이지(컨테이너 높이에 맞춰 행 수 자동), 선수 카드는 모달, 이닝 교체 화면은 점수/우리 타자/상대 타자/투수 4쪽, 세로 방향이면 회전 안내 오버레이, 매니페스트 orientation landscape, 첫 탭에서 전체화면+가로 잠금 시도 | web/app/index.html, css/app.css, js/app.js, js/club/club.js | 완료 |
 | 59 | 2026-09-06 | 비슷한 게임들의 가로 인터페이스 관례를 GitHub에서 찾아 적용, 경기 화면이 시뮬레이터 같으니 가로 화면에 꽉 차게 | GitHub 검색(baseball game/simulator, zengm, canvas hud): 직접 대응되는 오픈소스 야구 게임은 없고 ZenGM(관리 흐름: 하루/일주일/다음 경기 진행 버튼)과 캔버스 HUD 오버레이 관례(Surviv.io 류)를 참고. 경기 화면을 HUD로 재구성: 3D 뷰가 영역 전체(object-fit contain), 좌상단 점수 버그(이닝·점수·B/S/O·베이스·타자·구속), 상단 중앙 뷰 탭, 우상단 K-zone 인셋, 좌하단 필드 미니맵, 하단 중계 한 줄(기록 버튼으로 전체), 우하단 사인 칩+큰 진행 버튼. 서빙 점검에서 로드 대기용 이미지가 레이아웃을 깨던 문제 수정 | web/app/index.html, css/app.css | 완료 |
+| 60 | 2026-09-06 | 2.1 반영이 안 된다 | 원인: 서비스 워커 캐시 이름이 v2.0 그대로라 폰이 옛 셸을 캐시 우선으로 계속 사용(서버 파일은 이미 2.1). 조치: 셸 네트워크 우선·릴리스별 캐시 이름·새 워커 활성 시 자동 새로고침, tools/release_app.py로 배포마다 버전 stamp(v2.1.0-커밋) 기록, 운용 규칙에 추가 | web/app/sw.js, js/app.js, tools/release_app.py, docs/GIT_DEPLOY.md | 완료 |
 
 ## 운용
 - 새 지시 → 행 추가 → 산출물 버전 파일명(v{N.M}_{MMDD}) → recent report 갱신(이전 보고는 2_Archieve로) → README 이력표·2_Archieve/README.md 색인 갱신.

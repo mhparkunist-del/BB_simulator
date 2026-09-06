@@ -1,5 +1,5 @@
-/* bbsim app · service worker: shell cached on install, banks cached as they are fetched (offline replay afterwards) */
-const VERSION = "bbsim-app-v2.0";
+/* bbsim app · service worker: shell network-first (cache fallback), banks cached as fetched, one cache per release */
+const VERSION = "bbsim-app-v2.1.0-e3eeaac";
 const SHELL = ["index.html", "css/app.css", "js/kv.js", "js/app.js", "js/render/math.js", "js/render/park.js", "js/render/person.js", "js/render/pitcher.js",
   "js/render/figures.js", "js/render/play.js", "js/render/seam.js", "js/game/game.js", "js/club/club.js", "data/roster.json", "data/club.json", "manifest.webmanifest"];
 self.addEventListener("install", e => {
@@ -11,9 +11,10 @@ self.addEventListener("activate", e => {
 self.addEventListener("fetch", e => {
   const url = new URL(e.request.url);
   if (e.request.method !== "GET" || url.origin !== location.origin) return;
-  if (url.pathname.includes("/data/bank/")) {                      // banks: network first, then cache; cache what arrives
-    e.respondWith(fetch(e.request).then(r => { const cp = r.clone(); caches.open(VERSION).then(c => c.put(e.request, cp)); return r }).catch(() => caches.match(e.request)));
+  if (url.pathname.includes("/data/bank/")) {                      // banks: cache first (they never change within a release), else network and keep
+    e.respondWith(caches.match(e.request).then(r => r || fetch(e.request).then(res => { const cp = res.clone(); caches.open(VERSION).then(c => c.put(e.request, cp)); return res })));
     return;
   }
-  e.respondWith(caches.match(e.request).then(r => r || fetch(e.request).then(res => { const cp = res.clone(); caches.open(VERSION).then(c => c.put(e.request, cp)); return res })));
+  // shell and data: network first so a new deploy shows on the next open; cache keeps it working offline
+  e.respondWith(fetch(e.request, { cache: "no-cache" }).then(res => { const cp = res.clone(); caches.open(VERSION).then(c => c.put(e.request, cp)); return res }).catch(() => caches.match(e.request)));
 });
