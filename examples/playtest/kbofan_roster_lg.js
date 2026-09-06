@@ -1,0 +1,31 @@
+/* KBO fan playtest: LG 트윈스 squad plausibility (lineup, rotation, bullpen, 2군 ages, salaries), roster screen capture */
+(async () => {
+  const L = []; const note = t => { PT.note(t); L.push(t) };
+  const CODE = "LG";
+  PT.say(CODE + " 선수단 점검");
+  ClubUI.fresh(APP.teamList().find(t => t.code === CODE));
+  const S = ClubUI.state(); const P = id => S.players.find(p => p.id === id);
+  const cs = getComputedStyle(document.documentElement);
+  ClubUI.render();
+  note("club " + S.club.name + " color " + S.club.color + "/" + S.club.color2 + " css --team " + cs.getPropertyValue("--team").trim() + " --bulb " + cs.getPropertyValue("--bulb").trim());
+  const fmtP = p => p.name + "#" + p.num + " " + (p.pos || p.role) + " " + (p.bats || "") + "/" + (p.throws || "") + " " + p.age + "세 " + p.contract.salary + "억 ovr" + ClubInt.ovr(p).toFixed(2) + (p.real ? "" : "(est)");
+  note("LINEUP: " + S.lineup.map((id, i) => (i + 1) + "." + fmtP(P(id))).join(" | "));
+  note("ROTATION: " + S.rotation.map((id, i) => (i + 1) + "." + fmtP(P(id))).join(" | "));
+  const act = S.players.filter(p => p.active);
+  note("1군 " + act.length + " 2군 " + S.players.filter(p => !p.active).length);
+  note("BULLPEN: " + act.filter(p => p.type == "P" && !S.rotation.includes(p.id)).map(fmtP).join(" | "));
+  note("BENCH: " + act.filter(p => p.type == "B" && !S.lineup.includes(p.id)).map(fmtP).join(" | "));
+  note("TOP SALARY: " + S.players.slice().sort((a, b) => b.contract.salary - a.contract.salary).slice(0, 12).map(p => p.name + " " + p.contract.salary + "억(" + p.age + "세 " + (p.pos || p.role) + ")" + (p.active ? "" : "[2군]")).join(", "));
+  note("top40 " + ClubInt.top40().toFixed(1));
+  const known = ["오지환", "홍창기", "박해민", "문보경", "박동원", "김현수", "오스틴", "신민재", "임찬규", "손주영", "고우석", "정우영", "함덕주", "장현식", "유영찬", "김진성", "치리노스", "에르난데스", "톨허스트", "카라스코", "케네디", "송찬의", "구본혁", "이주헌", "김범석", "문성주", "최원영", "김영우"];
+  note("KNOWN: " + known.map(n => { const p = S.players.find(x => x.name === n); return n + "=" + (p ? (p.active ? "1군" : "2군") + " " + (p.pos || p.role) + " " + p.age + "세 " + p.hand + " " + p.contract.salary + "억" + (p.real ? "" : " est") : "없음") }).join(" | "));
+  const cnt = {}; S.players.forEach(p => cnt[p.name] = (cnt[p.name] || 0) + 1);
+  note("DUP NAMES: " + Object.entries(cnt).filter(([n, c]) => c > 1).map(([n, c]) => n + "x" + c + " " + S.players.filter(p => p.name === n).map(p => "#" + p.num + " " + (p.pos || p.role) + " " + p.age + "세" + p.hand + (p.active ? "1군" : "2군")).join("/")).join(", "));
+  const nonActiveKBO = APP.kbo.clubs.find(c => c.code === CODE).players.filter(p => p.active).map(p => p.name);
+  const demoted = nonActiveKBO.filter(n => { const p = S.players.find(x => x.name === n); return p && !p.active });
+  note("KBO 등록 1군인데 게임 2군으로 내려간 선수: " + demoted.join(", "));
+  APP.show("roster"); await PT.wait(400);
+  note("strip: " + ["tDate", "tRec", "tRank", "tBudget", "tPay", "tMorale"].map(id => id + "=" + PT.text("#" + id)).join(" "));
+  note("lineup warn: " + (document.querySelector("#lineup .warn") ? document.querySelector("#lineup .warn").textContent : "none"));
+  await PT.done({ persona: "KBO 골수팬 · LG", notes: L });
+})();

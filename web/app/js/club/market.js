@@ -33,26 +33,33 @@ function seasonEnd(){const s=S(),f=fin();const t40=I().top40();
 function tradeValue(p){const o=I().ovr(p);let v=100*Math.pow(Math.max(0,o-0.35),2.2);
  const pot=p.pot?Object.values(p.pot).reduce((a,b)=>a+b,0)/Object.keys(p.pot).length:o;const up=Math.max(0,pot-o);
  const ageF=p.age<=24?1.1+1.5*up:p.age<=28?1.0+0.8*up:p.age<=31?0.9:p.age<=33?0.72:0.55;
- const fair=I().salaryModel(o,p.age,true);const cF=Math.max(0.5,Math.min(1.2,1-0.5*(p.contract.salary-fair)/Math.max(1,fair)));
- if(p.injury)v*=0.7;return r1(v*ageF*cF)}
+ const fair=I().salaryModel(o,p.age,true);const cF=Math.max(0.5,Math.min(p.active?1.2:1.0,1-0.5*(p.contract.salary-fair)/Math.max(1,fair)));
+ if(p.injury)v*=0.7;if(!p.active)v*=0.75;return r1(v*ageF*cF)}
 function depth(list,p){return list.filter(x=>x.id!==p.id&&x.type===p.type&&(p.type=="B"?x.pos===p.pos:x.role===p.role)).length}
 function oppRoster(code){const K=window.APP.kbo;const club=K&&K.clubs.find(c=>c.code===code);if(!club)return [];const f=fin();const mods=(f.oppMods[code]=f.oppMods[code]||{removed:[],added:[]});const ci=K.clubs.indexOf(club);
  return club.players.filter(kp=>kp.active).map((kp,i)=>I().kboPlayer(kp,club,10000+ci*200+i)).filter(p=>!mods.removed.includes(p.id)).concat(mods.added)}
 function canTrade(){return gamesPlayed()<DEADLINE_GAME}
+const CASH_MAX=15;
+function oppCash(code){const f=fin();f.oppCash=f.oppCash||{};if(f.oppCash[code]===undefined)f.oppCash[code]=r1(20+40*hash01("cash|"+code));return f.oppCash[code]}
 function evalTrade(code,theirs,ours,cashAmt){const roster=oppRoster(code);const top3=roster.slice().sort((a,b)=>tradeValue(b)-tradeValue(a)).slice(0,3).map(p=>p.id);
  const vIn=ours.reduce((s,p)=>s+tradeValue(p)*(depth(roster,p)<=1?1.15:1),0)+Math.max(0,cashAmt)*CASH_UNIT;
  const vOut=theirs.reduce((s,p)=>s+tradeValue(p)*(top3.includes(p.id)?1.3:1),0)+Math.max(0,-cashAmt)*CASH_UNIT;
  return {vIn:r1(vIn),vOut:r1(vOut),need:r1(vOut*1.08)}}
 function proposeTrade(code,theirIds,ourIds,cashAmt){const s=S();const opp=s.opps.find(o=>o.code===code);if(!opp)return {ok:false,msg:"KBO 구단에서만 트레이드할 수 있습니다."};
  if(!canTrade())return {ok:false,msg:"트레이드 마감입니다 ("+DEADLINE_GAME+"경기 이후 · 실제 KBO는 7월 31일)."};
- const roster=oppRoster(code);const theirs=theirIds.map(id=>roster.find(p=>p.id===id)).filter(Boolean),ours=ourIds.map(id=>I().P(id)).filter(Boolean);
+ cashAmt=+cashAmt||0;theirIds=[...new Set(theirIds||[])];ourIds=[...new Set(ourIds||[])];const roster=oppRoster(code);const theirs=theirIds.map(id=>roster.find(p=>p.id===id)).filter(Boolean),ours=ourIds.map(id=>I().P(id)).filter(Boolean);
  if(!theirs.length&&!ours.length)return {ok:false,msg:"선수를 고르세요."};
+ if(!theirs.length&&!(cashAmt<0))return {ok:false,msg:"받을 선수나 받을 현금(음수) 없이 선수를 내줄 수는 없습니다."};
+ if(theirs.length>2||ours.length>2)return {ok:false,msg:"한쪽 최대 2명입니다."};
  if(ours.some(p=>p.noTrade))return {ok:false,msg:"FA로 영입한 선수는 1년간 트레이드할 수 없습니다."};
  if(cashAmt>s.budget)return {ok:false,msg:"현금이 잔액("+s.budget+"억)을 넘습니다."};
+ if(Math.abs(cashAmt)>CASH_MAX)return {ok:false,msg:"현금은 한 거래에 "+CASH_MAX+"억까지입니다."};
+ if(cashAmt<0&&-cashAmt>oppCash(code))return {ok:false,msg:opp.short+" 현금 여력은 "+oppCash(code)+"억뿐입니다."};
+ if(!ours.length){const top3=oppRoster(code).slice().sort((a,b)=>tradeValue(b)-tradeValue(a)).slice(0,3).map(p=>p.id);if(theirs.some(p=>top3.includes(p.id)||tradeValue(p)>8))return {ok:false,msg:opp.short+" 거절 · 주전급 선수는 현금만으로 팔지 않습니다. 선수를 넣으세요."}}
  const e=evalTrade(code,theirs,ours,cashAmt);
  if(e.vIn>=e.need){execTrade(opp,theirs,ours,cashAmt);return {ok:true,msg:opp.short+" 수락 · "+theirs.map(p=>p.name).join(", ")+" ⇄ "+ours.map(p=>p.name).join(", ")+(cashAmt?" + 현금 "+cashAmt+"억":""),e}}
  const gap=e.need-e.vIn;if(e.vIn<e.need*0.55)return {ok:false,msg:opp.short+" 거절 · 가치 차이가 큽니다 (우리 "+e.vIn+" vs 요구 "+e.need+").",e};
- const askCash=Math.ceil(gap/CASH_UNIT*2)/2;if(askCash<=Math.min(40,s.budget))return {ok:false,counter:{cash:cashAmt+askCash},msg:opp.short+" 역제안 · 현금 "+askCash+"억을 더하면 받겠습니다.",e};
+ const askCash=Math.ceil(gap/CASH_UNIT*2)/2;if(cashAmt+askCash<=Math.min(CASH_MAX,s.budget))return {ok:false,counter:{cash:cashAmt+askCash},msg:opp.short+" 역제안 · 현금 "+askCash+"억을 더하면 받겠습니다.",e};
  const cand=s.players.filter(p=>p.active&&!ourIds.includes(p.id)&&!p.noTrade).map(p=>({p,v:tradeValue(p)})).filter(x=>x.v>=gap*0.9&&x.v<=gap*1.8).sort((a,b)=>a.v-b.v)[0];
  if(cand)return {ok:false,counter:{add:cand.p.id},msg:opp.short+" 역제안 · "+cand.p.name+" 선수를 더하면 받겠습니다.",e};
  return {ok:false,msg:opp.short+" 거절 · 맞출 카드가 없습니다 (부족 "+r1(gap)+").",e}}
@@ -61,7 +68,7 @@ function dropFromClub(p){const s=S();s.players=s.players.filter(x=>x.id!==p.id);
 function addToClub(p){const s=S();const act=s.players.filter(x=>x.active).length;p.active=act<26;p.morale={playing_time:0.6,team_success:0.6,salary_fairness:0.65,relationships:0.5,role_fit:0.6};s.program[p.id]=p.type=="B"?"bat":"control";s.weekGames[p.id]=0;s.players.push(p)}
 function execTrade(opp,theirs,ours,cashAmt){const s=S(),f=fin();const mods=(f.oppMods[opp.code]=f.oppMods[opp.code]||{removed:[],added:[]});
  ours.forEach(p=>{dropFromClub(p);const q=JSON.parse(JSON.stringify(p));q.active=true;mods.added.push(q)});theirs.forEach(p=>{mods.removed.push(p.id);mods.added=mods.added.filter(x=>x.id!==p.id);addToClub(JSON.parse(JSON.stringify(p)))});
- if(cashAmt){cash(-cashAmt);if(cashAmt>0)f.exp.fees+=cashAmt;else f.inc.parent+=-cashAmt;led("트레이드 현금",-cashAmt,opp.short)}
+ if(cashAmt){cash(-cashAmt);if(cashAmt>0)f.exp.fees+=cashAmt;else f.inc.parent+=-cashAmt;led("트레이드 현금",-cashAmt,opp.short);f.oppCash=f.oppCash||{};f.oppCash[opp.code]=r1(oppCash(opp.code)+cashAmt)}
  const dO=ours.reduce((a,p)=>a+I().ovr(p),0)-theirs.reduce((a,p)=>a+I().ovr(p),0);const nb=ours.filter(p=>p.type=="B").length+theirs.filter(p=>p.type=="B").length;
  if(nb)opp.bat=r1(Math.max(0.35,Math.min(0.8,opp.bat+0.04*dO/nb)));else opp.pitch=r1(Math.max(0.35,Math.min(0.8,opp.pitch+0.04*dO/Math.max(1,ours.length+theirs.length))));
  s.players.forEach(x=>x.morale.relationships=Math.max(0,x.morale.relationships-0.02));
@@ -75,17 +82,22 @@ function aiOffer(){const s=S(),f=fin();if(!s.kbo||!canTrade()||f.offers.length>=
  I().addLog(opp.short+" 트레이드 제안: "+want.p.name+" ⇄ "+give.map(p=>p.name).join(", ")+" (예산·이적 화면에서 응답)")}
 function expireOffers(){const f=fin(),s=S();f.offers=f.offers.filter(o=>s.day-o.day<=7)}
 function answerOffer(id,accept){const f=fin(),s=S();const o=f.offers.find(x=>x.id===id);if(!o)return;f.offers=f.offers.filter(x=>x!==o);
+ if(accept&&!canTrade()){I().addLog("트레이드 마감 · 받은 제안을 실행할 수 없습니다");I().save();I().render();return}
  if(accept){const opp=s.opps.find(x=>x.code===o.code);const roster=oppRoster(o.code);const theirs=o.give.map(i=>roster.find(p=>p.id===i)).filter(Boolean),ours=[I().P(o.want)].filter(Boolean);if(opp&&theirs.length&&ours.length)execTrade(opp,theirs,ours,0)}
  else I().addLog(o.short+" 제안 거절");I().save();I().render()}
 /* ---------------- signing negotiation (FA / released players) ---------------- */
 function yearsPref(p){return p.age<=29?3:(p.age<=33?2:1)}
-function startNego(id){const s=S(),f=fin();const p=s.fa.find(x=>x.id===id);if(!p)return;
- f.nego={id,ask:p.asking,years:yearsPref(p),patience:3,round:0,msg:"에이전트: "+p.name+" 선수는 연봉 "+p.asking+"억, "+yearsPref(p)+"년을 원합니다. 조건을 제시해 주세요.",done:false};
+function startNego(id){const s=S(),f=fin();const p=s.fa.find(x=>x.id===id);if(!p)return;f.negoHist=f.negoHist||{};const h=f.negoHist[id];
+ if(h&&h.done){I().addLog(p.name+" 측은 이번 시즌 더 협상하지 않습니다");return}
+ f.nego=h?Object.assign({},h,{msg:"에이전트: 지난번 조건 그대로입니다. "+h.ask+"억, "+h.years+"년."}):{id,ask:p.asking,years:yearsPref(p),patience:3,round:0,msg:"에이전트: "+p.name+" 선수는 연봉 "+p.asking+"억, "+yearsPref(p)+"년을 원합니다. 조건을 제시해 주세요.",done:false};
  $("negoModal").hidden=false;$("negoSalary").value=p.asking;$("negoYears").value=yearsPref(p);renderNego();I().save()}
 function utility(p,salary,years){const s=S(),f=fin();const n=f.nego;let U=salary/n.ask;const yp=yearsPref(p);U*=years>=yp?1+0.03*(years-yp):1-0.06*(yp-years);
  const rank=I().rankNow().findIndex(r=>r.me)+1;const succ=rank<=2?1.06:rank>=5?0.94:1;U*=1+(succ-1)*(0.5+p.personality.ambition);
  const d=depth(s.players.filter(x=>x.active),p);U*=d<=1?1.08:d>=3?0.93:1;return U}
-function offer(salary,years){const s=S(),f=fin();const n=f.nego;if(!n||n.done)return;const p=s.fa.find(x=>x.id===n.id);if(!p)return;n.round++;
+function offer(salary,years){const s=S(),f=fin();const n=f.nego;if(!n||n.done)return;const p=s.fa.find(x=>x.id===n.id);if(!p)return;
+ const s0=+salary||0,y0=+years||1;salary=Math.round(10*Math.max(0.3,Math.min(30,s0)))/10;years=Math.max(1,Math.min(4,Math.floor(y0)||1));const bonus=r1(salary*years*0.3);
+ if(salary!==s0||years!==y0){$("negoSalary").value=salary;$("negoYears").value=years;n.msg="구단 규정: 연봉 0.3~30억, 1~4년으로 맞췄습니다("+salary+"억 × "+years+"년). 다시 제안을 누르세요.";renderNego();return}
+ if(bonus>s.budget){n.msg="구단 재정: 계약금 "+bonus+"억이 잔액 "+s.budget+"억을 넘습니다. 조건을 낮추세요.";renderNego();return}n.round++;
  const U=utility(p,salary,years);
  if(U>=0.97){sign(p,salary,years);n.done=true;n.msg="계약 성사 · "+p.name+" "+years+"년, 연봉 "+salary+"억 (계약금 "+r1(salary*years*0.3)+"억 별도)";}
  else if(U>=0.80){n.patience--;n.ask=r1(Math.max(salary,n.ask-(n.ask-salary)*0.45));if(years<yearsPref(p))n.years=yearsPref(p);
@@ -93,6 +105,7 @@ function offer(salary,years){const s=S(),f=fin();const n=f.nego;if(!n||n.done)re
   else n.msg="에이전트: 조금 더 올려 주시죠. "+n.ask+"억, "+n.years+"년이면 사인하겠습니다."+(n.patience<=1?" (마지막 제안입니다)":"")}
  else{n.patience--;n.msg="에이전트: 그 조건으로는 어렵습니다. 요구는 "+n.ask+"억, "+n.years+"년입니다."+(n.patience<=1?" (마지막 제안입니다)":"")}
  if(!n.done&&n.patience<=0){n.done=true;s.fa=s.fa.filter(x=>x.id!==p.id);n.msg="협상 결렬 · "+p.name+" 측이 자리를 떴습니다. 이번 시즌 시장에서 빠집니다.";I().addLog(p.name+" 협상 결렬")}
+ f.negoHist=f.negoHist||{};f.negoHist[n.id]={id:n.id,ask:n.ask,years:n.years,patience:n.patience,round:n.round,done:n.done};
  I().save();renderNego();I().render()}
 function sign(p,salary,years){const s=S(),f=fin();const bonus=r1(salary*years*0.3);cash(-bonus);f.exp.fees+=bonus;led("계약금",-bonus,p.name+" "+years+"년");
  s.fa=s.fa.filter(x=>x.id!==p.id);p.contract={salary,years,status:"fa"};p.noTrade=true;p.signedDay=s.day;addToClub(p);
@@ -100,7 +113,7 @@ function sign(p,salary,years){const s=S(),f=fin();const bonus=r1(salary*years*0.
 function renderNego(){const s=S(),f=fin();const n=f.nego;const box=$("negoBody");if(!n||!box)return;const p=s.fa.find(x=>x.id===n.id)||s.players.find(x=>x.id===n.id);if(!p){$("negoModal").hidden=true;return}
  const keys=p.type=="B"?I().DATA.bat_keys:I().DATA.pit_keys;const bonus=r1((+$("negoSalary").value||0)*(+$("negoYears").value||1)*0.3);
  box.innerHTML="<div><b>"+p.name+"</b> · "+(p.pos||p.role)+" · "+p.age+"세 · "+(p.from?"전 소속 "+p.from+" · ":"")+keys.slice(0,4).map(k=>I().KO[k]+" "+I().gi(p.grades[k])).join(" ")+"</div>"+
-  "<div class='hint'>요구 "+n.ask+"억 × "+n.years+"년 · 인내 "+"●".repeat(Math.max(0,n.patience))+"○".repeat(3-Math.max(0,n.patience))+" · 잔액 "+s.budget+"억 · 계약금은 연봉×연수의 30 % (지금 "+bonus+"억)</div>"+
+  "<div class='hint'>요구 "+n.ask+"억 × "+n.years+"년"+(n.done?"":" · 인내 "+"●".repeat(Math.max(0,n.patience))+"○".repeat(3-Math.max(0,n.patience)))+" · 잔액 "+s.budget+"억 · 계약금은 연봉×연수의 30 % (지금 "+bonus+"억)</div>"+
   "<div class='nmsg'>"+n.msg+"</div>";
  $("negoOffer").disabled=n.done;$("negoMeet").disabled=n.done;$("negoSalary").disabled=n.done;$("negoYears").disabled=n.done}
 /* ---------------- screen ---------------- */
@@ -122,8 +135,8 @@ function renderTrade(s,f){const box=$("trade");const clubs=s.opps.filter(o=>o.co
   (offers?"<div class='offers'>"+offers+"</div>":"")+
   "<div class='tradecols'><div><h3>받을 선수 (최대 2)</h3><div id='tradeTheirs' class='grow'></div></div><div><h3>보낼 선수 (최대 2)</h3><div id='tradeOurs' class='grow'></div></div></div>"+
   "<div class='ctl'><span class='hint'>현금(억, 음수는 받음)</span><input type='number' id='tradeCash' step='0.5' value='"+(MK.cash||0)+"' style='width:70px'><button class='go' id='tradeGo'"+(canTrade()?"":" disabled")+">제안</button><span id='tradeMsg' class='hint'>"+(MK.msg||"")+"</span></div>";
- I().pageTable("tradeTheirs","<tr><th>선수</th><th>포지션</th><th>OVR·연봉</th><th class='num'>가치</th></tr>",roster.map(x=>row(x,"theirs")),6,"tth");
- I().pageTable("tradeOurs","<tr><th>선수</th><th>포지션</th><th>OVR·연봉</th><th class='num'>가치</th></tr>",mine.map(x=>row(x,"ours")),6,"tou");
+ I().pageTable("tradeTheirs","<tr><th>선수</th><th>포지션</th><th>OVR·연봉</th><th class='num'>가치</th></tr>",roster.map(x=>row(x,"theirs")),window.innerHeight<520?4:6,"tth");
+ I().pageTable("tradeOurs","<tr><th>선수</th><th>포지션</th><th>OVR·연봉</th><th class='num'>가치</th></tr>",mine.map(x=>row(x,"ours")),window.innerHeight<520?4:6,"tou");
  $("tradeClub").onchange=()=>{MK.club=$("tradeClub").value;MK.sel={theirs:[],ours:[]};MK.msg="";render()};
  box.querySelectorAll("input[type=checkbox]").forEach(c=>c.onchange=()=>{const side=c.dataset.side,id=+c.dataset.id;const a=MK.sel[side];if(c.checked){if(a.length>=2){c.checked=false;return}a.push(id)}else MK.sel[side]=a.filter(x=>x!==id);render()});
  $("tradeGo").onclick=()=>{MK.cash=+$("tradeCash").value||0;const r=proposeTrade(MK.club,MK.sel.theirs,MK.sel.ours,MK.cash);MK.msg=r.msg;if(r.counter&&r.counter.add&&MK.sel.ours.length<2)MK.sel.ours.push(r.counter.add);if(r.counter&&r.counter.cash!==undefined)MK.cash=r.counter.cash;I().save();I().render()};

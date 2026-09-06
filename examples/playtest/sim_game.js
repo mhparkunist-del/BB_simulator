@@ -1,0 +1,40 @@
+/* sim_game v2: game screen — duplicate/empty lineup handling, hang-free score distribution, determinism, save/load, then the foul-only bank hang with the default seed (last, because it cannot be escaped) */
+(async () => {
+  const I = ClubInt, r2 = v => Math.round(v * 100) / 100, sum = a => a.reduce((x, y) => x + y, 0);
+  const games = [], hangs = []; let S;
+  const setup = async (seed, inn, card) => { APP.show("game"); await PT.wait(60); PT.click("#autoOrder"); const pc = document.querySelector("[data-p='" + card + "']"); if (pc) pc.click(); document.getElementById("seed").value = seed; document.getElementById("innings").value = inn; await document.getElementById("start").onclick(); await PT.until(() => !document.getElementById("game").hidden, 3000) };
+  const fastWithGuard = async ms => { let stopped = false; const t = setTimeout(() => { stopped = true; PT.click("#stop") }, ms); await GameUI.fast(); clearTimeout(t); return stopped };
+  const finish = async () => { PT.click("#resume"); await PT.until(() => PT.visible("#eventModal"), 3000); const ev = PT.text("#eventBody"); PT.click("#eventOk"); await PT.wait(40); return (ev || "").replace(/\s+/g, " ").slice(0, 60) };
+  const toGameDay = () => { let k = 0; while (!S.sched.find(g => g.date === I.today() && !g.result) && k++ < 5) ClubUI.simDay() };
+  try {
+    ClubUI.fresh(APP.teamList()[3]); S = ClubUI.state();
+    // (1) duplicate lineup on the game screen
+    const hero = S.players.filter(p => p.type == "B" && p.active).sort((a, b) => I.ovr(b) - I.ovr(a))[0]; const keep = S.lineup.slice(); S.lineup = Array(9).fill(hero.id); I.save();
+    APP.show("game"); await PT.wait(80); PT.note("(1) 9x " + hero.name + " lineup → game screen: pick.order=" + JSON.stringify(GameUI.pick.order) + " selected cards=" + document.querySelectorAll("[data-b].sel").length + " start disabled=" + document.getElementById("start").disabled + " order label=" + PT.text("#order"));
+    // (2) empty slot
+    S.lineup = keep.slice(); S.lineup[8] = null; I.save(); APP.show("schedule"); APP.show("game"); await PT.wait(80); PT.note("(2) 8-man lineup → game screen: clubLineup.order=" + JSON.stringify(APP.clubLineup && APP.clubLineup.order) + " pick.order=" + JSON.stringify(GameUI.pick.order) + " selected=" + document.querySelectorAll("[data-b].sel").length + " start disabled=" + document.getElementById("start").disabled);
+    PT.click("#autoOrder"); await PT.wait(30); PT.note("(2b) after autoOrder: selected=" + document.querySelectorAll("[data-b].sel").length + " start disabled=" + document.getElementById("start").disabled + " pitcher card=" + GameUI.pick.pitcher);
+    S.lineup = keep.slice(); I.save();
+    // (3) hang-free games: opp pitcher = seed%5 = 4, our pitcher card 4 (no foul-only default keys except b10@1-2 top)
+    for (let gi = 0; gi < 4; gi++) { toGameDay(); const g = S.sched.find(x => x.date === I.today() && !x.result); const t0 = performance.now(); await setup(4 + 5 * gi, gi === 0 ? 1 : 9, 4); let G = GameUI.state(); const stopped = await fastWithGuard(4000); G = GameUI.state();
+      if (!G.over) { hangs.push({ g: g.g, key: G.lineup[G.idx.us % 9] + "|" + G.pitcher + "|" + G.balls + "-" + G.strikes, half: G.half, inning: G.inning }); PT.note("(3) unexpected hang in hang-free game " + g.g + " " + G.inning + G.half + " pitches " + (G.pitches.us + G.pitches.them)); break }
+      const rec = { g: g.g, inn: G.total, us: sum(G.score.us), them: sum(G.score.them), hits: G.hits.us + "/" + G.hits.them, pitches: G.pitches.us + G.pitches.them, ms: Math.round(performance.now() - t0) }; rec.ev = await finish(); rec.result = JSON.stringify(g.result); rec.played = (S.played || []).includes(g.g); games.push(rec); PT.note("(3) game " + JSON.stringify(rec));
+      ClubUI.simDay(); PT.note("(3) next day " + S.day + " W-L " + S.W + "-" + S.L + " results " + S.sched.filter(x => x.result).length + " real " + S.sched.filter(x => x.result && x.result.real).length + " · starter fatigue " + S.rotation.map(id => I.P(id).name.slice(0, 2) + r2(I.P(id).fatigue)).join(",")) }
+    // (4) save via button, change state, load via title
+    if (GameUI.state() === null) { APP.show("schedule"); PT.click("#saveBtn"); await PT.until(() => document.querySelector("#saveSlots [data-slot='1']"), 3000); document.querySelector("#saveSlots [data-slot='1']").click(); await PT.until(() => PT.visible("#eventModal"), 3000); PT.click("#eventOk"); PT.click("#saveClose"); const dayS = S.day, wS = S.W;
+      for (let k = 0; k < 6; k++) ClubUI.simDay(); const dayAfter = S.day; PT.click("#titleBtn"); await PT.wait(50); PT.click("#btnLoad"); await PT.until(() => document.querySelector("#loadSlots [data-slot='1']"), 3000); const slotText = PT.text("#loadSlots"); document.querySelector("#loadSlots [data-slot='1']").click(); await PT.wait(200); S = ClubUI.state();
+      PT.note("(4) save/load: saved day " + dayS + " W " + wS + " → simmed to day " + dayAfter + " → loaded: day " + S.day + " W " + S.W + " · slot text: " + (slotText || "").replace(/\s+/g, " ").slice(0, 80) + " · screen schedule visible=" + PT.visible("#screen-club")) }
+    // (5) determinism on a rest day (Monday)
+    if (GameUI.state() === null) { let k = 0; while (S.sched.find(g => g.date === I.today() && !g.result) && k++ < 7) ClubUI.simDay(); PT.note("(5) rest day " + I.today() + " note: " + PT.text("#gameDayNote"));
+      const play = async seed => { await setup(seed, 2, 4); await fastWithGuard(4000); const G = GameUI.state(); const sc = G.over ? [sum(G.score.us), sum(G.score.them), G.pitches.us + G.pitches.them] : ["hung"]; if (G.over) await finish(); return sc };
+      const a = await play(9); const b = GameUI.state() === null ? await play(9) : ["skip"]; const c = GameUI.state() === null ? await play(14) : ["skip"];
+      PT.note("(5) seed 9 twice: " + JSON.stringify(a) + " / " + JSON.stringify(b) + " same=" + (JSON.stringify(a) === JSON.stringify(b)) + " · seed 14: " + JSON.stringify(c) + " · W-L unchanged " + S.W + "-" + S.L) }
+    // (6) the default-seed hang: seed 1 → opp pitcher 1, our first card
+    if (GameUI.state() === null) { toGameDay(); const g = S.sched.find(x => x.date === I.today() && !x.result); await setup(1, 9, 0); let G = GameUI.state(); let stopped = await fastWithGuard(3000); G = GameUI.state();
+      if (!G.over) { const key = (G.half == "top" ? "" : "D|") + (G.half == "top" ? G.lineup[G.idx.us % 9] : G.oppLineup[G.idx.them % 9]) + "|" + G.pitcher + "|none|" + G.balls + "|" + G.strikes; hangs.push({ g: g.g, key, inning: G.inning, half: G.half, pitches: G.pitches.us + G.pitches.them }); PT.note("(6) HANG with default seed 1: game " + g.g + " " + G.inning + "회" + (G.half == "top" ? "초" : "말") + " key " + key + " pitches in 3s: " + (G.pitches.us + G.pitches.them) + " · nav locked=" + APP.locked + " · feed lines " + document.querySelectorAll("#feed .l").length + " · escape: change sign");
+        const btn = document.querySelector(G.half == "top" ? ".call[data-call='take']" : ".dcall[data-dcall='outside']"); if (btn) btn.click(); stopped = await fastWithGuard(3000); G = GameUI.state(); PT.note("(6b) after sign change: over=" + G.over + " inning " + G.inning + G.half + " pitches " + (G.pitches.us + G.pitches.them) + (G.over ? " score " + sum(G.score.us) + ":" + sum(G.score.them) : " still stuck at " + G.balls + "-" + G.strikes)) }
+      else PT.note("(6) default seed game finished without hang: " + sum(G.score.us) + ":" + sum(G.score.them) + " pitches " + (G.pitches.us + G.pitches.them)) }
+  } catch (e) { PT.note("FATAL " + e.message + " " + (e.stack || "").slice(0, 200)) }
+  PT.note("summary: hang-free games " + games.length + " avg pitches " + r2(games.filter(g => g.inn === 9).reduce((a, g) => a + g.pitches, 0) / Math.max(1, games.filter(g => g.inn === 9).length)) + " avg ms(9inn) " + r2(games.filter(g => g.inn === 9).reduce((a, g) => a + g.ms, 0) / Math.max(1, games.filter(g => g.inn === 9).length)) + " scores " + games.map(g => g.us + ":" + g.them).join(" ") + " hangs " + hangs.length);
+  await PT.done({ scenario: "game", games, hangs, errs: PT.errs });
+})();

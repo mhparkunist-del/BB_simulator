@@ -46,3 +46,10 @@
 ## 6. 버튼 반응 (v2.6)
 - 누르면 살짝 눌리고(아래로 2 px, 96 %) 떼면 튕겨 올라옵니다(104 %까지 넘쳤다가 제자리, 0.34 s). 누른 지점에서 물결(ripple)이 퍼지고, 터치 기기에서는 6 ms 진동을 줍니다. 구단 카드·선수 카드도 눌리는 느낌을 줍니다. 움직임 축소 설정에서는 모두 끕니다.
 - 참고한 사례: [Hover.css](https://github.com/IanLunn/Hover)의 push·pop 효과, [Material Components ripple](https://github.com/material-components/material-components-web/tree/master/packages/mdc-ripple), [CSS ripple 정리](https://freefrontend.com/css-ripple-effects/). 라이브러리는 넣지 않고 CSS 한 블록과 위임 이벤트 두 개로 구현했습니다.
+
+## 7. 플레이테스트 반영 (v2.6.1)
+- 경기 날은 9이닝이고 시드는 경기마다 자동으로 바뀝니다. 연습 경기(경기 없는 날)는 3이닝이 기본입니다.
+- 홈 경기면 우리가 말에 공격합니다. 점수판도 원정 팀이 위에 옵니다.
+- 투수는 투구 수(체력 등급 S 110 ~ D 70구)나 한 투수 6실점에서 교체됩니다. 교체 투수 이름은 구단 불펜에서 옵니다.
+- 헤더에 "도움말" 버튼이 있습니다. 타순·로테이션·초말·볼·스트라이크·등급·컨디션·사인·R/H/E·샐러리캡·트레이드·정비·결과 바로보기를 한 줄씩 설명합니다.
+- 테스트 도구와 테스터 보고는 `docs/PLAYTEST.md`, `3_recent_report/2026-09-07_v2.6.1_playtest/`에 있습니다.

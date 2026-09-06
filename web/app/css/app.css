@@ -50,7 +50,7 @@ i.S{background:#ffcf57}i.A{background:#8ee6b3}i.B{background:#8ec6f0}i.C{backgro
 .bar{display:inline-block;height:7px;background:rgba(255,255,255,.10);border-radius:4px;width:56px;vertical-align:middle;overflow:hidden;box-shadow:inset 0 1px 2px rgba(0,0,0,.4)}
 .bar span{display:block;height:100%;background:linear-gradient(90deg,#5fcf94,var(--green));border-radius:4px}
 .bar.f span{background:linear-gradient(90deg,#ff8a7a,var(--red))}
-.win{color:var(--green)}.loss{color:var(--red)}.today{background:rgba(var(--bulb-rgb),.12)}.inj{color:var(--red)}
+.win{color:var(--green)}.loss{color:var(--red)}.draw{color:var(--mute)}.today{background:rgba(var(--bulb-rgb),.12)}.inj{color:var(--red)}
 .sel{outline:2px solid var(--bulb)}
 .ctl{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
 .card h3{margin:0 0 6px;font:16px var(--ui)}
@@ -190,7 +190,7 @@ button.big{min-height:48px;min-width:156px;font-size:17px}
 .teams .sw{display:inline-block;width:14px;height:14px;border-radius:4px;margin-right:6px;vertical-align:middle;box-shadow:0 0 0 1px rgba(255,255,255,.25)}
 .modalbox.event h3{margin:0 0 8px;font:19px var(--ui);color:var(--bulb)}
 .tutor{position:fixed;inset:0;z-index:40;pointer-events:none}
-.tutor .tbox{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);background:linear-gradient(165deg,rgba(255,255,255,.08),rgba(255,255,255,.02)),linear-gradient(rgba(var(--team-rgb),.35),rgba(var(--team-rgb),.35)),#0f131b;border:1px solid var(--bulb);border-radius:14px;padding:10px 14px;width:min(560px,92vw);pointer-events:auto;font-size:13px;box-shadow:0 0 24px rgba(var(--bulb-rgb),.22),var(--shadow)}
+.tutor .tbox{position:absolute;left:50%;top:52px;bottom:auto;transform:translateX(-50%);background:linear-gradient(165deg,rgba(255,255,255,.08),rgba(255,255,255,.02)),linear-gradient(rgba(var(--team-rgb),.35),rgba(var(--team-rgb),.35)),#0f131b;border:1px solid var(--bulb);border-radius:14px;padding:10px 14px;width:min(560px,92vw);pointer-events:auto;font-size:13px;box-shadow:0 0 24px rgba(var(--bulb-rgb),.22),var(--shadow)}
 .lock{align-self:center;margin-left:8px;color:var(--red);font:12px var(--ui);letter-spacing:.03em}
 .ctlmini{display:flex;gap:4px;margin-left:10px}
 .ctlmini button{min-height:26px;padding:2px 9px;font-size:12px}
@@ -228,3 +228,12 @@ select.posSel{min-height:26px;padding:1px 4px;font-size:11px}
 .offer{display:flex;gap:6px;align-items:center;flex-wrap:wrap;background:rgba(var(--bulb-rgb),.10);border:1px solid rgba(var(--bulb-rgb),.35);border-radius:10px;padding:4px 8px;font-size:12px;margin-bottom:4px}
 .offer button{min-height:26px;padding:2px 9px;font-size:12px}
 .nmsg{margin-top:8px;padding:8px 10px;background:rgba(255,255,255,.06);border-left:3px solid var(--bulb);border-radius:8px;font-size:13px}
+
+/* playtest round: badges, side tag, help, phone fixes */
+.feedlast .bs,.feedfull .bs{display:inline-block;margin-left:6px;padding:0 5px;border-radius:999px;background:rgba(var(--bulb-rgb),.25);color:var(--bulb2);font:10px var(--ui)}
+.bug .side{display:block;font:9.5px var(--ui);color:var(--bulb2);letter-spacing:.04em}
+.help th{text-align:left;white-space:nowrap;vertical-align:top;color:var(--bulb2);font:12px var(--ui);padding:4px 8px 4px 0}
+.help td{white-space:normal;font-size:12px;line-height:1.4}
+button.tiny{min-height:26px;padding:2px 8px;font-size:11px;opacity:.75}
+@media (max-width:1000px){.apphead .v{display:none}.strip .opt{display:none}.nav button{padding:2px 6px;font-size:11.5px;white-space:nowrap}.ctlmini button{padding:2px 6px;font-size:11px}.strip{gap:7px}}
+@media (max-height:520px){.viewbox.full .bodynote{display:none}.panel .grow{overflow:auto}.viewbox.full .kzinset{width:120px}}

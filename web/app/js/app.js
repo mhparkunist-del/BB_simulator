@@ -19,7 +19,7 @@ window.APP = window.APP || {};
     { name: "도심 늑대", city: "도심", color: "#c9c2ae", motto: "떼로 사냥한다" },
     { name: "남부 사자", city: "남부", color: "#d98c3a", motto: "포효 한 번에 한 점" },
   ];
-  const TUTORIAL = ["먼저 선수단을 둘러보세요. 이름을 누르면 카드가 열리고, 포지션 셀렉트로 수비 위치를 정합니다.", "훈련 화면에서 코치에게 방침을 맡기거나(균형·타격·투수·유망주·회복) 선수마다 직접 프로그램을 고릅니다.", "일정에서 다음 날을 진행하세요. 경기 날은 넘길 수 없고 경기 화면에서 직접 지휘합니다. 급하면 결과 바로보기로 남은 경기를 바로 끝냅니다. 경기가 시작되면 끝날 때까지 정비 화면으로 나갈 수 없습니다."];
+  const TUTORIAL = ["먼저 선수단을 둘러보세요. 이름을 누르면 카드가 열리고, 포지션 셀렉트로 수비 위치를 정합니다.", "훈련 화면에서 코치에게 방침을 맡기거나(균형·타격·투수·유망주·회복) 선수마다 직접 프로그램을 고릅니다.", "일정 화면의 큰 버튼이 안내합니다. 경기 날에는 \"오늘 경기 시작\"을 눌러 경기 화면으로 가고, 급하면 \"결과 바로보기\"로 남은 경기를 바로 끝냅니다. 경기가 없는 날은 \"다음 날\"입니다. 경기가 시작되면 끝날 때까지 정비 화면으로 나갈 수 없습니다."];
   function loadScript(src) {
     return new Promise((res, rej) => { const s = document.createElement("script"); s.src = A.base + src; s.onload = res; s.onerror = () => rej(new Error("script " + src)); document.head.appendChild(s) });
   }
@@ -48,7 +48,8 @@ window.APP = window.APP || {};
   A.onGameOver = function (res) {
     A.locked = false; $("lockBadge").hidden = true; document.querySelectorAll(".nav [data-screen]").forEach(b => b.disabled = false); $("saveBtn").disabled = false; $("titleBtn").disabled = false;
     const rec = window.ClubUI && window.ClubUI.recordExternalGame ? window.ClubUI.recordExternalGame(res) : false;
-    A.event("경기 종료", (res.us > res.them ? "이겼습니다. " : "졌습니다. ") + res.us + " : " + res.them + (rec ? "<br>결과가 오늘 일정과 기록에 반영됐습니다. 정비 시간입니다." : "<br>연습 경기라 기록에는 남지 않습니다."), () => A.show("schedule"));
+    A.show("schedule");
+    A.event("경기 종료", (res.us > res.them ? "이겼습니다. " : res.us < res.them ? "졌습니다. " : "비겼습니다. ") + res.us + " : " + res.them + (rec ? "<br>결과가 오늘 일정과 기록에 반영됐습니다. 정비 시간입니다. 일정 화면에서 다음 날로 넘어가세요." : "<br>연습 경기라 기록에는 남지 않습니다."), () => {});
     A.autosave();
   };
   /* theme: every accent on the page derives from the club's two colours (primary, accent); the title uses the KBO league navy/red */
@@ -67,11 +68,11 @@ window.APP = window.APP || {};
   A.autosave = function () { if (window.ClubUI && window.ClubUI.state()) A.kv.set("autosave", { when: new Date().toISOString(), S: window.ClubUI.state() }) };
   function slotList(container, mode) {
     Promise.all([1, 2, 3].map(i => A.kv.get("save:" + i))).then(saves => {
-      container.innerHTML = saves.map((sv, i) => "<div class='slot'><b>슬롯 " + (i + 1) + "</b><span>" + (sv ? (sv.S.club && sv.S.club.name ? sv.S.club.name + " · " : "") + "day " + sv.S.day + " · " + sv.S.W + "승 " + sv.S.L + "패 · " + sv.when.slice(0, 16).replace("T", " ") : "비어 있음") + "</span><button data-slot='" + (i + 1) + "'>" + (mode === "save" ? "여기 저장" : "불러오기") + "</button></div>").join("");
+      container.innerHTML = saves.map((sv, i) => "<div class='slot'><b>슬롯 " + (i + 1) + "</b><span>" + (sv ? (sv.S.club && sv.S.club.name ? sv.S.club.name + " · " : "") + "day " + sv.S.day + " · " + sv.S.W + "승 " + sv.S.L + "패 · " + new Date(sv.when).toLocaleString("ko-KR", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" }).replace("T", " ") : "비어 있음") + "</span><button data-slot='" + (i + 1) + "'>" + (mode === "save" ? "여기 저장" : "불러오기") + "</button></div>").join("");
       container.querySelectorAll("[data-slot]").forEach(b => b.onclick = async () => {
         const i = +b.dataset.slot;
         if (mode === "save") { await A.kv.set("save:" + i, { when: new Date().toISOString(), S: window.ClubUI.state() }); slotList(container, mode); A.event("저장", "슬롯 " + i + "에 저장했습니다.") }
-        else { const sv = await A.kv.get("save:" + i); if (!sv) return; await A.kv.set("club", sv.S); window.ClubUI.setState(sv.S); $("loadSlots").hidden = true; A.show("schedule") }
+        else { const sv = await A.kv.get("save:" + i); if (!sv) return; await A.kv.set("club", sv.S); await A.kv.set("autosave", { S: sv.S, at: Date.now() }); window.ClubUI.setState(sv.S); $("loadSlots").hidden = true; A.show("schedule") }
       });
       container.hidden = false;
     });
@@ -86,6 +87,8 @@ window.APP = window.APP || {};
     $("btnNew").onclick = () => { $("loadSlots").hidden = true; A.show("team"); renderTeams() };
     $("btnLoad").onclick = () => slotList($("loadSlots"), "load");
     $("btnContinue").onclick = () => A.show("schedule");
+    if ($("teamBack")) $("teamBack").onclick = () => A.show("title");
+    if ($("helpBtn")) { $("helpBtn").onclick = () => { $("helpModal").hidden = false }; $("helpClose").onclick = () => { $("helpModal").hidden = true } }
     $("saveBtn").onclick = () => { slotList($("saveSlots"), "save"); $("saveModal").hidden = false }; $("saveClose").onclick = () => { $("saveModal").hidden = true };
     $("titleBtn").onclick = () => { A.autosave(); A.show("title"); refreshContinue() };
     $("teamStart").onclick = async () => {
@@ -138,8 +141,8 @@ window.APP = window.APP || {};
   async function boot() {
     const status = $("boot");
     const q = new URLSearchParams(location.search);
-    const smokeMode = window.SMOKE || q.get("smoke");
-    if (smokeMode && !A.bundled && !q.get("nohold")) { const im = new Image(); im.src = A.base + "hold?ms=6000"; im.style.cssText = "position:fixed;width:1px;height:1px;opacity:0"; document.body.appendChild(im) }   // keeps the load event (and the screenshot) waiting
+    const smokeMode = window.SMOKE || q.get("smoke"), pt = q.get("pt");
+    if ((smokeMode || pt) && !A.bundled && !q.get("nohold")) { const im = new Image(); im.src = A.base + (pt ? "hold?wait=1&t=" + Date.now() : "hold?ms=6000"); im.style.cssText = "position:fixed;width:1px;height:1px;opacity:0"; document.body.appendChild(im) }   // keeps the load event (and the screenshot) waiting
     try {
       status.textContent = "데이터 불러오는 중…";
       A.roster = await A.fetchJSON("data/roster.json");
@@ -158,6 +161,7 @@ window.APP = window.APP || {};
       if (sv && sv.S && hash && hash !== "title" && hash !== "team") { window.ClubUI && window.ClubUI.setState && window.ClubUI.setState(sv.S); A.show(hash) }
       else { A.show("title"); refreshContinue() }
       setInterval(() => { if (!A.locked) A.autosave() }, 60 * 1000);
+      if (pt) startPlaytest(pt);
       if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
         let hadController = !!navigator.serviceWorker.controller;
         navigator.serviceWorker.addEventListener("controllerchange", () => { if (hadController && !A.reloaded) { A.reloaded = true; location.reload() } hadController = true });
@@ -168,6 +172,28 @@ window.APP = window.APP || {};
       status.hidden = false; status.textContent = "불러오기 실패: " + e.message; status.className = "boot err";
       console.error(e);
     }
+  }
+  /* playtest hook (tools/playtest.py): ?pt=<name> loads pt/<name>.js with window.PT = { say, note, shot, done, wait, until, click } */
+  A.teamList = () => teamList();
+  function startPlaytest(name) {
+    const box = document.createElement("div"); box.style.cssText = "position:fixed;left:0;right:0;top:0;z-index:99;background:rgba(40,40,120,.9);color:#fff;padding:2px 6px;font:12px monospace;white-space:pre-wrap";
+    box.textContent = "PT " + name + " running…"; document.body.appendChild(box);
+    const errs = []; window.addEventListener("error", e => errs.push(e.message + " @" + (e.filename || "").split("/").pop() + ":" + e.lineno)); window.addEventListener("unhandledrejection", e => errs.push("promise: " + (e.reason && e.reason.message || e.reason)));
+    const post = (path, obj) => fetch(A.base + path, { method: "POST", body: JSON.stringify(obj) }).catch(() => {});
+    window.NOCUT = true;
+    window.PT = {
+      name, errs, log: [], t0: performance.now(),
+      say(t) { box.textContent = "PT " + name + ": " + t },
+      note(t) { this.log.push(t); post("log", { t }) },
+      wait(ms) { return new Promise(r => setTimeout(r, ms)) },
+      until(fn, ms) { const t0 = Date.now(); return new Promise(r => { const iv = setInterval(() => { let ok = false; try { ok = fn() } catch (e) {} if (ok || Date.now() - t0 > (ms || 8000)) { clearInterval(iv); r(ok) } }, 40) }) },
+      click(sel) { const el = typeof sel === "string" ? document.querySelector(sel) : sel; if (!el) { this.note("click miss: " + sel); return false } el.click(); return true },
+      visible(sel) { const el = document.querySelector(sel); if (!el) return false; const r = el.getBoundingClientRect(); const cs = getComputedStyle(el); return !el.hidden && r.width > 0 && r.height > 0 && cs.display !== "none" && cs.visibility !== "hidden" },
+      text(sel) { const el = document.querySelector(sel); return el ? el.textContent.trim() : null },
+      async shot(label, sel) { try { const c = document.querySelector(sel || "canvas#play:not([hidden]), .vw:not([hidden]) canvas, canvas"); if (!c) return; await post("shot", { label, png: c.toDataURL("image/png") }) } catch (e) { this.note("shot failed: " + e.message) } },
+      async done(obj) { const rep = Object.assign({ name, ms: Math.round(performance.now() - this.t0), errs, log: this.log }, obj || {}); box.textContent = "PT " + name + " done · errs=" + errs.length; await post("report", rep) },
+    };
+    const sc = document.createElement("script"); sc.src = A.base + "pt/" + name + ".js?t=" + Date.now(); sc.onerror = () => { window.PT.note("scenario script failed to load"); window.PT.done({ fatal: "script load" }) }; document.body.appendChild(sc);
   }
   async function smoke(mode) {                    // headless check: drive a flow, report at the top of the page
     const box = document.createElement("div"); box.style.cssText = "position:fixed;left:0;right:0;top:0;z-index:99;background:rgba(0,102,51,.9);color:#fff;padding:2px 6px;font:12px monospace;white-space:pre-wrap";

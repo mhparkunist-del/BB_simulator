@@ -1,0 +1,30 @@
+/* KBO fan playtest: 한화 schedule — weekday pattern (Mon off, 3-game series), opponents, home/away, standings naming; sim 3 series and look at the schedule screen */
+(async () => {
+  const L = []; const note = t => { PT.note(t); L.push(t) };
+  PT.say("한화 일정 점검");
+  ClubUI.fresh(APP.teamList().find(t => t.code === "HH")); const S = ClubUI.state(); ClubUI.render();
+  const WD = "일월화수목금토";
+  const rows = S.sched.map(g => { const o = S.opps.find(x => x.id === g.opp); const d = new Date(g.date + "T00:00:00"); return { g: g.g, date: g.date, wd: WD[d.getDay()], opp: o.short, home: g.home } });
+  note("SCHED: " + rows.map(r => r.g + " " + r.date.slice(5) + "(" + r.wd + ") " + r.opp + (r.home ? " 홈" : " 원정")).join(" | "));
+  note("Monday games: " + rows.filter(r => r.wd === "월").length + " · series check (3 same opp): " + [0, 3, 6, 9, 12, 15, 18, 21, 24, 27].map(i => rows.slice(i, i + 3).map(r => r.opp).join("/")).join(" ; "));
+  note("weekday pattern per series: " + [0, 3, 6, 9, 12, 15, 18, 21, 24, 27].map(i => rows.slice(i, i + 3).map(r => r.wd).join("")).join(" "));
+  const dist = {}; rows.forEach(r => dist[r.opp] = (dist[r.opp] || 0) + 1);
+  note("opponents " + S.opps.length + " distinct in sched " + Object.keys(dist).length + " games per opp " + JSON.stringify(dist) + " · home " + rows.filter(r => r.home).length + " away " + rows.filter(r => !r.home).length);
+  note("team screen claim text: " + (document.querySelector("#screen-team h2 .hint") || {}).textContent);
+  note("rankNow names: " + ClubInt.rankNow().map(r => r.name + (r.me ? "(me)" : "")).join(", ") + " · tRank=" + PT.text("#tRank"));
+  note("season days " + ClubInt.DATA.days + " date0 " + ClubInt.DATA.date0 + " last game " + rows[29].date);
+  note("opp strength: " + S.opps.map(o => o.short + " bat" + o.bat + " pit" + o.pitch + " def" + o.def).join(", "));
+  APP.show("schedule"); await PT.wait(300);
+  note("nextGame: " + (document.getElementById("nextGame").innerText || "").replace(/\s+/g, " "));
+  note("nextDay label: " + PT.text("#nextDay"));
+  PT.click("#nextDay"); await PT.wait(300); note("after clicking nextDay on a game day → game screen visible? " + PT.visible("#screen-game") + " gameDayNote: " + PT.text("#gameDayNote"));
+  APP.show("schedule");
+  for (let i = 0; i < 10; i++) ClubUI.simDay();
+  const S2 = ClubUI.state();
+  note("after 10 simDays: day " + S2.day + " rec " + S2.W + "-" + S2.L + " results: " + S2.sched.filter(g => g.result).map(g => g.g + ":" + (g.result.us > g.result.them ? "승" : "패") + g.result.us + "-" + g.result.them + " " + g.result.sp + " " + g.result.ip + "ip").join(" | "));
+  note("LOG: " + S2.log.slice(0, 14).map(l => l.d + " " + l.t).join(" || "));
+  note("standings now: " + ClubInt.rankNow().map((r, i) => (i + 1) + "." + r.name + " " + r.W + "-" + r.L).join(", ") + " · tRank=" + PT.text("#tRank"));
+  await PT.wait(200);
+  note("schedule table text: " + (document.getElementById("schedule").innerText || "").replace(/\s+/g, " ").slice(0, 700));
+  await PT.done({ persona: "KBO 골수팬 · 일정", notes: L });
+})();

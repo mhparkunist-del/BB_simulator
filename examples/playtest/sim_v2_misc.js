@@ -1,0 +1,38 @@
+/* sim_v2_misc: (1) 새 시즌 after season end keeps the club? (2) draw log text via recordExternalGame (3) header rank "/ 6" with 10 clubs, opp games played
+   (4) morale/condition effect on results: condition drift to 99, morale has no game effect? (5) AI offer frequency, transfer requests over a season
+   (6) real-game fatigue bookkeeping (+0.45 SP) vs quick sim (7) training catalog risk/load and season attribute gain per program */
+(async () => {
+  const I = ClubInt, M = ClubMarket, r2 = v => Math.round(v * 100) / 100, r1 = v => Math.round(v * 10) / 10, avg = a => a.length ? a.reduce((x, y) => x + y, 0) / a.length : 0;
+  const season = S => { let d = 0; while (S.sched.filter(g => g.result).length < 30 && d++ < 60) ClubUI.simDay() };
+  try {
+    // (7) training catalog
+    PT.note("(7) programs: " + I.DATA.programs.map(p => p.key + "(load " + p.load + " risk " + p.risk + " for " + String(p.for) + " targets " + JSON.stringify(p.targets) + ")").join(" · "));
+    // (1) 새 시즌 keeps club
+    PT.click("#btnNew"); await PT.until(() => PT.visible("#screen-team")); document.querySelectorAll("#teamCards .tc")[2].click(); await PT.click("#teamStart"); await PT.until(() => PT.visible("#eventModal"), 5000); PT.click("#eventOk"); await PT.until(() => PT.visible("#tutorial"), 3000); PT.click("#tutSkip");
+    let S = ClubUI.state(); const club0 = S.club.name, n0 = S.players.length, ids0 = new Set(S.players.map(p => p.id));
+    // make a mark: train one player's contact up, sign a FA, trade for a star
+    const fa = S.fa[0]; M.startNego(fa.id); M.offer(fa.asking, 3); const code = S.opps[0].code; const ro = M.oppRoster(code).map(p => ({ p, v: M.tradeValue(p) })).sort((a, b) => b.v - a.v); const st = ro.find(x => x.v * 1.08 / 0.7 <= 35); const tr = st ? M.proposeTrade(code, [st.p.id], [], Math.ceil(st.v * 1.08 / 0.7 * 10) / 10) : { ok: false };
+    season(S); const W0 = S.W, bud0 = S.budget, top0 = r1(I.top40()); const ages0 = avg(S.players.map(p => p.age)); const trainedAttr = S.players.map(p => I.ovr(p));
+    APP.show("schedule"); await PT.wait(60); const resetBtn = document.getElementById("reset"); PT.note("(1) season over " + W0 + "-" + S.L + " budget " + bud0 + " · 새 시즌 button exists=" + !!resetBtn + " disabled=" + (resetBtn || {}).disabled + " nextDay disabled=" + document.getElementById("nextDay").disabled);
+    window.confirm = () => true; if (resetBtn) { resetBtn.click(); await PT.wait(200); const conf = PT.visible("#eventModal") || PT.visible("#confirmModal"); if (conf) { PT.click("#eventOk"); await PT.wait(100) } }
+    S = ClubUI.state(); const same = S.players.filter(p => ids0.has(p.id)).length;
+    PT.note("(1b) after 새 시즌: club " + S.club.name + " (was " + club0 + ") day " + S.day + " W-L " + S.W + "-" + S.L + " budget " + S.budget + " (was " + bud0 + ") players " + S.players.length + " (was " + n0 + ", same ids " + same + ") top40 " + r1(I.top40()) + " (was " + top0 + ") · FA signee kept=" + !!I.P(fa.id) + " traded star kept=" + (st ? !!I.P(st.p.id) : "n/a") + " · avg age " + r2(ages0) + " -> " + r2(avg(S.players.map(p => p.age))) + " · ovr avg " + r2(avg(trainedAttr)) + " -> " + r2(avg(S.players.map(I.ovr))) + " · stats reset? " + S.players.every(p => p.stats.G === 0) + " · kbo=" + S.kbo + " · sched results " + S.sched.filter(g => g.result).length + " · log " + S.log.slice(0, 2).map(l => l.t.slice(0, 50)).join(" | ") + " · header " + PT.text("#tRec") + " " + PT.text("#tDate"));
+    // (2) draw log text
+    ClubUI.fresh(APP.teamList()[3]); S = ClubUI.state(); ClubUI.recordExternalGame({ us: 2, them: 2, sp: S.players.find(p => p.role == "SP").name, ip: 6, er: 2 }); PT.note("(2) draw 2:2: log '" + S.log[0].t.slice(0, 40) + "' header " + PT.text("#tRec") + " W-L-D " + S.W + "-" + S.L + "-" + (S.D || 0) + " · rank row me: " + JSON.stringify(I.rankNow().find(r => r.me)));
+    APP.show("schedule"); await PT.wait(60); const sch = (document.getElementById("tab-schedule") || document.body).textContent.replace(/\s+/g, " "); PT.note("(2b) schedule text around 1차전: " + sch.slice(sch.indexOf("1차전"), sch.indexOf("1차전") + 90) + " · rank text: " + (PT.text("#tRank") || ""));
+    // (3) rank header and opp games
+    ClubUI.fresh(APP.teamList()[6]); S = ClubUI.state(); season(S); PT.note("(3) header rank '" + PT.text("#tRank") + "' clubs in table " + I.rankNow().length + " · our games " + (S.W + S.L) + " · opp games " + S.opps.map(o => o.W + o.L).join("/") + " · standings by win%: " + I.rankNow().slice(0, 4).map((r, i) => (i + 1) + "." + r.name + " " + r.W + "-" + r.L).join(", "));
+    // (4) condition drift and morale → results link
+    ClubUI.fresh(APP.teamList()[6]); S = ClubUI.state(); const c0 = avg(S.players.filter(p => p.active).map(p => p.condition)); const strengths=()=>{ClubUI.render();const t=PT.text("#nextGame")||"";const m=t.match(/타선 ([\d.]+) · 수비 ([\d.]+)/);return m?+m[1]:null}; const B0 = strengths(); for (let k = 0; k < 20; k++) ClubUI.simDay(); const c1 = avg(S.players.filter(p => p.active).map(p => p.condition)); const B1 = strengths();
+    S.players.forEach(p => { p.morale = { playing_time: 0.05, team_success: 0.05, salary_fairness: 0.05, relationships: 0.05, role_fit: 0.05 } }); ClubUI.render(); const B2 = strengths(); const ps = { st: 0, tot: 0 };
+    PT.note("(4) condition 1군 avg day0 " + r2(c0) + " -> day20 " + r2(c1) + " · batStrength " + r2(B0) + " -> " + r2(B1) + " · after setting all morale to 0.05: batStrength " + r2(B2) + " (morale in playGame? " + (B2 !== B1) + ") · pitchStrength " + JSON.stringify({ st: r2(ps.st), tot: r2(ps.tot) }) + " · condF at 99 = " + r2((0.88+0.24*0.99)) + " vs at 70 = " + r2((0.88+0.24*0.70)));
+    // (5) AI offers, transfer requests, injuries over a season on 'balanced' policy
+    ClubUI.fresh(APP.teamList()[6]); S = ClubUI.state(); S.policy = "balanced"; season(S);
+    PT.note("(5) balanced season: offers logged " + S.log.filter(l => l.t.includes("트레이드 제안")).length + " · transfer requests " + S.log.filter(l => l.t.includes("이적 요청")).length + " · injuries " + S.log.filter(l => l.t.includes("훈련 중 부상")).length + " (active " + S.log.filter(l => l.t.includes("훈련 중 부상") && S.players.some(p => p.active && l.t.startsWith(p.name))).length + ") · lineup starters injured during season: " + S.log.filter(l => l.t.includes("훈련 중 부상") && S.lineup.some(id => I.P(id) && l.t.startsWith(I.P(id).name))).length + " · min morale 1군 " + r2(Math.min(...S.players.filter(p => p.active).map(I.moraleOverall))) + " · 2군 playing_time avg " + r2(avg(S.players.filter(p => !p.active).map(p => p.morale.playing_time))) + " · log size " + S.log.length);
+    // (6) real-game fatigue bookkeeping
+    ClubUI.fresh(APP.teamList()[6]); S = ClubUI.state(); const sp = I.P(S.rotation[0]); const f0 = sp.fatigue; const bat = I.P(S.lineup[0]); const fb0 = bat.fatigue; ClubUI.recordExternalGame({ us: 4, them: 1, sp: sp.name, ip: 9, er: 1, box: [{ name: bat.name, PA: 4, H: 2, BB: 0, K: 1 }] });
+    PT.note("(6) real game: SP fatigue " + r2(f0) + " -> " + r2(sp.fatigue) + " (quick sim would add " + r2(0.28 + 0.015 * 9) + ") · batter " + r2(fb0) + " -> " + r2(bat.fatigue) + " · other lineup batters fatigue changed? " + S.lineup.slice(1).map(I.P).filter(Boolean).some(p => p.fatigue !== fb0 && p.fatigue > 0.3) + " · relievers used? " + S.players.filter(p => p.role == "RP" && p.stats.G > 0).length + " · rotIdx advanced? " + S.rotIdx);
+    ClubUI.advanceDay(); PT.note("(6b) next day: day " + S.day + " starter fatigue " + r2(sp.fatigue) + " · game 2 planned starter " + (I.P(S.rotation[S.rotIdx % 5]) || {}).name + " (rotIdx " + S.rotIdx + ") vs game 1 starter " + sp.name);
+  } catch (e) { PT.note("FATAL " + e.message + " " + (e.stack || "").slice(0, 300)) }
+  await PT.done({ scenario: "v2_misc", errs: PT.errs });
+})();

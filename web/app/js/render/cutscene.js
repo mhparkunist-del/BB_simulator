@@ -32,11 +32,12 @@
       shA, shB, elA: add3(lerp3(shA, hdA, 0.5), [r[0] * 0.05, r[1] * 0.05, 0]), elB: add3(lerp3(shB, hdB, 0.5), [-r[0] * 0.05, -r[1] * 0.05, 0]), hdA, hdB }), h);
   }
   const KEYS = Object.keys(POS), HOME = { jersey: "#efece2", pants: "#efece2", cap: "#8a1f2b", gloveCol: "#5a3a1e" };   // the batting side in the field (no helmet, no bat)
+  const capped = (o, side) => Object.assign({}, o, { cap: (window.SIDECOL && window.SIDECOL[side]) || o.cap });        // caps in the club colour of that side
   /* --- scene builders: return { cam, people, caption } for a time t (seconds) --- */
   function intro(t, o) {                                       // o: { pitcher, club, opp, side:"us"|"them" } — the defence walks out, the starter last
     const dug = DUG[o.side], people = [];
-    KEYS.forEach((k, i) => { if (k === "P") return; const st = clamp((t - 0.12 * i) / 2.2, 0, 1); people.push({ J: walk(dug, POS[k], st, 0.6, H), o: k === "C" ? UNI.catcher : UNI.fielder }) });
-    const pf = clamp((t - 0.6) / 3.0, 0, 1); people.push({ J: walk(dug, POS.P, pf, 0.35, H), o: UNI.pitcher });
+    KEYS.forEach((k, i) => { if (k === "P") return; const st = clamp((t - 0.12 * i) / 2.2, 0, 1); people.push({ J: walk(dug, POS[k], st, 0.6, H), o: capped(k === "C" ? UNI.catcher : UNI.fielder, o.side) }) });
+    const pf = clamp((t - 0.6) / 3.0, 0, 1); people.push({ J: walk(dug, POS.P, pf, 0.35, H), o: capped(UNI.pitcher, o.side) });
     people.push({ J: standPose(0.9, -2.6, 1.85, false), o: UNI.umpire });
     const f = ease(clamp(t / 3.8, 0, 1)), C = lerp3([20, -4, 2.6], [9, 4, 2.2], f), T = lerp3([2, 14, 1.2], [0, 18.4, 1.4], f);
     return { C, T, fov: 30 - 6 * f, people, caption: t > 0.8 ? ["선발 등판", (o.pitcher || "") + (o.club ? " · " + o.club : "")] : null };
@@ -44,8 +45,8 @@
   function inning(t, o) {                                      // o: { incoming:"us"|"them", inning, half } — one side jogs off, the other jogs on
     const people = [], out = o.incoming === "us" ? "them" : "us";
     KEYS.forEach((k, i) => {
-      const so = clamp((t - 0.08 * i) / 1.9, 0, 1); if (so < 1) people.push({ J: walk(POS[k], DUG[out], so, 0.6, H), o: HOME });
-      const si = clamp((t - 0.5 - 0.08 * i) / 2.0, 0, 1); if (si > 0) people.push({ J: walk(DUG[o.incoming], POS[k], si, 0.6, H), o: k === "C" ? UNI.catcher : (k === "P" ? UNI.pitcher : UNI.fielder) });
+      const so = clamp((t - 0.08 * i) / 1.9, 0, 1); if (so < 1) people.push({ J: walk(POS[k], DUG[out], so, 0.6, H), o: capped(HOME, out) });
+      const si = clamp((t - 0.5 - 0.08 * i) / 2.0, 0, 1); if (si > 0) people.push({ J: walk(DUG[o.incoming], POS[k], si, 0.6, H), o: capped(k === "C" ? UNI.catcher : (k === "P" ? UNI.pitcher : UNI.fielder), o.incoming) });
     });
     people.push({ J: standPose(0.9, -2.6, 1.85, false), o: UNI.umpire });
     return { C: [6, -22, 16], T: [0, 30, 1], fov: 46, people, caption: [o.inning + "회" + (o.half === "top" ? "초" : "말"), (o.incoming === "us" ? "우리 수비" : "우리 공격")] };
@@ -56,14 +57,14 @@
       const fromField = POS[k], fromDug = DUG[winnersField ? "them" : "us"];
       if (winnersField) {                                      // the fielding side won: run to the mound and celebrate; losers leave the dugout area quietly
         const f = clamp((t - 0.05 * i) / 1.6, 0, 1), dest = [meet[0] + 3.2 * Math.cos(i * 0.7), meet[1] + 3.2 * Math.sin(i * 0.7)];
-        if (f < 1) people.push({ J: walk(fromField, dest, f, 0.95, H), o: k === "C" ? UNI.catcher : UNI.fielder });
-        else { const ph = Math.max(0, Math.sin((t - 1.6 - 0.1 * i) * 5)); people.push({ J: cheerPose(dest[0], dest[1], H, 1, ph), o: k === "C" ? UNI.catcher : UNI.fielder }) }
+        if (f < 1) people.push({ J: walk(fromField, dest, f, 0.95, H), o: capped(k === "C" ? UNI.catcher : UNI.fielder, o.fielding) });
+        else { const ph = Math.max(0, Math.sin((t - 1.6 - 0.1 * i) * 5)); people.push({ J: cheerPose(dest[0], dest[1], H, 1, ph), o: capped(k === "C" ? UNI.catcher : UNI.fielder, o.fielding) }) }
       } else {                                                 // the fielding side lost: heads down, walk to the dugout; the batting side pours out of its dugout
         const f = clamp((t - 0.1 * i) / 3.2, 0, 1), xy = lerp2(fromField, DUG[o.fielding], ease(f)), d = unit2(fromField, DUG[o.fielding]);
-        people.push({ J: f < 1 ? withGlove(runPose(xy[0], xy[1], d, H, ease(f) * 30, 0.22), 1) : sadPose(xy[0], xy[1], H, d), o: k === "C" ? UNI.catcher : UNI.fielder });
-        const g = clamp((t - 0.3 - 0.07 * i) / 1.5, 0, 1), dest = [meet[0] - 8 + 3.0 * Math.cos(i * 0.7), 6 + 3.0 * Math.sin(i * 0.7)];
-        if (g < 1) people.push({ J: walk(fromDug, dest, g, 0.95, H), o: HOME });
-        else { const ph = Math.max(0, Math.sin((t - 1.8 - 0.1 * i) * 5)); people.push({ J: cheerPose(dest[0], dest[1], H, 1, ph), o: HOME }) }
+        people.push({ J: f < 1 ? withGlove(runPose(xy[0], xy[1], d, H, ease(f) * 30, 0.22), 1) : sadPose(xy[0], xy[1], H, d), o: capped(k === "C" ? UNI.catcher : UNI.fielder, o.fielding) });
+        const g = clamp((t - 0.3 - 0.07 * i) / 1.5, 0, 1), dest = [1.0 + 3.2 * Math.cos(i * 0.7), 9.5 + 3.2 * Math.sin(i * 0.7)];
+        if (g < 1) people.push({ J: walk(fromDug, dest, g, 0.95, H), o: capped(HOME, o.fielding === "us" ? "them" : "us") });
+        else { const ph = Math.max(0, Math.sin((t - 1.8 - 0.1 * i) * 5)); people.push({ J: cheerPose(dest[0], dest[1], H, 1, ph), o: capped(HOME, o.fielding === "us" ? "them" : "us") }) }
       }
     });
     const f = ease(clamp(t / 4, 0, 1)), C = lerp3([2, -14, 3.2], [3, -8, 2.6], f);
@@ -80,6 +81,7 @@
       g.fillStyle = "#fff"; g.font = "700 26px 'Black Han Sans','Jua',sans-serif"; g.fillText(S.caption[0], w / 2, h - 46);
       g.font = "16px 'Jua','Gothic A1',sans-serif"; g.fillStyle = "rgba(255,255,255,.85)"; g.fillText(S.caption[1] || "", w / 2, h - 24); g.restore();
     }
+    g.save(); g.font = "12px 'Jua',sans-serif"; g.fillStyle = "rgba(255,255,255,.6)"; g.textAlign = "right"; g.fillText("탭하여 건너뛰기", w - 12, 20); g.restore();
   }
   function play(kind, o, canvasId) {
     if (window.NOCUT) return Promise.resolve();

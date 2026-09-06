@@ -14,12 +14,12 @@
 <header class="apphead" id="apphead" hidden>
   <h1>DUGOUT NIGHT</h1>
   <nav class="nav"><button data-screen="schedule">일정</button><button data-screen="training">훈련</button><button data-screen="roster">선수단</button><button data-screen="stats">기록</button><button data-screen="market">예산·이적</button><button data-screen="game" class="gamebtn">경기</button><span id="lockBadge" class="lock" hidden>경기 중 · 정비는 경기 뒤에</span></nav>
-  <span class="ctlmini"><button id="saveBtn" title="저장">저장</button><button id="titleBtn" title="타이틀">타이틀</button></span>
+  <span class="ctlmini"><button id="saveBtn" title="저장">저장</button><button id="helpBtn" title="용어 도움말">도움말</button><button id="titleBtn" title="타이틀">타이틀</button></span>
   <div id="cstrip" class="strip">
-    <span class="s"><small>DATE</small><b id="tDate">-</b></span><span class="s"><small>REC</small><b id="tRec">0-0</b></span><span class="s"><small>RANK</small><b id="tRank">-</b></span>
-    <span class="s"><small>BUDGET</small><b id="tBudget">-</b></span><span class="s"><small>PAYROLL</small><b id="tPay">-</b></span><span class="s"><small>MORALE</small><b id="tMorale">-</b></span>
+    <span class="s"><small>날짜</small><b id="tDate">-</b></span><span class="s"><small>전적</small><b id="tRec">0-0</b></span><span class="s"><small>순위</small><b id="tRank">-</b></span>
+    <span class="s"><small>이적 자금</small><b id="tBudget">-</b></span><span class="s opt"><small>연봉(상위 40)</small><b id="tPay">-</b></span><span class="s opt"><small>사기</small><b id="tMorale">-</b></span>
   </div>
-  <span class="v">v2.6.0-ea1c872</span>
+  <span class="v">v2.6.1-d8903a4</span>
 </header>
 <div id="boot" class="boot">불러오는 중…</div>
 <main>
@@ -33,9 +33,9 @@
   </div>
 </section>
 <section id="screen-team" class="screen" hidden>
-  <div class="panel col"><h2>맡을 구단을 고르세요 <span class="hint">이름·상징색이 정해집니다. 선수단은 시즌 시작 시점의 같은 구단이고, 상대 5구단과 30경기를 치릅니다.</span></h2>
+  <div class="panel col"><h2>맡을 구단을 고르세요 <span class="hint">이름·상징색이 정해집니다. 선수단은 시즌 시작 시점의 같은 구단이고, 상대 9구단과 30경기(3연전 단위, 월요일 휴식)를 치릅니다. 처음이면 아무 구단이나 좋습니다.</span></h2>
     <div id="teamCards" class="teams grow"></div>
-    <div class="ctl"><span id="teamPick" class="hint">구단을 누르세요</span><span style="flex:1"></span><button class="go" id="teamStart" disabled>부임하기</button></div></div>
+    <div class="ctl"><span id="teamPick" class="hint">구단을 누르세요</span><span style="flex:1"></span><button id="teamBack">뒤로</button><button class="go" id="teamStart" disabled>부임하기</button></div></div>
 </section>
 <section id="screen-club" class="screen" hidden>
   <div class="tabs ctabs" style="display:none"><button data-tab="schedule" class="on">일정</button><button data-tab="training">훈련</button><button data-tab="roster">선수단</button><button data-tab="stats">순위·기록</button><button data-tab="market">예산·이적</button></div>
@@ -44,7 +44,7 @@
     <div class="col">
       <div class="panel"><h2>다음 경기</h2><div id="nextGame"></div></div>
       <div class="panel grow"><h2>구단 일지</h2><div id="log" class="log grow"></div></div>
-      <div class="ctl"><button class="go" id="nextDay">다음 날</button><span class="hint">경기 날은 넘길 수 없습니다 · 경기 화면에서 치르거나 결과 바로보기</span><button id="reset">새 시즌</button></div>
+      <div class="ctl"><button class="go" id="nextDay">다음 날</button><span class="hint">경기 날은 넘길 수 없습니다 · 경기 화면에서 치르거나 결과 바로보기</span><span style="flex:1"></span><button id="reset" class="tiny" title="저장된 시즌을 지우고 같은 구단으로 다시 시작">새 시즌</button></div>
     </div>
   </div>
   <div id="tab-training" class="fit two-col" hidden>
@@ -65,10 +65,24 @@
   <div id="tab-market" class="fit three-col" hidden>
     <div class="panel col"><h2>예산 · <span class="hint">입장·광고·모기업 수입, 연봉·운영 지출, 샐러리캡 137.4억(상위 40인)</span></h2><div id="budget" class="col grow"></div></div>
     <div class="panel col"><h2>트레이드 · <span class="hint">20경기까지 · 선수 ⇄ 선수 + 현금</span></h2><div id="trade" class="col grow"></div></div>
-    <div class="panel col"><h2>영입 협상 · <span class="hint">FA·방출 선수 · 요구액과 인내</span></h2><div id="signing" class="grow"></div><div class="hint">계약금(연봉×연수×30 %)은 잔액에서 바로 나가고 연봉은 주간 결산에서 나갑니다. FA 영입 선수는 1년간 트레이드할 수 없습니다.</div></div>
+    <div class="panel col"><h2>영입 협상 · <span class="hint">FA·방출 선수 · 요구액과 인내</span></h2><div id="signing" class="grow"></div><div class="hint">계약금(연봉×연수×30 %)은 잔액에서 바로 나가고 연봉은 매주 일요일 결산에서 나갑니다. 시즌 중 시장은 타 구단 2군·방출 선수입니다. 영입 선수는 1년간 트레이드할 수 없습니다.</div></div>
   </div>
+  <div id="helpModal" class="modal" hidden><div class="modalbox"><h3>용어 도움말</h3>
+    <table class="tiny help"><tr><th>타순·로테이션·불펜</th><td>타순=타자 9명의 순서. 로테이션=선발 투수 5명이 돌아가며 등판. 불펜=중간·마무리 투수.</td></tr>
+    <tr><th>1군·2군</th><td>1군=경기에 나가는 26명. 2군=대기 선수. 선수단 화면에서 올리고 내립니다.</td></tr>
+    <tr><th>초·말</th><td>한 이닝의 앞 절반(초)에는 원정팀이, 뒷 절반(말)에는 홈팀이 공격합니다.</td></tr>
+    <tr><th>볼·스트라이크·아웃</th><td>볼 4개면 출루(볼넷), 스트라이크 3개면 아웃(삼진), 아웃 3개면 공수 교대.</td></tr>
+    <tr><th>등급 S·A·B·C·D</th><td>능력 순서. 컨택=맞히기, 파워=장타, 선구=볼 고르기, 주력=달리기, 판단=주루 판단, 수비, 송구. 투수는 구위=공의 힘, 제구=정확도, 체력=긴 이닝, 무브먼트=변화. 잠재=성장 상한.</td></tr>
+    <tr><th>컨디션·피로</th><td>컨디션(30~99)은 오늘의 몸 상태, 피로(0~100 %)는 쌓인 피곤함. 피로가 높으면 성적이 떨어지고 부상 위험이 오릅니다.</td></tr>
+    <tr><th>사인</th><td>공격: 번트(짧게 대기), 기다려(공을 고름), 강공(크게 휘두름). 수비: 몸쪽 승부, 바깥쪽 유인구, 내야 전진, 외야 후퇴. 다음 투구부터 적용됩니다.</td></tr>
+    <tr><th>R·H·E, 자책</th><td>R=득점, H=안타, E=실책. 자책=투수 책임으로 내준 점수. ERA=9이닝당 자책, AVG=타율.</td></tr>
+    <tr><th>이적 자금·연봉·샐러리캡</th><td>이적 자금=지금 쓸 수 있는 돈. 연봉(상위 40)=연봉이 높은 40명의 합. 샐러리캡 137.4억을 넘기면 시즌 말에 초과분의 30 %를 냅니다.</td></tr>
+    <tr><th>트레이드·영입 협상</th><td>트레이드=선수끼리 맞바꿈(현금 15억까지). 협상=요구액에 연봉·연수를 제안, 인내 3번 안에 못 맞추면 결렬.</td></tr>
+    <tr><th>정비</th><td>경기가 없는 시간. 일정·훈련·선수단·예산 화면을 자유롭게 오갑니다. 경기 중에는 경기 화면에서 나갈 수 없습니다.</td></tr>
+    <tr><th>결과 바로보기</th><td>남은 경기를 애니메이션 없이 끝까지 진행합니다. 정지로 멈추면 그 자리부터 다시 지휘합니다.</td></tr></table>
+    <div class="ctl" style="justify-content:flex-end;margin-top:8px"><button class="go" id="helpClose">닫기</button></div></div></div>
   <div id="negoModal" class="modal" hidden><div class="modalbox"><h3>영입 협상</h3><div id="negoBody"></div>
-    <div class="ctl" style="margin-top:8px"><span class="hint">연봉(억)</span><input type="number" id="negoSalary" step="0.5" min="0.3" style="width:80px"><span class="hint">연수</span><select id="negoYears"><option>1</option><option>2</option><option>3</option><option>4</option></select>
+    <div class="ctl" style="margin-top:8px"><span class="hint">연봉(억)</span><input type="number" id="negoSalary" step="0.5" min="0.3" max="30" style="width:80px"><span class="hint">연수</span><select id="negoYears"><option>1</option><option>2</option><option>3</option><option>4</option></select>
     <button class="go" id="negoOffer">제안</button><button id="negoMeet">요구 수용</button><button id="negoClose">닫기</button></div></div></div>
   <div id="eventModal" class="modal" hidden><div class="modalbox event"><h3 id="eventTitle"></h3><div id="eventBody"></div><div class="ctl" style="justify-content:flex-end;margin-top:10px"><button class="go" id="eventOk">확인</button></div></div></div>
   <div id="tutorial" class="tutor" hidden><div class="tbox"><div id="tutText"></div><div class="ctl" style="justify-content:flex-end;margin-top:8px"><span id="tutStep" class="hint"></span><button id="tutSkip">건너뛰기</button><button class="go" id="tutNext">다음</button></div></div></div>
@@ -79,7 +93,7 @@
 <section id="screen-game" class="screen" hidden>
   <div id="setup" class="fit">
     <div class="panel col">
-      <h2>우리 선발 투수와 타순 9명 · <label>이닝 <input id="innings" type="number" value="3" min="1" max="9"></label> <label>시드 <input id="seed" type="number" value="1"></label> <span class="hint" id="gameDayNote"></span> <span class="hint">구단 화면의 타순·선발이 미리 채워집니다. 초에는 우리 타선(공격 사인), 말에는 우리 선발(수비 사인)입니다.</span></h2>
+      <h2>우리 선발 투수와 타순 9명 · <label>이닝 <input id="innings" min="1" max="9" type="number" value="3" min="1" max="9"></label> <label>시드 <input id="seed" min="1" max="9999" type="number" value="1"></label> <span class="hint" id="gameDayNote"></span> <span class="hint">구단 화면의 타순·선발이 미리 채워집니다. 초에는 우리 타선(공격 사인), 말에는 우리 선발(수비 사인)입니다.</span></h2>
       <div class="roster small" id="pitchers"></div>
       <div class="roster small grow" id="batters"></div>
       <div class="ctl"><span id="order" class="hint">선택 0/9</span><button id="clearOrder">초기화</button><button id="autoOrder">자동 타순</button><button class="go" id="start" disabled>플레이 볼</button></div>
@@ -96,7 +110,7 @@
           <span class="s"><small>SCORE</small><b id="sRuns">0:0</b></span>
           <span class="cnt"><span class="row"><small>B</small><span class="lamps balls" id="lBalls"><span></span><span></span><span></span></span></span><span class="row"><small>S</small><span class="lamps" id="lStrikes"><span></span><span></span></span></span><span class="row"><small>O</small><span class="lamps" id="lOuts"><span></span><span></span><span></span></span></span></span>
           <span class="diamond"><span class="base" id="b2"></span><span class="base" id="b3"></span><span class="base" id="b1"></span></span>
-          <span class="s wide"><small>AT BAT</small><b id="sBatter" class="txt">—</b><small id="onDeck" class="ondeck"></small></span>
+          <span class="s wide"><small>AT BAT</small><b id="sBatter" class="txt">—</b><small id="sideTag" class="side">-</small><small id="onDeck" class="ondeck"></small></span>
           <span class="s"><small>MPH</small><b id="speed">—</b></span>
           <span class="sign" id="signBadge">benchsign!</span>
         </div>
@@ -108,7 +122,7 @@
         <div class="actions">
           <div class="chips" id="offCalls"><button data-call="none" class="call on">자유</button><button data-call="bunt" class="call">번트</button><button data-call="take" class="call">기다려</button><button data-call="power" class="call">강공</button></div>
           <div class="chips" id="defCalls" style="display:none"><button data-dcall="none" class="dcall on">자유</button><button data-dcall="inside" class="dcall">몸쪽</button><button data-dcall="outside" class="dcall">바깥 유인</button><button data-dcall="infield_in" class="dcall">내야 전진</button><button data-dcall="outfield_deep" class="dcall">외야 후퇴</button></div>
-          <div class="big"><button class="go" id="playPitch">한 구</button><button class="go" id="playPA">타석</button><button class="go" id="playInning">이닝</button><button id="playFast" title="남은 경기를 애니메이션 없이 끝까지 진행하고 결과를 보입니다">결과 바로보기</button><label class="spd">배속 <input id="spd" type="number" value="1" step="0.5" min="0.25" max="10"></label><button id="stop">정지</button></div>
+          <div class="big"><button class="go" id="playPitch" title="투구 하나를 진행합니다">다음 투구</button><button class="go" id="playPA">타석</button><button class="go" id="playInning">이닝</button><button id="playFast" title="남은 경기를 애니메이션 없이 끝까지 진행하고 결과를 보입니다">결과 바로보기</button><label class="spd">배속 <input id="spd" type="number" value="1" step="0.5" min="0.25" max="10"></label><button id="stop">정지</button></div>
         </div>
         <div id="adminPanel" class="adminover" hidden><div id="admin" class="hint tiny"></div></div>
       </div>

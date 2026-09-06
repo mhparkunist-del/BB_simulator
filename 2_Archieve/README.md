@@ -24,7 +24,7 @@
 | game_v1.0_0906, game_v1.0.1_0906 | 관리자 승부 플랫폼 초기판(측면·존·타구), 테스트 유저 수정판 | game_v1.2_0906.html(원근 카메라·야수) |
 | play_pc_v1.0/v1.1_0906, play_pc_admin_v1.0/v1.1_0906 | 투구 은행 PC판(게이머·관리자) 이전판(2026-09-06 18:50 이동, 규칙: 새 버전 빌드 즉시 이전판 이동) | play_pc_v1.2_0906.html, play_pc_admin_v1.2_0906.html |
 | play_standalone_v1.0/v1.1_0906 | 서버 없는 게이머판(타석 은행) 초기·야수 현실 모델판 | play_standalone_v1.2_0906.html, play_pc_v1.0_0906.html(투구 은행) |
-| app_preview_v2.0~v2.5_0906 | 웹앱 단일 파일 미리보기 이전판(새 버전 번들 즉시 이동) | app_preview_v2.6_0906.html, web/app/(배포 원본) |
+| app_preview_v2.0~v2.6_0906 | 웹앱 단일 파일 미리보기 이전판(새 버전 번들 즉시 이동) | app_preview_v2.6.1_0907.html, web/app/(배포 원본) |
 
 ## 2026-09-06_v1.4_nine_innings (2026-09-06 이동)
 9이닝 100경기 시뮬레이션 진단 보고(report.md, D01 경기 CSV, D02 MLB 대조 CSV, runs_hist.png). 후속: 3_recent_report/2026-09-06_v1.6_human_view.
@@ -49,3 +49,6 @@ KBO 실명 구단 보고와 캡처 5장. 후속: 3_recent_report/2026-09-06_v2.4
 
 ## 2026-09-06_v2.5_market_theme (2026-09-06 이동)
 예산·이적·협상과 구단 테마색 보고, 캡처 5장. 후속: 3_recent_report/2026-09-06_v2.6_scenes.
+
+## 2026-09-06_v2.6_scenes (2026-09-07 이동)
+경기 날 스킵 삭제·결과 바로보기·장면 연출·버튼 반응 보고, 캡처 5장. 후속: 3_recent_report/2026-09-07_v2.6.1_playtest.

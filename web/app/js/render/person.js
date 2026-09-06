@@ -14,7 +14,7 @@ function capsule(g, cam, A, B, rA, rB, col, edge) {
   if (edge) { g.strokeStyle = edge; g.lineWidth = 0.8; g.stroke() }
 }
 function ball3(g, cam, P, r, col, edge) {
-  const q = cam.proj(P); if (!q) return; const rr = Math.max(1.2, cam.fl * r / q[2]);
+  const q = cam.proj(P); if (!q) return; const rr = Math.max(2.6, cam.fl * r / q[2]);
   g.beginPath(); g.arc(q[0], q[1], rr, 0, 7); g.fillStyle = col; g.fill();
   if (edge) { g.strokeStyle = edge; g.lineWidth = 0.8; g.stroke() }
   return [q, rr];
