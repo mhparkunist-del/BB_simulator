@@ -1,5 +1,5 @@
 /* bbsim app · service worker: shell network-first (cache fallback), banks cached as fetched, one cache per release */
-const VERSION = "bbsim-app-v2.5.0-911f034";
+const VERSION = "bbsim-app-v2.6.0-ea1c872";
 const SHELL = ["index.html", "css/app.css", "js/kv.js", "js/app.js", "js/render/math.js", "js/render/park.js", "js/render/person.js", "js/render/pitcher.js",
   "js/render/figures.js", "js/render/play.js", "js/render/seam.js", "js/render/cutscene.js", "js/game/game.js", "js/club/club.js", "js/club/market.js", "data/roster.json", "data/club.json", "data/kbo.json", "manifest.webmanifest"];
 self.addEventListener("install", e => {
