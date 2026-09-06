@@ -238,6 +238,7 @@ class PlateAppearance:
             from .fielding import align, resolve_fielding
             align(cfg.fielders, ctx.fielder_shift, self.batter.hand)
             rec.play, rec.fielding = resolve_fielding(bb, cfg.fielders, cfg.park, rng, batter_speed=float(getattr(getattr(self.batter, "profile", None), "speed", 0.5)), batter_hand=self.batter.hand,
+                                                       run_iq=float(getattr(getattr(self.batter, "profile", None), "run_iq", 0.5)), boldness=float(getattr(getattr(self.batter, "profile", None), "boldness", 0.5)),
                                                      pressure=ctx.leverage)
         else:
             rec.play = resolve(bb, cfg.park, rng)

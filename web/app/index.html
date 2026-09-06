@@ -11,9 +11,10 @@
 </head>
 <body>
 <div id="rotate"><div class="ico">⟳</div><p>가로로 돌려 주세요</p><p class="hint">모든 화면이 가로 한 화면에 맞춰져 있습니다.</p></div>
-<header class="apphead">
+<header class="apphead" id="apphead" hidden>
   <h1>DUGOUT NIGHT</h1>
-  <nav class="nav"><button data-screen="schedule">일정</button><button data-screen="training">훈련</button><button data-screen="roster">선수단</button><button data-screen="stats">기록</button><button data-screen="game" class="gamebtn">경기</button></nav>
+  <nav class="nav"><button data-screen="schedule">일정</button><button data-screen="training">훈련</button><button data-screen="roster">선수단</button><button data-screen="stats">기록</button><button data-screen="game" class="gamebtn">경기</button><span id="lockBadge" class="lock" hidden>경기 중 · 정비는 경기 뒤에</span></nav>
+  <span class="ctlmini"><button id="saveBtn" title="저장">저장</button><button id="titleBtn" title="타이틀">타이틀</button></span>
   <div id="cstrip" class="strip">
     <span class="s"><small>DATE</small><b id="tDate">-</b></span><span class="s"><small>REC</small><b id="tRec">0-0</b></span><span class="s"><small>RANK</small><b id="tRank">-</b></span>
     <span class="s"><small>BUDGET</small><b id="tBudget">-</b></span><span class="s"><small>PAYROLL</small><b id="tPay">-</b></span><span class="s"><small>MORALE</small><b id="tMorale">-</b></span>
@@ -22,7 +23,21 @@
 </header>
 <div id="boot" class="boot">불러오는 중…</div>
 <main>
-<section id="screen-club" class="screen">
+<section id="screen-title" class="screen title">
+  <div class="titlebox">
+    <div class="logo">DUGOUT NIGHT</div>
+    <div class="tag">투수·타자·포수·야수가 각자 판단하는 야구 · 구단을 맡아 시즌을 치릅니다</div>
+    <div class="ctl col-btns"><button class="go big" id="btnContinue" hidden>계속하기</button><button class="big" id="btnNew">새로 시작</button><button class="big" id="btnLoad">불러오기</button></div>
+    <div id="loadSlots" class="slots" hidden></div>
+    <div class="hint" id="titleNote">가로 화면 전용 · 진행은 기기 안에 저장됩니다</div>
+  </div>
+</section>
+<section id="screen-team" class="screen" hidden>
+  <div class="panel col"><h2>맡을 구단을 고르세요 <span class="hint">이름·상징색이 정해집니다. 선수단은 시즌 시작 시점의 같은 구단이고, 상대 5구단과 30경기를 치릅니다.</span></h2>
+    <div id="teamCards" class="teams grow"></div>
+    <div class="ctl"><span id="teamPick" class="hint">구단을 누르세요</span><span style="flex:1"></span><button class="go" id="teamStart" disabled>부임하기</button></div></div>
+</section>
+<section id="screen-club" class="screen" hidden>
   <div class="tabs ctabs" style="display:none"><button data-tab="schedule" class="on">일정</button><button data-tab="training">훈련</button><button data-tab="roster">선수단</button><button data-tab="stats">순위·기록</button></div>
   <div id="tab-schedule" class="fit two-col">
     <div class="panel col"><h2>일정 · 30경기</h2><div id="schedule" class="grow"></div></div>
@@ -33,7 +48,9 @@
     </div>
   </div>
   <div id="tab-training" class="fit two-col" hidden>
-    <div class="panel col"><h2>훈련 배정 · 매일 적용 <span class="hint">잠재력에 가까울수록, 나이가 많을수록, 피로할수록 느려집니다. 부하가 높으면 부상 위험이 오릅니다.</span></h2><div id="training" class="grow"></div></div>
+    <div class="panel col"><h2>훈련 · <span class="hint">코치에게 맡기면 매주 방침대로 배정되고, 직접이면 선수마다 고릅니다. 잠재력에 가까울수록, 나이가 많을수록, 피로할수록 느려집니다.</span></h2>
+      <div class="ctl" id="policy"><span class="hint">방침</span><button data-pol="manual" class="pol on">직접</button><button data-pol="balanced" class="pol">균형</button><button data-pol="hitting" class="pol">타격 강화</button><button data-pol="pitching" class="pol">투수 강화</button><button data-pol="youth" class="pol">유망주 육성</button><button data-pol="rest" class="pol">회복 우선</button></div>
+      <div id="training" class="grow"></div></div>
     <div class="col"><div class="panel"><h2>코칭 스태프</h2><div id="staff"></div></div><div class="panel grow"><h2>이번 주 훈련 성과</h2><div id="trainLog" class="log grow"></div></div></div>
   </div>
   <div id="tab-roster" class="fit three-col" hidden>
@@ -45,13 +62,16 @@
     <div class="col"><div class="panel"><h2>순위</h2><div id="standings"></div></div><div class="panel grow"><h2>팀 기록</h2><div id="teamStats"></div></div></div>
     <div class="col"><div class="panel grow"><h2>타자 기록</h2><div id="batStats" class="grow"></div></div><div class="panel grow"><h2>투수 기록</h2><div id="pitStats" class="grow"></div></div></div>
   </div>
+  <div id="eventModal" class="modal" hidden><div class="modalbox event"><h3 id="eventTitle"></h3><div id="eventBody"></div><div class="ctl" style="justify-content:flex-end;margin-top:10px"><button class="go" id="eventOk">확인</button></div></div></div>
+  <div id="tutorial" class="tutor" hidden><div class="tbox"><div id="tutText"></div><div class="ctl" style="justify-content:flex-end;margin-top:8px"><span id="tutStep" class="hint"></span><button id="tutSkip">건너뛰기</button><button class="go" id="tutNext">다음</button></div></div></div>
+  <div id="saveModal" class="modal" hidden><div class="modalbox"><h3>저장 슬롯</h3><div id="saveSlots" class="slots"></div><div class="ctl" style="justify-content:flex-end;margin-top:8px"><button id="saveClose">닫기</button></div></div></div>
   <div id="cardModal" class="modal" hidden><div class="modalbox"><div class="ctl" style="justify-content:flex-end"><button id="cardClose">닫기</button></div><div id="playerCard"></div></div></div>
 </section>
 
 <section id="screen-game" class="screen" hidden>
   <div id="setup" class="fit">
     <div class="panel col">
-      <h2>우리 선발 투수와 타순 9명 · <label>이닝 <input id="innings" type="number" value="3" min="1" max="9"></label> <label>시드 <input id="seed" type="number" value="1"></label> <span class="hint">구단 화면의 타순·선발이 미리 채워집니다. 초에는 우리 타선(공격 사인), 말에는 우리 선발(수비 사인)입니다.</span></h2>
+      <h2>우리 선발 투수와 타순 9명 · <label>이닝 <input id="innings" type="number" value="3" min="1" max="9"></label> <label>시드 <input id="seed" type="number" value="1"></label> <span class="hint" id="gameDayNote"></span> <span class="hint">구단 화면의 타순·선발이 미리 채워집니다. 초에는 우리 타선(공격 사인), 말에는 우리 선발(수비 사인)입니다.</span></h2>
       <div class="roster small" id="pitchers"></div>
       <div class="roster small grow" id="batters"></div>
       <div class="ctl"><span id="order" class="hint">선택 0/9</span><button id="clearOrder">초기화</button><button id="autoOrder">자동 타순</button><button class="go" id="start" disabled>플레이 볼</button></div>

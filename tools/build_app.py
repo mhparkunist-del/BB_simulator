@@ -44,8 +44,9 @@ def club_batter(rng, i, bat, pos):
     contact = float(np.mean([pr["recognition"], pr["tracking"], pr["barrel_placement"], pr["timing"]]))
     power = float(np.clip(0.5 * pr["power"] + 0.5 * (pr["bat_speed"] - 27) / 9, 0, 1))
     eye = float(np.mean([pr["discipline"], pr["recognition"]]))
-    p["attrs"].update({"contact": round(contact, 3), "power": round(power, 3), "eye": round(eye, 3), "speed": round(float(pr.get("speed", 0.5)), 3)})
-    for k in ("contact", "power", "eye", "speed"):
+    p["attrs"].update({"contact": round(contact, 3), "power": round(power, 3), "eye": round(eye, 3), "speed": round(float(pr.get("speed", 0.5)), 3), "run_iq": round(float(pr.get("run_iq", 0.5)), 3)})
+    p["pot"]["run_iq"] = round(float(np.clip(p["attrs"]["run_iq"] + rng.uniform(0.02, 0.25) * max(0.0, (30 - p["age"]) / 11.0), p["attrs"]["run_iq"], 0.98)), 3)
+    for k in ("contact", "power", "eye", "speed", "run_iq"):
         p["pot"][k] = round(float(np.clip(max(p["attrs"][k], p["pot"][k]), p["attrs"][k], 0.98)), 3)
         p["grades"][k] = bat["card"][k]
     p["hand"] = pr["hand"]
@@ -150,8 +151,8 @@ def main():
         day += 1
     club = {"version": a.version, "club": {"name": "덕아웃 나이트", "budget": 60.0, "staff": {"batting": 0.6, "pitching": 0.55, "conditioning": 0.5, "medical": 0.5}},
             "date0": d0.isoformat(), "days": day + 2, "players": players, "free_agents": fa, "opponents": opps, "schedule": sched,
-            "programs": PROGRAMS, "ko": {"contact": "컨택", "power": "파워", "eye": "선구", "speed": "주력", "defense": "수비", "arm": "송구", "stuff": "구위", "control": "제구", "stamina": "체력", "movement": "무브먼트"},
-            "bat_keys": ["contact", "power", "eye", "speed", "defense", "arm"], "pit_keys": ["stuff", "control", "stamina", "movement"]}
+            "programs": PROGRAMS, "ko": {"contact": "컨택", "power": "파워", "eye": "선구", "speed": "주력", "defense": "수비", "arm": "송구", "stuff": "구위", "control": "제구", "stamina": "체력", "movement": "무브먼트", "run_iq": "판단"},
+            "bat_keys": ["contact", "power", "eye", "speed", "run_iq", "defense", "arm"], "pit_keys": ["stuff", "control", "stamina", "movement"]}
     dump(os.path.join(APP, "data", "club.json"), club)
     # ---- game roster (what the game screen needs) with club names
     name_of = {p["engine_id"]: p["name"] for p in players if "engine_id" in p and p["type"] == "B"}

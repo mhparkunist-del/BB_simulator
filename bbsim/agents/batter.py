@@ -59,6 +59,7 @@ class BatterProfile:
     split_vs_R: float = 0.5            # 우투 상대
     bunt_skill: float = 0.3            # 번트
     speed: float = 0.5                 # 주력: sprint speed on the bases (engine/baserunning.py)
+    run_iq: float = 0.5                # 타구 판단: reads the throw vs. the extra base; low -> runs into outs (engine/fielding.py _hit_bases)
     bat_mass: float = 0.879            # kg, bat choice (heavier = more power, slower swing)
 
     @classmethod
@@ -66,7 +67,7 @@ class BatterProfile:
         """Map a game-layer PlayerCard (batter skills) onto the perception/mechanics profile."""
         t = card.derive_bat_traits()
         keys = ("tracking", "discipline", "boldness", "guess_hitting", "barrel_placement", "timing", "swing_quickness",
-                "path_control", "barrel_accuracy", "power", "spray_control", "bunt_skill", "speed", "split_vs_L", "split_vs_R",
+                "path_control", "barrel_accuracy", "power", "spray_control", "bunt_skill", "speed", "run_iq", "split_vs_L", "split_vs_R",
                 "composure", "reaction", "game_sense", "stamina", "focus", "recognition", "release_read")
         kw = {k: float(t[k]) for k in keys if k in t}
         return cls(name=card.name, hand=card.hand, height=card.fixed["height"], bat_speed=float(t["bat_speed"]),

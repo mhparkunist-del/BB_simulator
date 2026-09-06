@@ -10,12 +10,25 @@ window.APP = window.APP || {};
     return r.json();
   };
   const $ = id => document.getElementById(id);
-  const SCREENS = ["schedule", "training", "roster", "stats", "game"];
+  const SCREENS = ["title", "team", "schedule", "training", "roster", "stats", "game"];
+  const TEAMS = [
+    { name: "덕아웃 나이트", city: "야간 구장", color: "#f2b441", motto: "밤경기의 명가" },
+    { name: "항구 갈매기", city: "항구", color: "#4fa3e0", motto: "바닷바람을 등지고" },
+    { name: "고원 산양", city: "고원", color: "#8ad1a8", motto: "높은 곳에서 멀리" },
+    { name: "강변 여우", city: "강변", color: "#e0524b", motto: "빠르고 영리하게" },
+    { name: "도심 늑대", city: "도심", color: "#c9c2ae", motto: "떼로 사냥한다" },
+    { name: "남부 사자", city: "남부", color: "#d98c3a", motto: "포효 한 번에 한 점" },
+  ];
+  const TUTORIAL = ["먼저 선수단을 둘러보세요. 이름을 누르면 카드가 열리고, 포지션 셀렉트로 수비 위치를 정합니다.", "훈련 화면에서 코치에게 방침을 맡기거나(균형·타격·투수·유망주·회복) 선수마다 직접 프로그램을 고릅니다.", "일정에서 다음 날을 진행하세요. 경기 날에 경기 버튼을 누르면 직접 지휘하고, 그냥 넘기면 빠른 시뮬로 처리됩니다. 경기가 시작되면 끝날 때까지 정비 화면으로 나갈 수 없습니다."];
   function loadScript(src) {
     return new Promise((res, rej) => { const s = document.createElement("script"); s.src = A.base + src; s.onload = res; s.onerror = () => rej(new Error("script " + src)); document.head.appendChild(s) });
   }
   A.show = function (name) {
     if (!SCREENS.includes(name)) name = "schedule";
+    if (A.locked && name !== "game") name = "game";
+    $("apphead").hidden = (name === "title" || name === "team");
+    $("screen-title").hidden = name !== "title"; $("screen-team").hidden = name !== "team";
+    if (name === "title" || name === "team") { $("screen-club").hidden = true; $("screen-game").hidden = true; if (location.hash !== "#" + name) history.replaceState(null, "", "#" + name); return }
     document.querySelectorAll(".nav [data-screen]").forEach(b => b.classList.toggle("on", b.dataset.screen === name));
     $("screen-club").hidden = name === "game";
     $("screen-game").hidden = name !== "game";
@@ -23,11 +36,58 @@ window.APP = window.APP || {};
     if (name !== "game" && window.ClubUI_tab) { window.ClubUI_tab(name); if (window.ClubUI && window.ClubUI.state && window.ClubUI.state()) window.ClubUI.render() }
     if (name === "game") {
       if (window.ClubUI && window.ClubUI.lineupForGame) A.clubLineup = window.ClubUI.lineupForGame();
+      const gt = window.ClubUI && window.ClubUI.gameToday ? window.ClubUI.gameToday() : null;
+      const note = $("gameDayNote"); if (note) note.textContent = gt ? (gt.g + "차전 · " + gt.opp + (gt.home ? " (홈)" : " (원정)") + " · 결과가 시즌에 기록됩니다") : "오늘은 경기가 없습니다 · 연습 경기(기록 없음)";
       if (window.GameUI && !(window.GameUI.state && window.GameUI.state())) { window.GameUI.roster(); }
       try { if (screen.orientation && screen.orientation.lock) screen.orientation.lock("landscape").catch(() => {}) } catch (e) {}
     } else { try { if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock() } catch (e) {} }
     if (location.hash !== "#" + name) history.replaceState(null, "", "#" + name);
   };
+  A.onGameStart = function () { A.locked = true; $("lockBadge").hidden = false; document.querySelectorAll(".nav [data-screen]").forEach(b => { if (b.dataset.screen !== "game") b.disabled = true }); $("saveBtn").disabled = true; $("titleBtn").disabled = true };
+  A.onGameOver = function (res) {
+    A.locked = false; $("lockBadge").hidden = true; document.querySelectorAll(".nav [data-screen]").forEach(b => b.disabled = false); $("saveBtn").disabled = false; $("titleBtn").disabled = false;
+    const rec = window.ClubUI && window.ClubUI.recordExternalGame ? window.ClubUI.recordExternalGame(res) : false;
+    A.event("경기 종료", (res.us > res.them ? "이겼습니다. " : "졌습니다. ") + res.us + " : " + res.them + (rec ? "<br>결과가 오늘 일정과 기록에 반영됐습니다. 정비 시간입니다." : "<br>연습 경기라 기록에는 남지 않습니다."), () => A.show("schedule"));
+    A.autosave();
+  };
+  A.event = function (title, body, cb) { $("eventTitle").textContent = title; $("eventBody").innerHTML = body; $("eventModal").hidden = false; $("eventOk").onclick = () => { $("eventModal").hidden = true; if (cb) cb() } };
+  A.autosave = function () { if (window.ClubUI && window.ClubUI.state()) A.kv.set("autosave", { when: new Date().toISOString(), S: window.ClubUI.state() }) };
+  function slotList(container, mode) {
+    Promise.all([1, 2, 3].map(i => A.kv.get("save:" + i))).then(saves => {
+      container.innerHTML = saves.map((sv, i) => "<div class='slot'><b>슬롯 " + (i + 1) + "</b><span>" + (sv ? (sv.S.club && sv.S.club.name ? sv.S.club.name + " · " : "") + "day " + sv.S.day + " · " + sv.S.W + "승 " + sv.S.L + "패 · " + sv.when.slice(0, 16).replace("T", " ") : "비어 있음") + "</span><button data-slot='" + (i + 1) + "'>" + (mode === "save" ? "여기 저장" : "불러오기") + "</button></div>").join("");
+      container.querySelectorAll("[data-slot]").forEach(b => b.onclick = async () => {
+        const i = +b.dataset.slot;
+        if (mode === "save") { await A.kv.set("save:" + i, { when: new Date().toISOString(), S: window.ClubUI.state() }); slotList(container, mode); A.event("저장", "슬롯 " + i + "에 저장했습니다.") }
+        else { const sv = await A.kv.get("save:" + i); if (!sv) return; await A.kv.set("club", sv.S); window.ClubUI.setState(sv.S); $("loadSlots").hidden = true; A.show("schedule") }
+      });
+      container.hidden = false;
+    });
+  }
+  function tutorial(step) {
+    if (step >= TUTORIAL.length) { $("tutorial").hidden = true; A.kv.set("tutorial_done", true); return }
+    $("tutorial").hidden = false; $("tutText").textContent = TUTORIAL[step]; $("tutStep").textContent = (step + 1) + "/" + TUTORIAL.length;
+    A.show(["roster", "training", "schedule"][step]);
+    $("tutNext").onclick = () => tutorial(step + 1); $("tutSkip").onclick = () => tutorial(TUTORIAL.length);
+  }
+  function wireFlow() {
+    $("btnNew").onclick = () => { $("loadSlots").hidden = true; A.show("team"); renderTeams() };
+    $("btnLoad").onclick = () => slotList($("loadSlots"), "load");
+    $("btnContinue").onclick = () => A.show("schedule");
+    $("saveBtn").onclick = () => { slotList($("saveSlots"), "save"); $("saveModal").hidden = false }; $("saveClose").onclick = () => { $("saveModal").hidden = true };
+    $("titleBtn").onclick = () => { A.autosave(); A.show("title"); refreshContinue() };
+    $("teamStart").onclick = async () => {
+      const t = TEAMS[A.teamPick]; window.ClubUI.fresh(t); await A.kv.set("tutorial_done", false);
+      A.show("schedule");
+      A.event("구단주 인사", "<b>" + t.name + "</b> 감독으로 부임하신 것을 환영합니다.<br>" + t.motto + " — 올 시즌 30경기, 선수단과 훈련은 감독님께 맡깁니다.<br>먼저 선수들을 둘러보시죠.", () => tutorial(0));
+      A.autosave();
+    };
+  }
+  function renderTeams() {
+    A.teamPick = null; $("teamStart").disabled = true;
+    $("teamCards").innerHTML = TEAMS.map((t, i) => "<div class='tc' data-i='" + i + "'><b><span class='sw' style='background:" + t.color + "'></span>" + t.name + "</b><span class='hint'>" + t.city + " · " + t.motto + "</span></div>").join("");
+    $("teamCards").querySelectorAll(".tc").forEach(c => c.onclick = () => { A.teamPick = +c.dataset.i; $("teamCards").querySelectorAll(".tc").forEach(x => x.classList.toggle("sel", x === c)); $("teamPick").textContent = TEAMS[A.teamPick].name + " 선택"; $("teamStart").disabled = false });
+  }
+  async function refreshContinue() { const sv = await A.kv.get("autosave"); const has = !!(sv && sv.S); $("btnContinue").hidden = !has; if (has && window.ClubUI && window.ClubUI.setState && !(window.ClubUI.state() && window.ClubUI.state().day === sv.S.day)) window.ClubUI.setState(sv.S) }
   function viewSel(v) {                           // small screens: one 3D view at a time
     A.viewSel = v; window.VIEW_HIDE = { cam: v !== "cam", body: v !== "body", seam: v !== "seam" };
     ["cam", "body", "seam"].forEach(k => { const p = $("vw-" + k); if (p) p.hidden = k !== v });
@@ -73,8 +133,12 @@ window.APP = window.APP || {};
       document.querySelectorAll(".nav [data-screen]").forEach(b => b.onclick = () => A.show(b.dataset.screen));
       document.querySelectorAll(".viewsel button").forEach(b => b.onclick = () => viewSel(b.dataset.view));
       window.addEventListener("resize", applyLayout);
-      applyLayout(); wireGameExtras();
-      A.show((location.hash || "#schedule").slice(1));
+      applyLayout(); wireGameExtras(); wireFlow();
+      const sv = await A.kv.get("autosave");
+      const hash = (location.hash || "").slice(1);
+      if (sv && sv.S && hash && hash !== "title" && hash !== "team") { window.ClubUI && window.ClubUI.setState && window.ClubUI.setState(sv.S); A.show(hash) }
+      else { A.show("title"); refreshContinue() }
+      setInterval(() => { if (!A.locked) A.autosave() }, 60 * 1000);
       if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
         let hadController = !!navigator.serviceWorker.controller;
         navigator.serviceWorker.addEventListener("controllerchange", () => { if (hadController && !A.reloaded) { A.reloaded = true; location.reload() } hadController = true });
@@ -91,13 +155,24 @@ window.APP = window.APP || {};
     document.body.appendChild(box);
     const errs = []; window.addEventListener("error", e => errs.push(e.message));
     try {
-      if (mode === "club") {
+      if (mode === "flow") {
+        await new Promise(r => { const t = setInterval(() => { if (window.ClubUI && window.ClubUI.state()) { clearInterval(t); r() } }, 50) });
+        A.show("title"); $("btnNew").onclick(); $("teamCards").querySelectorAll(".tc")[1].onclick(); await $("teamStart").onclick();
+        const S = window.ClubUI.state();
+        box.textContent = "SMOKE OK flow: club=" + (S.club && S.club.name) + " event=" + !$("eventModal").hidden + " title='" + $("eventTitle").textContent + "' screen=" + (!$("screen-club").hidden) + " locked=" + !!A.locked + " errs=" + errs.length;
+      } else if (mode === "lock") {
+        await new Promise(r => { const t = setInterval(() => { if (window.ClubUI && window.ClubUI.state()) { clearInterval(t); r() } }, 50) });
+        A.show("game"); $("autoOrder").onclick(); if (window.GameUI.pick.pitcher === null) document.querySelector("[data-p]").onclick(); $("start").onclick();
+        A.show("schedule");
+        box.textContent = "SMOKE OK lock: locked=" + !!A.locked + " gameVisible=" + !$("screen-game").hidden + " clubHidden=" + $("screen-club").hidden + " navDisabled=" + [...document.querySelectorAll(".nav [data-screen]")].filter(b => b.disabled).length + " errs=" + errs.length;
+      } else if (mode === "club") {
         await new Promise(r => { const t = setInterval(() => { if (window.ClubUI && window.ClubUI.state()) { clearInterval(t); r() } }, 50) });
         window.ClubUI.fresh(); for (let i = 0; i < 9; i++) window.ClubUI.advanceDay();
         A.show("training");
         const S = window.ClubUI.state();
         const tb = $("training"); box.textContent = "SMOKE OK club: day=" + S.day + " record=" + S.W + "-" + S.L + " errs=" + errs.length + " | training box " + tb.clientHeight + "/" + tb.scrollHeight + " rows=" + tb.querySelectorAll("tr").length + " pager=" + !!tb.querySelector(".pager");
       } else {
+        await new Promise(r => { const t = setInterval(() => { if (window.ClubUI && window.ClubUI.state()) { clearInterval(t); r() } }, 50) });
         A.show("game");
         $("autoOrder").onclick(); if (window.GameUI.pick.pitcher === null) document.querySelector("[data-p]").onclick(); $("start").onclick();
         const GU = window.GameUI, G = GU.state();

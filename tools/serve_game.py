@@ -37,7 +37,7 @@ ROOT = os.path.join(os.path.dirname(__file__), "..")
 PITCHER_FIELDS = ("mph", "eff", "cmd", "wrist_speed", "finger_len", "grip_force", "grip_skill", "abd", "tilt", "lean", "stride", "fwd", "core", "height", "hand")
 BATTER_FIELDS = ("recognition", "discipline", "tracking", "composure", "reaction", "boldness", "barrel_placement", "timing",
                  "swing_quickness", "path_control", "barrel_accuracy", "power", "spray_control", "guess_hitting", "stamina", "focus",
-                 "game_sense", "bat_speed", "bat_mass", "speed", "hand", "height", "name")
+                 "game_sense", "bat_speed", "bat_mass", "speed", "run_iq", "hand", "height", "name")
 FIELDER_FIELDS = ("sprint_speed", "wingspan", "first_step", "route", "ball_reading", "glove", "arm_strength", "arm_accuracy",
                   "transfer", "positioning", "composure", "focus", "stamina", "name")
 FIELDER_RANGES = {k: (0, 1) for k in FIELDER_FIELDS}
@@ -248,13 +248,14 @@ def make_roster(seed):
                "swing_quickness", "path_control", "barrel_accuracy", "power", "spray_control", "guess_hitting")}
         kw["bat_speed"] = float(np.clip(rng.normal(33.0, 2.0), 28, 38)); kw["hand"] = "L" if rng.random() < 0.35 else "R"
         kw["speed"] = float(np.clip(rng.normal(0.5, 0.2), 0.05, 0.98))
+        kw["run_iq"] = float(np.clip(rng.normal(0.5, 0.2), 0.05, 0.98))
         kw["name"] = "타자%02d" % (i + 1)
         contact = np.mean([kw["recognition"], kw["tracking"], kw["barrel_placement"], kw["timing"]])
         power = 0.5 * kw["power"] + 0.5 * (kw["bat_speed"] - 27) / 9
         eye = np.mean([kw["discipline"], kw["recognition"]])
         fuzz = lambda v: float(np.clip(v + rng.normal(0, 0.08), 0, 1))
         bats.append({"id": i, "profile": kw, "card": {"name": kw["name"], "hand": kw["hand"], "contact": _grade(fuzz(contact)),
-                                                       "power": _grade(fuzz(power)), "eye": _grade(fuzz(eye)), "speed": _grade(fuzz(kw["speed"]))}})
+                                                       "power": _grade(fuzz(power)), "eye": _grade(fuzz(eye)), "speed": _grade(fuzz(kw["speed"])), "run_iq": _grade(fuzz(kw["run_iq"]))}})
     pits = []
     for j, pid in enumerate("ABCDE"):
         pr = next(x for x in PARAMS["profiles"] if x["id"] == pid)

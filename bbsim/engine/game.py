@@ -82,7 +82,7 @@ class Game:
         self.events.append(ev)
         bx = st.box.setdefault(ev["batter"], {"PA": 0, "H": 0, "BB": 0, "K": 0, "R": 0})
         bx["PA"] += 1
-        bx["H"] += r.outcome in ("single", "double", "triple", "HR")
+        bx["H"] += r.outcome in ("single", "double", "triple", "HR", "single_out", "double_out")
         bx["BB"] += r.outcome in ("walk", "hbp")
         bx["K"] += r.outcome == "strikeout"
         st.runners, st.outs, st.runs = runners, outs, runs

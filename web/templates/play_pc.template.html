@@ -429,6 +429,7 @@ function paintPark(g, cam, w, h) {
   [-1, 1].forEach(sx => ring3(g, cam, sx * 10.5, -4.2, 0.76, "#c9c2ae", 1));
 }
 
+
 /* ---------------- human figure ---------------- */
 function capsule(g, cam, A, B, rA, rB, col, edge) {
   const a = cam.proj(A), b = cam.proj(B); if (!a || !b) return;
@@ -767,12 +768,22 @@ function batterPose(p, t, h, hand) {
       hdA: hands, hdB: hands2, bat: [hands, o.tip],
     };
   };
-  const stance = mk({ hipTh: 0, shTh: -8, pz: 0.48, hands: [bx + side * 0.10, by - 0.26, 0.79 * h], tip: [bx + side * 0.40, by - 0.56, 0.79 * h + 0.62] });
-  const load = mk({
-    hipTh: -6, shTh: -16, pz: 0.48, dx: side * 0.03, hands: [bx + side * 0.16, by - 0.34, 0.80 * h], tip: [bx + side * 0.50, by - 0.60, 0.80 * h + 0.58],
-    footFront: [bx + side * 0.02, by + 0.30, 0.10], kneeFront: [bx + side * 0.02, by + 0.22, 0.30 * h],
+  const stance = mk({
+    hipTh: 0, shTh: -6, pz: 0.46, leanX: -side * 0.09, hands: [bx + side * 0.14, by - 0.22, 0.74 * h], hands2: [bx + side * 0.17, by - 0.19, 0.76 * h],
+    tip: [bx + side * 0.34, by - 0.46, 0.74 * h + 0.66], elB: [bx + side * 0.30, by - 0.30, 0.62 * h],
+    footFront: [bx + side * 0.03, by + 0.36, 0], footBack: [bx - side * 0.03, by - 0.36, 0],
+    kneeFront: [bx - side * 0.04, by + 0.30, 0.27 * h], kneeBack: [bx - side * 0.02, by - 0.28, 0.27 * h],
   });
-  const plant = mk({ hipTh: 18, shTh: -8, pz: 0.47, hands: [bx + side * 0.14, by - 0.30, 0.78 * h], tip: [bx + side * 0.46, by - 0.58, 0.78 * h + 0.60] });
+  const load = mk({
+    hipTh: -8, shTh: -22, pz: 0.46, dx: side * 0.04, leanX: -side * 0.06, hands: [bx + side * 0.22, by - 0.36, 0.80 * h], hands2: [bx + side * 0.25, by - 0.33, 0.82 * h],
+    tip: [bx + side * 0.40, by - 0.62, 0.80 * h + 0.60], elB: [bx + side * 0.36, by - 0.44, 0.66 * h],
+    footFront: [bx + side * 0.04, by + 0.24, 0.08], kneeFront: [bx + side * 0.00, by + 0.18, 0.30 * h], footBack: [bx - side * 0.03, by - 0.36, 0], kneeBack: [bx - side * 0.02, by - 0.28, 0.26 * h],
+  });
+  const plant = mk({
+    hipTh: 28, shTh: -12, pz: 0.45, leanX: -side * 0.05, hands: [bx + side * 0.18, by - 0.30, 0.78 * h], hands2: [bx + side * 0.21, by - 0.27, 0.80 * h],
+    tip: [bx + side * 0.40, by - 0.58, 0.78 * h + 0.60], elB: [bx + side * 0.32, by - 0.40, 0.64 * h],
+    footFront: [bx + side * 0.03, by + 0.44, 0], kneeFront: [bx - side * 0.05, by + 0.34, 0.30 * h], footBack: [bx - side * 0.03, by - 0.36, 0.02], kneeBack: [bx - side * 0.08, by - 0.24, 0.27 * h],
+  });
   // full swing contact: hands above and behind the ball, barrel down to it, sweet spot on the ball
   const lowDrop = 0.15 * Math.max(0, Math.min(1, (0.90 - cz) / 0.5));
   const miss = (kind === "swing" && !hit) ? [0, 0, -0.11] : [0, 0, 0];
@@ -781,19 +792,20 @@ function batterPose(p, t, h, hand) {
   const u = norm(sub3(Cpt, handsNat));
   const knob = sub3(Cpt, mul3(u, 0.66)), tip = add3(Cpt, mul3(u, 0.18));
   const contact = mk({
-    hipTh: 80, shTh: 60, pz: 0.48 - lowDrop, dx: -side * 0.05, dy: 0.02, hands: knob, tip,
-    hands2: add3(knob, mul3(u, 0.06)),
-    footFront: [bx + side * 0.02, by + 0.42, 0], kneeFront: [bx - side * 0.02, by + 0.34, 0.43 * h - lowDrop * 0.4],
-    footBack: [bx - side * 0.02, by - 0.36, 0.05], kneeBack: [bx - side * 0.12, by - 0.18, 0.27 * h],
-    elA: add3(lerp3(add3(handsNat, [0, 0, 0.3]), knob, 0.5), [0, -0.10, -0.06]),
-    headOff: [-side * 0.08, 0.06, 0.12 * h],
+    hipTh: 88, shTh: 72, pz: 0.47 - lowDrop, dx: -side * 0.06, dy: 0.04, leanX: -side * 0.03, hands: knob, tip,
+    hands2: add3(knob, mul3(u, 0.07)),
+    footFront: [bx + side * 0.03, by + 0.44, 0], kneeFront: [bx + side * 0.01, by + 0.40, 0.45 * h - lowDrop * 0.4],
+    footBack: [bx - side * 0.03, by - 0.36, 0.06], kneeBack: [bx - side * 0.16, by - 0.16, 0.26 * h],
+    elA: add3(lerp3(add3(handsNat, [0, 0, 0.22]), knob, 0.55), [-side * 0.04, -0.12, -0.04]),
+    elB: add3(lerp3(add3(handsNat, [side * 0.16, 0, 0.18]), knob, 0.5), [side * 0.10, -0.16, -0.10]),
+    headOff: [-side * 0.09, 0.05, 0.12 * h],
   });
   const follow = mk({
-    hipTh: 104, shTh: 116, pz: 0.48, dx: -side * 0.10, dy: 0.04,
-    hands: [bx - side * 0.26, by + 0.12, 0.86 * h], tip: [bx - side * 0.26 + side * 0.40, by + 0.12 - 0.40, 0.86 * h - 0.40],
-    footFront: [bx + side * 0.02, by + 0.42, 0], kneeFront: [bx - side * 0.02, by + 0.34, 0.44 * h],
-    footBack: [bx - side * 0.06, by - 0.30, 0.10], kneeBack: [bx - side * 0.14, by - 0.12, 0.28 * h],
-    headOff: [-side * 0.08, 0.02, 0.12 * h],
+    hipTh: 110, shTh: 128, pz: 0.47, dx: -side * 0.12, dy: 0.05, leanX: -side * 0.02,
+    hands: [bx - side * 0.34, by + 0.20, 0.90 * h], hands2: [bx - side * 0.36, by + 0.18, 0.93 * h], tip: [bx - side * 0.34 + side * 0.36, by + 0.20 - 0.50, 0.90 * h - 0.30],
+    footFront: [bx + side * 0.03, by + 0.44, 0], kneeFront: [bx + side * 0.01, by + 0.40, 0.46 * h],
+    footBack: [bx - side * 0.08, by - 0.28, 0.12], kneeBack: [bx - side * 0.18, by - 0.08, 0.28 * h],
+    headOff: [-side * 0.09, 0.0, 0.12 * h],
   });
   const watch = mk({ hipTh: 8, shTh: -8, pz: 0.47, hands: [bx + side * 0.13, by - 0.30, 0.78 * h], tip: [bx + side * 0.45, by - 0.58, 0.78 * h + 0.60], headOff: [-side * 0.07, 0.10, 0.13 * h] });
   // bunt: square round, hands apart, bat level across the plate, sweet spot on the ball

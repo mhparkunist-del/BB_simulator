@@ -42,6 +42,7 @@ class FieldingPlay:
     events: List[Dict] = field(default_factory=list)        # v1.7 timed events for the viewers (run / move / field / throw / call)
     positions: Dict[str, List[float]] = field(default_factory=dict)   # where the nine stood at the pitch
     ground: Dict = field(default_factory=dict)              # v1.10 ball on the ground after landing: {"t": [s after contact], "xyz": [[x,y,z]]}
+    runner: Dict = field(default_factory=dict)              # v2.2 batter-runner's judgment / aggression used for the extra-base decision
     foul_point: Optional[List[float]] = None                # v1.10 where the fair/foul call was made
 
     def to_dict(self) -> Dict:
@@ -256,8 +257,10 @@ def _throw_to_base(play, fielders, f: Fielder, at, t_release: float, base: int, 
 
 
 def resolve_fielding(bb: BattedBall, fielders: List[Fielder], park: Park, rng: np.random.Generator,
-                     batter_speed: float = 0.5, pressure: float = 0.0, batter_hand: str = "R") -> Tuple[PlayResult, FieldingPlay]:
+                     batter_speed: float = 0.5, pressure: float = 0.0, batter_hand: str = "R",
+                     run_iq: float = 0.5, boldness: float = 0.5) -> Tuple[PlayResult, FieldingPlay]:
     play = FieldingPlay()
+    play.runner = {"iq": float(run_iq), "bold": float(boldness)}
     play.positions = {f.profile.position: _fpos(fielders, f.profile.position) for f in fielders}
     land0 = bb.trajectory.final.pos
     foul_geo, fpt, how = foul_boundary(bb, park)
@@ -359,7 +362,7 @@ def resolve_fielding(bb: BattedBall, fielders: List[Fielder], park: Park, rng: n
         _ev_field(play, f.profile.position, stop, t_pick, "wall" if wall_h is not None else "pickup", True)
         h1 = (wall_h if wall_h is not None else min(1.2, 0.05 * v_arr))
         play.ground = _samples(_bounce_roll((lx, ly), stop, t_land if wall_h is None else hang, max(t_pick, t_land + 0.3), h1), (t_land if wall_h is None else hang), max(t_pick, t_land + 0.3))
-        return _hit_bases(stop, f, t_ret, batter_speed, rng, play, pressure, batter_hand, fielders)
+        return _hit_bases(stop, f, t_ret, batter_speed, rng, play, pressure, batter_hand, fielders, play.runner)
 
     # ground ball: decelerating roll along the spray direction from the landing/first bounce point
     ux, uy = v0[0] / max(vh, 1e-6), v0[1] / max(vh, 1e-6)
@@ -454,12 +457,14 @@ def resolve_fielding(bb: BattedBall, fielders: List[Fielder], park: Park, rng: n
     _ev_move(play, f.profile.position, f.pos, stop, 0.3, min(t_pick, max(0.35, f.time_to(stop))))
     _ev_field(play, f.profile.position, stop, t_pick, "pickup", True)
     play.ground = _samples(ground_fn, hang, t_pick)
-    return _hit_bases(stop, f, t_ret, batter_speed, rng, play, pressure, batter_hand, fielders)
+    return _hit_bases(stop, f, t_ret, batter_speed, rng, play, pressure, batter_hand, fielders, play.runner)
 
 
 def _hit_bases(stop, f: Fielder, t_ret: float, batter_speed: float, rng, play: FieldingPlay, pressure: float,
-               hand: str = "R", fielders: Optional[List[Fielder]] = None):
-    """Single/double/triple from the retrieval time and throw to 2B / 3B vs the runner."""
+               hand: str = "R", fielders: Optional[List[Fielder]] = None, runner: Optional[Dict] = None):
+    """Single/double/triple from the retrieval time and throw to 2B / 3B vs the runner. v2.2: the batter-runner reads
+    the margin with noise set by 타구 판단 (run_iq) and a push from 과감성 (boldness); a bad read runs into an out
+    on the bases (single_out / double_out)."""
     fl = fielders or []
     if fl:
         p2, p3 = throw_plan(f, stop, 2, fl, t_ret), throw_plan(f, stop, 3, fl, t_ret)
@@ -470,17 +475,35 @@ def _hit_bases(stop, f: Fielder, t_ret: float, batter_speed: float, rng, play: F
         t2, t3 = t_ret + f.profile.throw_time(d2), t_ret + f.profile.throw_time(d3)
     r2, r3 = _runner_time(2, batter_speed, hand), _runner_time(3, batter_speed, hand)
     tag = lambda pl: (" · 중계 %s" % pl["relay"]["who"]) if (pl.get("relay")) else (" · 원바운드" if pl["segs"][-1]["hop"] else "")
-    if t3 < r3 and t2 < r2:
+    iq = float((runner or {}).get("iq", 0.5)); bold = float((runner or {}).get("bold", 0.5))
+    sigma = 0.08 + 0.55 * (1.0 - iq)                       # how blurred the runner's read of the throw is
+    push = 0.35 * (bold - 0.5)                             # aggressive runners lean toward going
+    m2, m3 = t2 - r2, t3 - r3                              # positive = the runner beats the throw
+    go2 = (m2 + rng.normal(0.0, sigma) + push) > -0.05
+    go3 = (m3 + rng.normal(0.0, sigma) + push) > -0.05
+    if not go2 or (m2 < -0.05 and not go2):
         if fl:
             _commit_plan(play, fl, p2)
             play.events.append(runner_event(batter_speed, hand, 1, True))
         return PlayResult("single", 1, "%s 처리, 1루 정지 (2루 송구 %.1f s vs 주자 %.1f s%s)" % (f.profile.position, t2, r2, tag(p2) if fl else ""), 1.0), play
-    if t3 < r3:
+    if m2 < -0.05:                                         # went for second on a bad read: thrown out
+        if fl:
+            t_arr = _commit_plan(play, fl, p2)
+            play.events.append(runner_event(batter_speed, hand, 2, False, out_t=t_arr))
+            _ev_call(play, 2, t_arr, True)
+        return PlayResult("single_out", 1, "안타 후 2루 주루사 (송구 %.1f s vs 주자 %.1f s · 판단 %.0f%%)" % (t2, r2, 100 * iq), 1.0), play
+    if not go3:
         if fl:
             t_arr = _commit_plan(play, fl, p2)
             play.events.append(runner_event(batter_speed, hand, 2, True))
             _ev_call(play, 2, max(r2, t_arr), False)
         return PlayResult("double", 2, "2루타 (3루 송구 %.1f s vs 주자 %.1f s%s)" % (t3, r3, tag(p3) if fl else ""), 1.0), play
+    if m3 < -0.05:
+        if fl:
+            t_arr = _commit_plan(play, fl, p3)
+            play.events.append(runner_event(batter_speed, hand, 3, False, out_t=t_arr))
+            _ev_call(play, 3, t_arr, True)
+        return PlayResult("double_out", 2, "2루타 후 3루 주루사 (송구 %.1f s vs 주자 %.1f s · 판단 %.0f%%)" % (t3, r3, 100 * iq), 1.0), play
     if fl:
         t_arr = _commit_plan(play, fl, p3)
         play.events.append(runner_event(batter_speed, hand, 3, True))

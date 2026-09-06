@@ -140,3 +140,30 @@ main{flex:1 1 auto;min-height:0;padding:6px 8px}
 @media (max-height:520px){
   .bug{padding:3px 8px;gap:8px} .bug b{font-size:14px} .big button.go{min-height:34px;min-width:56px;font-size:13px} .viewbox.full .kzinset{width:104px} .viewbox.full .fieldinset{width:100px} .viewbox.full .feedlast{left:112px}
 }
+
+/* ---- title / team / events / tutorial / save ---- */
+.screen.title{align-items:center;justify-content:center}
+.titlebox{display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center}
+.logo{font:700 44px "Oswald";letter-spacing:.14em;color:var(--bulb)}
+.tag{color:var(--mute);font-size:13px}
+.col-btns{flex-direction:row}
+button.big{min-height:46px;min-width:150px;font-size:15px}
+.slots{display:flex;flex-direction:column;gap:6px;min-width:360px}
+.slots .slot{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:6px 10px}
+.slots .slot span{flex:1;font-size:12px}
+.teams{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;overflow:hidden}
+.teams .tc{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:10px 12px;cursor:pointer;display:flex;flex-direction:column;gap:4px}
+.teams .tc.sel{outline:2px solid var(--bulb)}
+.teams .tc b{font:700 16px "Oswald";letter-spacing:.06em}
+.teams .sw{display:inline-block;width:14px;height:14px;border-radius:3px;margin-right:6px;vertical-align:middle}
+.modalbox.event h3{margin:0 0 8px;font:700 16px "IBM Plex Sans KR";color:var(--bulb)}
+.tutor{position:fixed;inset:0;z-index:40;pointer-events:none}
+.tutor .tbox{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);background:var(--panel);border:1px solid var(--bulb);border-radius:8px;padding:10px 14px;width:min(560px,92vw);pointer-events:auto;font-size:13px}
+.lock{align-self:center;margin-left:8px;color:var(--red);font:700 11px "Oswald";letter-spacing:.06em}
+.ctlmini{display:flex;gap:4px;margin-left:10px}
+.ctlmini button{min-height:26px;padding:2px 8px;font-size:11px}
+.nav button:disabled{opacity:.35}
+select.posSel{min-height:26px;padding:1px 4px;font-size:11px}
+.warn{color:var(--red);font-size:11px}
+.form{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:11px;margin-top:6px}
+.form input[type=range]{width:100%;min-height:20px}

@@ -14,9 +14,9 @@ import os
 import numpy as np
 
 ROOT = os.path.join(os.path.dirname(__file__), "..")
-BAT_KEYS = ("contact", "power", "eye", "speed", "defense", "arm")
+BAT_KEYS = ("contact", "power", "eye", "speed", "run_iq", "defense", "arm")
 PIT_KEYS = ("stuff", "control", "stamina", "movement")
-KO = {"contact": "컨택", "power": "파워", "eye": "선구", "speed": "주력", "defense": "수비", "arm": "송구",
+KO = {"contact": "컨택", "power": "파워", "eye": "선구", "speed": "주력", "run_iq": "판단", "defense": "수비", "arm": "송구",
       "stuff": "구위", "control": "제구", "stamina": "체력", "movement": "무브먼트"}
 SURNAMES = "김 이 박 최 정 강 조 윤 장 임 한 오 서 신 권 황 안 송 류 전 홍 고 문 양 손 배 백 허 유 남".split()
 GIVEN = "민준 서준 도윤 예준 시우 하준 주원 지호 지후 준서 준우 현우 도현 건우 우진 선우 연우 유준 정우 승우 승현 시윤 준혁 은우 지훈 승민 지환 승준 유찬 태윤".split()

@@ -20,7 +20,7 @@ function check(){$("order").textContent="선택 "+pick.order.length+"/9";$("star
 $("clearOrder").onclick=()=>{pick.order=[];document.querySelectorAll("[data-b]").forEach(x=>{x.classList.remove("sel");$("ord"+x.dataset.b).textContent=""});check()};
 $("autoOrder").onclick=()=>{$("clearOrder").onclick();const sc=b=>({S:5,A:4,B:3,C:2,D:1}[b.contact]+{S:5,A:4,B:3,C:2,D:1}[b.eye]+{S:5,A:4,B:3,C:2,D:1}[b.power]);[...BANK.batters].sort((a,b)=>sc(b)-sc(a)).slice(0,9).forEach(b=>{pick.order.push(b.id);document.querySelector("[data-b='"+b.id+"']").classList.add("sel");$("ord"+b.id).textContent=pick.order.length});if(pick.pitcher===null){pick.pitcher=1;document.querySelector("[data-p='1']").classList.add("sel")}check()};
 $("start").onclick=()=>{const seed=+$("seed").value||1;rng=mulberry(seed);G={inning:1,half:"top",outs:0,runners:[false,false,false],total:+$("innings").value||3,over:false,score:{us:[0],them:[]},hits:{us:0,them:0},errors:{us:0,them:0},idx:{us:0,them:0},lineup:pick.order.slice(),oppLineup:BANK.opp.batters.map(b=>b.id),ourPitcher:pick.pitcher,oppPitcher:seed%5,pitcher:seed%5,pitches:{us:0,them:0},mph:{us:[0,0],them:[0,0]},box:{us:{},them:{}},pline:{us:{outs:0,H:0,R:0,K:0,BB:0},them:{outs:0,H:0,R:0,K:0,BB:0}},used:{},balls:0,strikes:0,paPitches:0};setScene("pitch");
- $("setup").hidden=true;$("game").hidden=false;$("feed").innerHTML="";feed("플레이 볼 · 우리 선발 "+BANK.pitchers[G.ourPitcher].name+" · 상대 선발 "+BANK.opp.pitchers[G.oppPitcher].name+" · 1번 "+BANK.batters[G.lineup[0]].name,true);render();drawAll(null,-2)};
+ $("setup").hidden=true;$("game").hidden=false;$("feed").innerHTML="";if(window.APP&&window.APP.onGameStart)window.APP.onGameStart();feed("플레이 볼 · 우리 선발 "+BANK.pitchers[G.ourPitcher].name+" · 상대 선발 "+BANK.opp.pitchers[G.oppPitcher].name+" · 1번 "+BANK.batters[G.lineup[0]].name,true);render();drawAll(null,-2)};
 document.querySelectorAll(".call").forEach(b=>b.onclick=()=>{call=b.dataset.call;document.querySelectorAll(".call").forEach(x=>x.classList.toggle("on",x===b));if(G&&!G.over)feed("벤치 사인: "+CALLKO[call]+" (다음 투구부터)",false)});
 document.querySelectorAll(".dcall").forEach(b=>b.onclick=()=>{dcall=b.dataset.dcall;document.querySelectorAll(".dcall").forEach(x=>x.classList.toggle("on",x===b));if(G&&!G.over)feed("수비 사인: "+CALLKO[dcall]+" (다음 투구부터)",false)});
 function feed(t,big,badge){const d=document.createElement("div");d.className="l"+(big?" big":"");d.innerHTML=(G?"<span class='t'>"+G.inning+"회"+(G.half=="top"?"초":"말")+"</span>":"")+t+(badge?"<span class='bs'>benchsign!</span>":"");$("feed").prepend(d)}
@@ -42,11 +42,13 @@ function applyOutcome(o,la,dist){const R=G.runners;let runs=0,outs=0;const ev={}
  else if(o=="single"||o=="error"){if(R[2])runs++;const r2=R[1]&&rng()<0.6;let r3=R[1]&&!r2;runs+=r2?1:0;const r13=R[0]&&rng()<0.3&&!r3;r3=r3||r13;const r2n=R[0]&&!r13;G.runners=[true,r2n,r3]}
  else if(o=="double"){runs+=(R[2]?1:0)+(R[1]?1:0);const r1s=R[0]&&rng()<0.45;runs+=r1s?1:0;G.runners=[false,true,R[0]&&!r1s]}
  else if(o=="triple"){runs+=R.filter(Boolean).length;G.runners=[false,false,true]}
+ else if(o=="single_out"){outs=1;if(R[2])runs++;const r2=R[1]&&rng()<0.6;let r3=R[1]&&!r2;runs+=r2?1:0;const r13=R[0]&&rng()<0.3&&!r3;r3=r3||r13;const r2n=R[0]&&!r13;G.runners=[false,r2n,r3]}
+ else if(o=="double_out"){outs=1;runs+=(R[2]?1:0)+(R[1]?1:0);const r1s=R[0]&&rng()<0.45;runs+=r1s?1:0;G.runners=[false,false,R[0]&&!r1s]}
  else if(o=="HR"){runs+=R.filter(Boolean).length+1;G.runners=[false,false,false]}
  else outs=1;
  return {runs,outs,ev}}
-const OUTKO={strikeout:"삼진",walk:"볼넷",hbp:"몸에 맞는 공",out:"아웃",single:"안타",double:"2루타",triple:"3루타",HR:"홈런!",error:"실책으로 출루"};
-const BASES_OF={single:1,error:1,double:2,triple:3,HR:4,walk:1,hbp:1};
+const OUTKO={strikeout:"삼진",walk:"볼넷",hbp:"몸에 맞는 공",out:"아웃",single:"안타",double:"2루타",triple:"3루타",HR:"홈런!",error:"실책으로 출루",single_out:"안타 뒤 2루 주루사",double_out:"2루타 뒤 3루 주루사"};
+const BASES_OF={single:1,error:1,double:2,triple:3,HR:4,walk:1,hbp:1,single_out:2,double_out:3};
 function todayLine(nm,o){const bx=G.box[o][nm];return bx?bx.H+"/"+bx.PA:"0/0"}
 function attrLine(a){return Object.entries(a).filter(([k])=>!["name","hand","height"].includes(k)).slice(0,8).map(([k,v])=>k+" "+(typeof v=="number"?v.toFixed(2):v)).join(" ")}
 function paCard(){const b=batter();const top=G.half=="top";const d=defense();const n=G.pitches[d];const m=G.mph[d];const avg=m[1]?(m[0]/m[1]).toFixed(0)+" mph":"-";
@@ -64,7 +66,7 @@ function renderBreak(over){$("breakTitle").textContent=over?"경기 종료 · �
  $("breakUs").innerHTML=tbl(G.box.us);$("breakThem").innerHTML=tbl(G.box.them);
  const pl=(nm,d)=>{const L=G.pline[d],m=G.mph[d];return "<tr><td>"+nm+"</td><td>"+ip(L.outs)+"</td><td>"+G.pitches[d]+"</td><td>"+L.H+"</td><td>"+L.R+"</td><td>"+L.K+"</td><td>"+L.BB+"</td><td>"+(m[1]?(m[0]/m[1]).toFixed(0):"-")+"</td></tr>"};
  $("breakPitchers").innerHTML="<table class='box'><tr><th>투수</th><th>이닝</th><th>투구</th><th>피안타</th><th>실점</th><th>삼진</th><th>볼넷</th><th>평균 mph</th></tr>"+pl("우리 · "+BANK.pitchers[G.ourPitcher].name,"us")+pl("상대 · "+BANK.opp.pitchers[G.oppPitcher].name,"them")+"</table>";
- $("resume").textContent=over?"새 경기":"다음 이닝 진행";$("resume").onclick=()=>{if(over)location.reload();else{setScene("pitch");render();drawAll(null,-2)}}}
+ $("resume").textContent=over?"정비로 돌아가기":"다음 이닝 진행";$("resume").onclick=()=>{if(over){const res={us:sum(G.score.us),them:sum(G.score.them),sp:BANK.pitchers[G.ourPitcher].name,ip:Math.round(G.pline.us.outs/3*10)/10,er:G.pline.us.R,box:Object.entries(G.box.us).map(([n,v])=>({name:n,PA:v.PA,H:v.H,BB:v.BB,K:v.K}))};G=null;$("game").hidden=true;$("setup").hidden=false;setScene("pitch");if(window.APP&&window.APP.onGameOver)window.APP.onGameOver(res)}else{setScene("pitch");render();drawAll(null,-2)}}}
 async function onePitch(){let p;try{p=await pickPitch()}catch(e){feed("이 조합의 투구 데이터가 없습니다 ("+e.message+")",true);stopFlag=true;return "pitch"}const top=G.half=="top";const used=top?call!="none":dcall!="none";$("signBadge").classList.toggle("on",used);
  if(G.paPitches==0)feed(paCard(),false);
  let paOver=null;
@@ -80,7 +82,7 @@ async function onePitch(){let p;try{p=await pickPitch()}catch(e){feed("이 조�
  await animate(p);const d=defense();G.pitches[d]++;G.paPitches++;G.mph[d][0]+=p.mph;G.mph[d][1]++;$("speed").textContent=p.mph.toFixed(0);feed(p.text+(BANK.admin?" ["+p.code+"]":""),false,used);if(BANK.admin)adminInfo(p);
  render();
  if(paOver){const {runs,outs,ev}=res;addRuns(runs);G.outs+=outs;
-  const o=offense();const nm=batter().name;const bx=G.box[o][nm]||(G.box[o][nm]={PA:0,H:0,BB:0,K:0});bx.PA++;const hit=["single","double","triple","HR"].includes(paOver);bx.H+=hit?1:0;if(hit)G.hits[o]++;if(paOver=="error")G.errors[d]++;bx.BB+=(paOver=="walk"||paOver=="hbp")?1:0;bx.K+=paOver=="strikeout"?1:0;const L=G.pline[d];L.outs+=outs;L.R+=runs;if(hit)L.H++;if(paOver=="strikeout")L.K++;if(paOver=="walk"||paOver=="hbp")L.BB++;
+  const o=offense();const nm=batter().name;const bx=G.box[o][nm]||(G.box[o][nm]={PA:0,H:0,BB:0,K:0});bx.PA++;const hit=["single","double","triple","HR","single_out","double_out"].includes(paOver);bx.H+=hit?1:0;if(hit)G.hits[o]++;if(paOver=="error")G.errors[d]++;bx.BB+=(paOver=="walk"||paOver=="hbp")?1:0;bx.K+=paOver=="strikeout"?1:0;const L=G.pline[d];L.outs+=outs;L.R+=runs;if(hit)L.H++;if(paOver=="strikeout")L.K++;if(paOver=="walk"||paOver=="hbp")L.BB++;
   feed(OUTKO[paOver]+(ev.dp?" (병살)":"")+(ev.sf?" (희생플라이)":"")+" · 아웃 "+G.outs+" · 우리 "+sum(G.score.us)+" : 상대 "+sum(G.score.them),true);
   G.idx[o]++;G.balls=0;G.strikes=0;G.paPitches=0;
   if(G.outs>=3)return endHalf();

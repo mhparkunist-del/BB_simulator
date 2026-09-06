@@ -87,6 +87,23 @@ def apply_outcome(runners: List[bool], outs: int, runs: int, r: PlateAppearanceR
         runners = [False, True, runners[0] and not r1_scores]
     elif o == "triple":
         runs += sum(runners); runners = [False, False, True]
+    elif o == "single_out":                                # v2.2: hit, then the batter-runner is thrown out going for second
+        outs += 1
+        if runners[2]:
+            runs += 1
+        r2_scores = runners[1] and rng.random() < 0.60
+        runners[2] = (runners[1] and not r2_scores)
+        runs += int(r2_scores)
+        runners[1] = runners[0]
+        runners[0] = False
+        ev["runner_out"] = 2
+    elif o == "double_out":                                # hit, then out going for third
+        outs += 1
+        runs += int(runners[2]) + int(runners[1])
+        r1_scores = runners[0] and rng.random() < 0.45
+        runs += int(r1_scores)
+        runners = [False, False, runners[0] and not r1_scores]
+        ev["runner_out"] = 3
     elif o == "HR":
         runs += sum(runners) + 1; runners = [False, False, False]
     else:                                               # unresolved (20+ pitches): scored as an out, flagged
