@@ -4,7 +4,9 @@ const DATA=window.APP.club;
 const $=id=>document.getElementById(id);
 const KO=DATA.ko;
 let S=null, sel=null, swapSlot=null;const PG={};
-function pageTable(id,head,rows,per,key){const box=$(id);const cap=box&&box.clientHeight>80?Math.max(3,Math.floor((box.clientHeight-58)/31)):per;per=Math.min(per,cap);const n=Math.max(1,Math.ceil(rows.length/per));const p=Math.min(PG[key]||0,n-1);PG[key]=p;$(id).innerHTML="<table>"+head+rows.slice(p*per,(p+1)*per).join("")+"</table>"+(n>1?"<div class='pager'><button data-pg='"+key+"' data-d='-1'>이전</button><span>"+(p+1)+"/"+n+"</span><button data-pg='"+key+"' data-d='1'>다음</button></div>":"");$(id).querySelectorAll("[data-pg]").forEach(b=>b.onclick=()=>{PG[key]=Math.max(0,Math.min(n-1,(PG[key]||0)+ +b.dataset.d));render()})}
+function pageTable(id,head,rows,per,key){const box=$(id);const draw=pp=>{const n=Math.max(1,Math.ceil(rows.length/pp));const p=Math.min(PG[key]||0,n-1);PG[key]=p;box.innerHTML="<table>"+head+rows.slice(p*pp,(p+1)*pp).join("")+"</table>"+(n>1?"<div class='pager'><button data-pg='"+key+"' data-d='-1'>이전</button><span>"+(p+1)+"/"+n+"</span><button data-pg='"+key+"' data-d='1'>다음</button></div>":"");return n};
+ let pp=per,n=draw(pp);for(let k=0;k<6&&box.clientHeight>60&&box.scrollHeight>box.clientHeight+2&&pp>2;k++){pp--;n=draw(pp)}
+ box.querySelectorAll("[data-pg]").forEach(b=>b.onclick=()=>{PG[key]=Math.max(0,Math.min(n-1,(PG[key]||0)+ +b.dataset.d));render()})}
 function rng(){S.seed=(S.seed*1664525+1013904223)>>>0;return S.seed/4294967296}
 function gauss(){let u=0,v=0;while(u===0)u=rng();while(v===0)v=rng();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)}
 function poisson(l){let L=Math.exp(-l),k=0,p=1;do{k++;p*=rng()}while(p>L);return k-1}

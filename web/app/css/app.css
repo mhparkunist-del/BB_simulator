@@ -57,7 +57,7 @@ i.S{background:#f2b441}i.A{background:#8ad1a8}i.B{background:#7fb3e0}i.C{backgro
 /* screens fill the rest of the viewport */
 main{flex:1 1 auto;min-height:0;padding:6px 8px}
 .screen{height:100%;display:flex;flex-direction:column;min-height:0}
-.fit{flex:1 1 auto;min-height:0;display:grid;gap:8px}
+.fit{flex:1 1 auto;min-height:0;display:grid;gap:8px;grid-template-rows:minmax(0,1fr)}
 .two-col{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}
 .three-col{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr) minmax(0,1.2fr)}
 .col{display:flex;flex-direction:column;min-height:0;gap:8px}

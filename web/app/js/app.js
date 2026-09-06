@@ -83,8 +83,8 @@ window.APP = window.APP || {};
     }
   }
   async function smoke(mode) {                    // headless check: drive a flow, report at the top of the page
-    const box = document.createElement("div"); box.style.cssText = "background:#063;color:#fff;padding:6px;font:14px monospace;white-space:pre-wrap";
-    document.body.insertBefore(box, document.body.firstChild);
+    const box = document.createElement("div"); box.style.cssText = "position:fixed;left:0;right:0;top:0;z-index:99;background:rgba(0,102,51,.9);color:#fff;padding:2px 6px;font:12px monospace;white-space:pre-wrap";
+    document.body.appendChild(box);
     const errs = []; window.addEventListener("error", e => errs.push(e.message));
     try {
       if (mode === "club") {
@@ -92,7 +92,7 @@ window.APP = window.APP || {};
         window.ClubUI.fresh(); for (let i = 0; i < 9; i++) window.ClubUI.advanceDay();
         A.show("training");
         const S = window.ClubUI.state();
-        box.textContent = "SMOKE OK club: day=" + S.day + " record=" + S.W + "-" + S.L + " errs=" + errs.length;
+        const tb = $("training"); box.textContent = "SMOKE OK club: day=" + S.day + " record=" + S.W + "-" + S.L + " errs=" + errs.length + " | training box " + tb.clientHeight + "/" + tb.scrollHeight + " rows=" + tb.querySelectorAll("tr").length + " pager=" + !!tb.querySelector(".pager");
       } else {
         A.show("game");
         $("autoOrder").onclick(); if (window.GameUI.pick.pitcher === null) document.querySelector("[data-p]").onclick(); $("start").onclick();
