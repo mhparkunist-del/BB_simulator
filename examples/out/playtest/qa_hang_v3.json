@@ -1,0 +1,25 @@
+{
+ "name": "qa_hang_v3",
+ "ms": 4131,
+ "errs": [],
+ "log": [
+  "seed1 ok {\"us\":1,\"them\":3} | seed2 ok {\"us\":0,\"them\":5} | seed3 ok {\"us\":0,\"them\":8} | seed4 ok {\"us\":0,\"them\":6} | seed5 ok {\"us\":7,\"them\":4} | seed6 ok {\"us\":1,\"them\":4} | seed7 ok {\"us\":1,\"them\":3} | seed8 ok {\"us\":1,\"them\":1}",
+  "PASS EXPECT 0 of 8 fast 3-inning practice games hang in an endless foul loop | GOT 0/8 hung. ",
+  "PASS unlocked at the end | GOT false"
+ ],
+ "persona": "QA 파괴 테스터 · foul-loop census",
+ "checks": [
+  {
+   "name": "EXPECT 0 of 8 fast 3-inning practice games hang in an endless foul loop",
+   "ok": true,
+   "got": "0/8 hung. "
+  },
+  {
+   "name": "unlocked at the end",
+   "ok": true,
+   "got": "false"
+  }
+ ],
+ "fails": 0,
+ "hangs": []
+}

@@ -1,0 +1,5 @@
+elapsed 117.5s
+png: /home/mhpark/취미/2_BB_simulator/examples/out/playtest/qa_anim.png
+report: MISSING (scenario never called PT.done — check qa_anim.log and the png status bar)
+firefox stderr: *** You are running in headless mode.
+

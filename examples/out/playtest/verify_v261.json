@@ -1,0 +1,18 @@
+{
+ "name": "verify_v261",
+ "ms": 1439,
+ "errs": [],
+ "log": [
+  "gameToday {\"g\":1,\"opp\":\"LG 트윈스\",\"home\":true,\"starter\":0}",
+  "innings=9 seed=9911",
+  "home=true total=9 firstBatterIsUs=no",
+  "final 4:3 inning=9 usedOurP=2 usedOppP=2",
+  "changes: 6회말투수 교체 · 고우석 → 손주영 (85구) | 5회초투수 교체 · 원태인 → 페덱 (84구)",
+  "badge? false",
+  "modal=true screen=true body=이겼습니다. 4 : 3결과가 오늘 일정과 기록에 반영됐습니다. 정비 시간입니다. 일정 화면에서 다음 날로 넘",
+  "sched result {\"us\":4,\"them\":3,\"sp\":\"원태인\",\"ip\":9,\"er\":0,\"real\":true} W-L-D 1-0-0 rotIdx=1 cash=42.4",
+  "standings row1: 1삼성 라이온즈1001.000 rank=1위 / 10"
+ ],
+ "persona": "verify",
+ "ok": true
+}

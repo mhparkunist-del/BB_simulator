@@ -1,0 +1,19 @@
+00:06:01 FA pool: 이호성(RP 23 ovr 0.39 ask 0.4 amb 0.86 depth 7), 장지훈(RP 27 ovr 0.49 ask 0.7 amb 0.54 depth 7), 원종해(RP 22 ovr 0.58 ask 2.2 amb 0.33 depth 7), 허윤동(RP 32 ovr 0.46 ask 0.5 amb 0.84 depth 7), 김준모(RP 23 ovr 0.42 ask 0.4 amb 0.86 depth 7), 김재민(C 19 ovr 0.6 ask 2.6 amb 0.45 depth 2), 안민성(C 24 ovr 0.4 ask 0.4 amb 0.83 depth 2), 류효승(RF 26 ovr 0.49 ask 0.7 amb 0.3 depth 1) · budget 40
+00:06:01 (a) 500억x1 on ask 0.4: signed=true salary 30 years 1 budget 31 msg 계약 성사 · 이호성 1년, 연봉 30억 (계약금 9억 별도)
+00:06:01 (a2) 25% ask x100y: signed=false msg 에이전트: 그 조건으로는 어렵습니다. 요구는 0.4억, 3년입니다. · budget 40
+00:06:01 (a3) 30억x4y (bonus 36) on 원종해 ask 2.2: signed=true budget 4 · then 30x4 again on next FA: 
+00:06:01 (a4) second 30x4 with budget 4: signed=false msg 구단 재정: 계약금 36억이 잔액 4억을 넘습니다. 조건을 낮추세요.
+00:06:01 (b) patience after 2 lowballs 1 -> startNego again patience 1 round 2 · 10 lowballs with restarts: still in FA=true ask 0.4 (결렬 avoided=true)
+00:06:01 (c) 2 counters at U≈0.80 (4y) then meet: 이호성 0.4->0.4 (x1, mods 1.04) [] 계약 성사 · 이호성 4년, 연봉 0 | 장지훈 0.7->0.9 (x1.29, mods 1.02) [0.6->0.8^,0.7->0.9^] 계약 성사 · 장지훈 4년, 연봉 0 | 원종해 2.2->1.9 (x0.86, mods 1.01) [1.8->2,1.6->1.9^] 계약 성사 · 원종해 4년, 연봉 1 | 허윤동 0.5->0.5 (x1, mods 1.07) [0.4->0.5,0.4->0.5^] 계약 성사 · 허윤동 4년, 연봉 0 | 김준모 0.4->0.4 (x1, mods 1.04) [] 계약 성사 · 김준모 4년, 연봉 0 | 김재민 2.6->2 (x0.77, mods 1.09) [2->2.3,1.7->2] 계약 성사 · 김재민 4년, 연봉 2 | 안민성 0.4->0.4 (x1, mods 1.11) [0.3->0.4^,0.3->0.4^] 계약 성사 · 안민성 4년, 연봉 0 | 류효승 0.7->0.5 (x0.71, mods 1.17) [0.5->0.6] 계약 성사 · 류효승 4년, 연봉 0 · avg ratio 0.95 · rival bumps 6 · budget 31.5
+00:06:02 (c2) immediate-accept fraction of ask at 4y, rank 1: 이호성 0.88 (mods 1.04), 장지훈 0.93 (mods 1.02), 원종해 0.98 (mods 1.01), 허윤동 0.9 (mods 1.07), 김준모 0.88 (mods 1.04), 김재민 0.91 (mods 1.09), 안민성 0.88 (mods 1.11), 류효승 0.79 (mods 1.17)
+00:06:02 (d) signed 1 FA at 30억x4y: budget 4 top40 156.6 payroll/wk 6.8
+00:06:02 (d2) budget by day: 6.8,10,13,13,13,13,12.6,15.1,18,20.7,20.7,20.7,20.7,19.8,22.4,25.2,28.3,28.3,28.3,28.3,27.6 · weekly: -0.7/-0.9/-0.4 · owner/warning events: 0
+00:06:02 (d3) at budget 27.6: trade with +1억 cash ok=false 삼성 거절 · 가치 차이가 큽니다 (우리 0.7 vs 요구 6.2). · cash sale ok=true budget 28.6
+00:06:02 (d4) sign FA at ask while budget 28.6: signed=false msg 에이전트: 조금 더 올려 주시죠. 0.7억, 3년이면 사인하겠습니다.
+00:06:02 (d5) season end: budget 39.6 · 26-4 · [{"d":"5/8 (금)","kind":"샐러리캡 제재금","amt":-5.6,"text":"상위 40인 156.2억, 초과분의 30%"}] · 시즌 재정 결산 · 잔액 39.6억 · 수입 80.2억 · 지출 80.6억 · consequences: none
+00:06:02 (e) most expensive 박상준 salary 11.9 years 3: buyout 6억 vs salary actually paid over the 35-day season ≈ 2.3억 · farm player buyout min 0.2 vs his season pay 0.1
+00:06:02 (f) signed all 8 at ask: active 24->26 top40 127->131.7 budget 33 · FA left 0
+00:06:02 (f2) season 28-2 budget 79.7 · [] · signees playing_time 0.36 active 2/8 · transfer requests 0
+00:06:02 (g) FA signee trade at game 19: ok=false FA로 영입한 선수는 1년간 트레이드할 수 없습니다. noTrade=true
+00:06:02 (h) UI hint with 999억/50년 typed: 장지훈 · RP · 27세 · 전 소속 SSG · 구위 C 제구 C 체력 C 무브먼트 B요구 0.7억 × 3년 · 인내 ●●● · 잔액 40억 · 계약금은 연봉×연수의 30 % (지금 299.7억)에이전트: 장지훈 선수는 연봉 0.7억, 3년을 원합니다. 조건을 제시해 주세요.
+00:06:03 (h2) after 제안: signed=true salary 30 years 1 budget 31 msg 계약 성사 · 장지훈 1년, 연봉 30억 (계약금 9억 별도)

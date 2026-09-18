@@ -1,0 +1,16 @@
+{
+ "name": "casual_newseason",
+ "ms": 2545,
+ "errs": [],
+ "log": [
+  "team screen: #teamBack 41x30px/12.5px | #teamStart 62x30px/12.5px",
+  "after 뒤로: title visible true",
+  "before: club LG 트윈스 policy balanced day 0 · #reset 54x30px/12.5px next to #nextDay 90x30px/12.5px",
+  "reset with 취소: confirm text '저장된 시즌을 지우고 새로 시작할까요?' · club still LG 트윈스 policy balanced",
+  "reset with 확인: club LG 트윈스 policy manual day 0 players 98 · event modal false '구단주 인사' · tutorial false · screen 일정"
+ ],
+ "persona": "casual mobile",
+ "screen": "newseason",
+ "clubKept": true,
+ "confirmText": "저장된 시즌을 지우고 새로 시작할까요?"
+}

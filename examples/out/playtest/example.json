@@ -1,0 +1,18 @@
+{
+ "name": "example",
+ "ms": 3799,
+ "errs": [],
+ "log": [
+  "club KIA 타이거즈 players 99 cash 40",
+  "game over true score 0:0",
+  "signed 이호성 true"
+ ],
+ "persona": "example",
+ "fun": 7,
+ "funWhy": "빠른 결과 보기와 협상이 이어져 리듬이 좋다",
+ "bugs": [],
+ "stats": {
+  "signed": true,
+  "locked": false
+ }
+}

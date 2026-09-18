@@ -1,0 +1,14 @@
+23:33:40 rAF polyfilled with setTimeout(16)
+23:33:41 PASS 한 구 (animated, 10x) completes within 15s | GOT pitches=1 busy=false
+23:33:42 PASS 12 rapid 한 구 clicks -> exactly 1 pitch (busy guard) | GOT 1 pitches
+23:33:42 PASS spd input has min=0.25 but accepts -1 | GOT -1
+23:33:45 FAIL EXPECT 배속 -1 does not freeze the pitch (buttons back within 3s) | GOT playPitch.disabled=true pitches 2->2
+23:33:45 PASS 정지 rescues the frozen pitch | GOT playPitch.disabled=false
+23:33:49 PASS spd 0 -> falls back to 1x, pitch completes | GOT false
+23:33:49 PASS feed announces interruption | GOT 1회말결과 바로보기 중단 · 1회말부터 지휘합니다1회말1구째 73마일, 몸쪽 낮은 코스 — 지켜보고 스트라이크1회말타석 시작 · 상대 타자 이주
+23:33:49 PASS fast + stop spam: stopped cleanly, buttons enabled | GOT over=false inning=1bottom pitches=23
+23:33:50 PASS 타석 completes | GOT pitches=25
+23:34:01 PASS 이닝 reaches the break screen | GOT pitches=36 over=true
+23:34:04 finished hung=false
+23:34:04 PASS no JS errors in animation tests | GOT 
+23:34:04 PASS bench sign buttons: no error, feed line | GOT 1회초수비 사인: 몸쪽 승부 (다음 투구부터)1회초벤치 사인: 번트 (다

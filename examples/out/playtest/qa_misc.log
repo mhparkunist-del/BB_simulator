@@ -1,0 +1,12 @@
+23:33:41 PASS APP.show('bogus') -> schedule | GOT #schedule
+23:33:41 PASS APP.show() -> schedule | GOT #schedule
+23:33:41 FAIL EXPECT a cancel/back control on the club-select screen | GOT buttons: 부임하기
+23:33:41 PASS state intact after visiting team screen without picking | GOT NC 다이노스
+23:33:41 PASS 27 active (API): header shows over-cap | GOT 1군 (27/26)라일
+23:33:41 FAIL EXPECT quick-sim with 27 active is refused or penalised | GOT log0=승 3:1 vs 삼성 라이온즈 (홈) · 선발 라일리 7이닝 1실점 · 블레인 2안타 1홈런, 최정원 3안타 1홈런, 홍종표 2안타 1홈런 active=27
+23:33:41 PASS swap then clicking a batter already in the lineup does not duplicate | GOT [50,61,64,76,60,58,78,81,63]
+23:33:41 PASS nego years select max is 4 | GOT 1,2,3,4
+23:33:41 FAIL EXPECT salary '1e3' (=1000억) is rejected as unaffordable | GOT signed=true budget=-856.8
+23:33:41 PASS schedule pager clamps at last page | GOT 4/4
+23:33:41 PASS overwriting a slot updates its timestamp | GOT 2026-09-06T14:33:41.333Z -> 2026-09-06T14:33:41.637Z
+23:33:41 PASS no JS errors in misc | GOT 

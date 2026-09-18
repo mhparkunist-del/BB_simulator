@@ -1,0 +1,135 @@
+{
+ "name": "sim_v2_game2",
+ "ms": 35436,
+ "errs": [],
+ "log": [
+  "engine mapping: batters with engine_id 한준수→b8,김태군→b0,김선빈→b2,김도영→b3,정현창→b10,이호연→b4,박상준→b1,박정우→b11,카스트로→b7,김민규→b6,나성범→b9,고종욱→b5 · pitchers 곽도규→p3,황동하→p1,양현종→p4,정해영→p2,성영탁→p0",
+  "game 1 {\"seed\":0,\"oppP\":0,\"us\":0,\"them\":0,\"hits\":\"5/2\",\"pitches\":266,\"hangs\":0,\"keys\":\"\",\"ms\":922}",
+  "game 2 {\"seed\":1,\"oppP\":1,\"us\":0,\"them\":0,\"hits\":\"5/2\",\"pitches\":266,\"hangs\":0,\"keys\":\"\",\"ms\":285}",
+  "game 3 {\"seed\":2,\"oppP\":2,\"us\":1,\"them\":0,\"hits\":\"7/1\",\"pitches\":305,\"hangs\":0,\"keys\":\"\",\"ms\":321}",
+  "game 4 {\"seed\":3,\"oppP\":3,\"us\":0,\"them\":2,\"hits\":\"6/5\",\"pitches\":301,\"hangs\":0,\"keys\":\"\",\"ms\":304}",
+  "game 5 {\"seed\":4,\"oppP\":4,\"us\":0,\"them\":5,\"hits\":\"5/5\",\"pitches\":280,\"hangs\":0,\"keys\":\"\",\"ms\":297}",
+  "game 6 {\"seed\":5,\"oppP\":0,\"us\":9,\"them\":0,\"hits\":\"9/1\",\"pitches\":319,\"hangs\":0,\"keys\":\"\",\"ms\":321}",
+  "game 7 {\"seed\":6,\"oppP\":1,\"us\":5,\"them\":0,\"hits\":\"11/0\",\"pitches\":310,\"hangs\":0,\"keys\":\"\",\"ms\":314}",
+  "game 8 {\"seed\":7,\"oppP\":2,\"us\":2,\"them\":0,\"hits\":\"12/2\",\"pitches\":289,\"hangs\":0,\"keys\":\"\",\"ms\":301}",
+  "game 9 {\"seed\":8,\"oppP\":3,\"us\":3,\"them\":1,\"hits\":\"8/2\",\"pitches\":319,\"hangs\":0,\"keys\":\"\",\"ms\":322}",
+  "game 10 {\"seed\":9,\"oppP\":4,\"us\":1,\"them\":1,\"hits\":\"4/2\",\"pitches\":257,\"hangs\":0,\"keys\":\"\",\"ms\":277}",
+  "summary: 10 games · W 5 L 2 T 3 · runs us 21 them 9 · games with hang 0/10 total hangs 0 · avg ms 366.4 · club W-L 5-2",
+  "(roster→physics) traded-in star 김영웅 (ovr 0.67, engine_id=undefined) put at #4: clubLineup.order=null · game-screen batter cards: 42 김태군 · C R|50 박상준 · SS L|3 김선빈 · 2B R|최정우 · R|36 이호연 · 1B R|57 고종욱 · LF R|37 김민규 · RF R|26 카스트로 · DH R|25 한준수 · C R|47 나성범 · CF R|12 정현창 · SS R|1 박정우 · CF L · is 김영웅 selectable? false",
+  "(archetype) engine batter b0 '김태군' grades {\"contact\":\"C\",\"power\":\"B\",\"eye\":\"C\",\"speed\":\"D\"} vs club player mapped to b0: 김태군 grades {\"contact\":\"B\",\"power\":\"A\",\"eye\":\"B\",\"speed\":\"C\",\"run_iq\":\"A\",\"defense\":\"B\",\"arm\":\"B\"} attrs {\"contact\":0.5899555523144362,\"power\":0.6870199999999997,\"eye\":0.603,\"speed\":0.45,\"run_iq\":0.823,\"defense\":0.733,\"arm\":0.637} · engine attrs static=false"
+ ],
+ "scenario": "game2",
+ "games": [
+  {
+   "seed": 0,
+   "oppP": 0,
+   "us": 0,
+   "them": 0,
+   "hits": "5/2",
+   "pitches": 266,
+   "hangs": 0,
+   "keys": "",
+   "ms": 922
+  },
+  {
+   "seed": 1,
+   "oppP": 1,
+   "us": 0,
+   "them": 0,
+   "hits": "5/2",
+   "pitches": 266,
+   "hangs": 0,
+   "keys": "",
+   "ms": 285
+  },
+  {
+   "seed": 2,
+   "oppP": 2,
+   "us": 1,
+   "them": 0,
+   "hits": "7/1",
+   "pitches": 305,
+   "hangs": 0,
+   "keys": "",
+   "ms": 321
+  },
+  {
+   "seed": 3,
+   "oppP": 3,
+   "us": 0,
+   "them": 2,
+   "hits": "6/5",
+   "pitches": 301,
+   "hangs": 0,
+   "keys": "",
+   "ms": 304
+  },
+  {
+   "seed": 4,
+   "oppP": 4,
+   "us": 0,
+   "them": 5,
+   "hits": "5/5",
+   "pitches": 280,
+   "hangs": 0,
+   "keys": "",
+   "ms": 297
+  },
+  {
+   "seed": 5,
+   "oppP": 0,
+   "us": 9,
+   "them": 0,
+   "hits": "9/1",
+   "pitches": 319,
+   "hangs": 0,
+   "keys": "",
+   "ms": 321
+  },
+  {
+   "seed": 6,
+   "oppP": 1,
+   "us": 5,
+   "them": 0,
+   "hits": "11/0",
+   "pitches": 310,
+   "hangs": 0,
+   "keys": "",
+   "ms": 314
+  },
+  {
+   "seed": 7,
+   "oppP": 2,
+   "us": 2,
+   "them": 0,
+   "hits": "12/2",
+   "pitches": 289,
+   "hangs": 0,
+   "keys": "",
+   "ms": 301
+  },
+  {
+   "seed": 8,
+   "oppP": 3,
+   "us": 3,
+   "them": 1,
+   "hits": "8/2",
+   "pitches": 319,
+   "hangs": 0,
+   "keys": "",
+   "ms": 322
+  },
+  {
+   "seed": 9,
+   "oppP": 4,
+   "us": 1,
+   "them": 1,
+   "hits": "4/2",
+   "pitches": 257,
+   "hangs": 0,
+   "keys": "",
+   "ms": 277
+  }
+ ],
+ "hangs": []
+}

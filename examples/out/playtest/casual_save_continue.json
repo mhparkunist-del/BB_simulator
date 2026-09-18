@@ -1,0 +1,15 @@
+{
+ "name": "casual_save_continue",
+ "ms": 2937,
+ "errs": [],
+ "log": [
+  "policy now balanced · #saveBtn 35x30px/12px · #titleBtn 42x30px/12px",
+  "save modal visible true slots: 슬롯 1비어 있음여기 저장슬롯 2비어 있음여기 저장슬롯 3비어 있음여기 저장 · #saveSlots [data-slot] 66x30px/12.5px",
+  "after 여기 저장: event true '저장 · 슬롯 1에 저장했습니다.' save modal still visible true slots now: 슬롯 1LG 트윈스 · day 0 · 0승 0패 · 2026-09-06 14:29여기 저장슬롯 2비어 있음여기 저장슬롯 3비어 있음여기 저장",
+  "modal closed true",
+  "title: continue visible true #btnContinue 156x48px/17px",
+  "continue → schedule visible true policy balanced day 0"
+ ],
+ "persona": "casual mobile",
+ "screen": "casual_save_continue"
+}

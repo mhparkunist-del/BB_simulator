@@ -1,0 +1,124 @@
+{
+ "name": "newbie_probe",
+ "ms": 1159,
+ "errs": [],
+ "log": [
+  "튜토리얼 3/3 상자 {\"x\":400,\"y\":563,\"w\":560,\"h\":121} vs 오늘 경기 시작 버튼 {\"x\":838,\"y\":660,\"w\":104,\"h\":34} → 겹침=true · 버튼 중앙 최상위 요소=tbox",
+  "헤더: nav [{\"label\":\"일정\",\"w\":46,\"clipped\":false},{\"label\":\"훈련\",\"w\":46,\"clipped\":false},{\"label\":\"선수단\",\"w\":56,\"clipped\":false},{\"label\":\"기록\",\"w\":45,\"clipped\":false},{\"label\":\"예산·이적\",\"w\":72,\"clipped\":false},{\"label\":\"경기\",\"w\":46,\"clipped\":false}] · 스트립 {\"x\":649,\"y\":7,\"w\":372,\"h\":28} · 헤더 {\"x\":0,\"y\":0,\"w\":1360,\"h\":42}",
+  "타순 '선택 중' 버튼 {\"x\":395,\"y\":112,\"w\":65,\"h\":34} · 패널 {\"x\":19,\"y\":87,\"w\":421,\"h\":598} · 오른쪽 넘침=true · 패널 scroll/client 447/421",
+  "트레이드 보낼 선수 표: {\"oursScrollW\":195,\"oursClientW\":195,\"tblRect\":{\"x\":666,\"y\":144,\"w\":195,\"h\":269},\"wrapRect\":{\"x\":459,\"y\":48,\"w\":402,\"h\":646},\"lastCellVisible\":{\"text\":\"17.8\",\"right\":861,\"wrapRight\":861,\"cut\":false}}"
+ ],
+ "persona": "야구 초보",
+ "screen": "probe",
+ "seen": {
+  "size": [
+   1360,
+   700
+  ],
+  "tut3": {
+   "step": "3/3",
+   "box": {
+    "x": 400,
+    "y": 563,
+    "w": 560,
+    "h": 121
+   },
+   "nextDay": {
+    "x": 838,
+    "y": 660,
+    "w": 104,
+    "h": 34
+   },
+   "overlap": true,
+   "topAtNextDayCenter": "tbox"
+  },
+  "header": {
+   "navs": [
+    {
+     "label": "일정",
+     "w": 46,
+     "clipped": false
+    },
+    {
+     "label": "훈련",
+     "w": 46,
+     "clipped": false
+    },
+    {
+     "label": "선수단",
+     "w": 56,
+     "clipped": false
+    },
+    {
+     "label": "기록",
+     "w": 45,
+     "clipped": false
+    },
+    {
+     "label": "예산·이적",
+     "w": 72,
+     "clipped": false
+    },
+    {
+     "label": "경기",
+     "w": 46,
+     "clipped": false
+    }
+   ],
+   "strip": {
+    "x": 649,
+    "y": 7,
+    "w": 372,
+    "h": 28
+   },
+   "header": {
+    "x": 0,
+    "y": 0,
+    "w": 1360,
+    "h": 42
+   },
+   "stripLines": 2
+  },
+  "swap": {
+   "label": "선택 중",
+   "btn": {
+    "x": 395,
+    "y": 112,
+    "w": 65,
+    "h": 34
+   },
+   "panel": {
+    "x": 19,
+    "y": 87,
+    "w": 421,
+    "h": 598
+   },
+   "spillsRight": true,
+   "textClipped": false,
+   "panelScrollW": 447,
+   "panelClientW": 421
+  },
+  "trade": {
+   "oursScrollW": 195,
+   "oursClientW": 195,
+   "tblRect": {
+    "x": 666,
+    "y": 144,
+    "w": 195,
+    "h": 269
+   },
+   "wrapRect": {
+    "x": 459,
+    "y": 48,
+    "w": 402,
+    "h": 646
+   },
+   "lastCellVisible": {
+    "text": "17.8",
+    "right": 861,
+    "wrapRight": 861,
+    "cut": false
+   }
+  }
+ }
+}

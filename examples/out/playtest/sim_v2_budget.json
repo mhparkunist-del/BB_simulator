@@ -1,0 +1,15 @@
+{
+ "name": "sim_v2_budget",
+ "ms": 855,
+ "errs": [],
+ "log": [
+  "(1) do-nothing: budget 40 -> 94.1 · gate entries 15 vs home games played 15 · att avg 22143 · inc {\"gate\":48.5,\"ads\":29.1,\"parent\":10} exp {\"salary\":28.5,\"ops\":5,\"tax\":0,\"fees\":0,\"buyout\":0} · track H43.2 H46.5 H49.8 -49.8 A49.8 A49.8 A51 H54.1 H57.6 H60.9 -60.9 A60.9 A60.9 A62.1 H64.9 H68.3 H71.8 -71.8 A71.8 A71.8 A72.9 H75.9 H79.3 H82.5 -82.5 A82.5 A82.5 A83.6 H86.5 H89.9 H93.1 -93.1 A93.1 A93.1 A94.1",
+  "(2) external draw 3:3 on home game day: budget 40 -> 41.8 record 0-0-1 header 0-0-1 · sched result {\"us\":3,\"them\":3,\"sp\":\"-\",\"ip\":0,\"er\":0,\"real\":true} · log 패 3:3 vs 삼성 라이온즈 · 직접 경기",
+  "(2b) advanceDay after external game: day 1 budget 41.8 gate entries 1",
+  "(3) salary dump: sold 76 in 38 trades for 341.9억, top40 129.8 -> 92.2 budget 381.9 active 14",
+  "(3b) season: 23-7 budget 444.2 · [] · 시즌 재정 결산 · 잔액 444.2억 · 수입 427.2억 · 지출 23억",
+  "(4) 40억 spent on 3 cash buys (박계범 ovr 0.71 14.1억, 천성호 ovr 0.73 17억, 박찬호 ovr 0.63 8.8억): 29-1 vs control 28-2 · budget end 50.5",
+  "(5) sinks: FA bonus, trade cash, buyout, tax. No staff/scouting/facility/wage-rise sink. Income this run 89.9 vs expense 79.4"
+ ],
+ "scenario": "v2_budget"
+}

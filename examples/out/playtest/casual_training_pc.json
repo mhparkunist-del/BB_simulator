@@ -1,0 +1,12 @@
+{
+ "name": "casual_training_pc",
+ "ms": 979,
+ "errs": [],
+ "log": [
+  "training rows 8 box 556/556 pager '이전1/14다음' | .pol 49x34px/14px | #training select 157x30px/12px | td font 12px | h2: 훈련 · 코치에게 맡기면 매주 방침대로 배정되고, 직접이면 선수마다 고릅니다. 잠재력에 가까울수록, 나이가 많을수록, 피로할수록 느려집니다.",
+  "policy on: 직접 · staff: 타격 코치 60투수 코치 55컨디셔닝 50메디컬 50 · trainLog: 아직 훈련 기록이 없습니다.",
+  "first row: 박동원C36C잠재 B 81 15%타격 드릴(배럴·타이밍)배트 스피드·하체 파워선구안·트래킹주루·스프린트펑고·루트 드릴송구·롱토스체력·회복휴식 · programs: 타격 드릴(배럴·타이밍)/배트 스피드·하체 파워/선구안·트래킹/주루·스프린트/펑고·루트 드릴/송구·롱토스/체력·회복/휴식"
+ ],
+ "persona": "casual mobile",
+ "screen": "casual_training"
+}

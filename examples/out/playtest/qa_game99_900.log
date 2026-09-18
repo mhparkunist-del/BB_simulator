@@ -1,0 +1,6 @@
+23:28:42 PASS innings input max attr is 9 but 99 accepted | GOT 99
+23:28:43 PASS total = 99 | GOT 99
+23:29:08 FAIL reached the inning break | GOT pitches=0 (hang?) 1회초타석 시작 · 손호영 (R) · 컨택 B 파워 A 선구 A 주력 B · 오늘 0/0상대 투수 고우석 (
+23:29:08 FAIL EXPECT 99-column box score fits the panel (no horizontal overflow) | GOT table 2373px vs panel 900px at left 751, innerWidth 900, doc scrollWidth 900
+23:29:08 PASS resume button visible on break screen | GOT resume rect right=1642
+23:29:08 PASS no JS errors | GOT 

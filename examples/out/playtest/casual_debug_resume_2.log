@@ -1,0 +1,44 @@
+00:13:51 PA 4 · 1회초 O0 2:0 · 16048ms
+00:14:02 PA 8 · 1회초 O2 4:0 · 27254ms
+00:14:05 break #1 '1회말 시작 전 · 점수와 기록' → resume
+00:14:05   +206ms after resume · scene pitch · pitchBtn on
+00:14:05   +410ms after resume · scene pitch · pitchBtn on
+00:14:05   +610ms after resume · scene pitch · pitchBtn on
+00:14:05   +810ms after resume · scene pitch · pitchBtn on
+00:14:06   +1011ms after resume · scene pitch · pitchBtn on
+00:14:06   +1211ms after resume · scene pitch · pitchBtn on
+00:14:06   +1412ms after resume · scene pitch · pitchBtn on
+00:14:06   +1612ms after resume · scene pitch · pitchBtn on
+00:14:13 PA 12 · 2회초 O0 4:0 · 38291ms
+00:14:13 break #2 '2회초 시작 전 · 점수와 기록' → resume
+00:14:13   +205ms after resume · scene pitch · pitchBtn on
+00:14:14   +406ms after resume · scene pitch · pitchBtn on
+00:14:14   +607ms after resume · scene pitch · pitchBtn on
+00:14:14   +807ms after resume · scene pitch · pitchBtn on
+00:14:14   +1007ms after resume · scene pitch · pitchBtn on
+00:14:14   +1208ms after resume · scene pitch · pitchBtn on
+00:14:15   +1409ms after resume · scene pitch · pitchBtn on
+00:14:15   +1609ms after resume · scene pitch · pitchBtn on
+00:14:33 PA 16 · 2회초 O2 4:0 · 57921ms
+00:14:37 break #3 '2회말 시작 전 · 점수와 기록' → resume
+00:14:38   +208ms after resume · scene pitch · pitchBtn on
+00:14:38   +409ms after resume · scene pitch · pitchBtn on
+00:14:38   +610ms after resume · scene pitch · pitchBtn on
+00:14:38   +810ms after resume · scene pitch · pitchBtn on
+00:14:38   +1015ms after resume · scene pitch · pitchBtn on
+00:14:39   +1215ms after resume · scene pitch · pitchBtn on
+00:14:39   +1416ms after resume · scene pitch · pitchBtn on
+00:14:39   +1617ms after resume · scene pitch · pitchBtn on
+00:14:46 PA 20 · 2회말 O2 4:0 · 71457ms
+00:14:56 game over true PAs 22 breaks 3 · final '경기 종료 · 우리 4 : 상대 1'
+00:14:56   +212ms after final resume · event false '경기 종료' setup true
+00:14:57   +416ms after final resume · event false '경기 종료' setup true
+00:14:57   +617ms after final resume · event false '경기 종료' setup true
+00:14:57   +817ms after final resume · event false '경기 종료' setup true
+00:14:57   +1018ms after final resume · event false '경기 종료' setup true
+00:14:57   +1219ms after final resume · event false '경기 종료' setup true
+00:14:58   +1419ms after final resume · event false '경기 종료' setup true
+00:14:58   +1620ms after final resume · event false '경기 종료' setup true
+00:14:58   +1820ms after final resume · event false '경기 종료' setup true
+00:14:58   +2021ms after final resume · event false '경기 종료' setup true
+00:14:59 after OK: screen 일정 rec 1-0

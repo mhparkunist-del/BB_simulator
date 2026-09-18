@@ -1,0 +1,9 @@
+00:29:41 gameToday {"g":1,"opp":"LG 트윈스","home":true,"starter":0}
+00:29:41 innings=9 seed=4130
+00:29:42 home=true total=9 firstBatterIsUs=no
+00:29:43 final 6:14 inning=9 usedOurP=3 usedOppP=3
+00:29:43 changes: 7회말투수 교체 · 손주영 → 톨허스트 (87구) | 5회초투수 교체 · 페덱 → 양창섭 (41구, 6실점) | 4회말투수 교체 · 임찬규 → 손주영 (86구)
+00:29:43 badge? false
+00:29:43 modal=true screen=true body=졌습니다. 6 : 14결과가 오늘 일정과 기록에 반영됐습니다. 정비 시간입니다. 일정 화면에서 다음 날로 넘
+00:29:43 sched result {"us":6,"them":14,"sp":"원태인","ip":4,"er":3,"real":true} W-L-D 0-1-0 rotIdx=1 cash=41.2
+00:29:43 standings row1: 1LG 트윈스1001.000 rank=2위 / 10

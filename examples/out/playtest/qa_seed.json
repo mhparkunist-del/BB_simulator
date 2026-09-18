@@ -1,0 +1,51 @@
+{
+ "name": "qa_seed",
+ "ms": 3211,
+ "errs": [],
+ "log": [
+  "PASS seed input allows -1 (no min attr) | GOT min='' value=-1",
+  "start threw can't access property \"name\", BANK.opp.pitchers[G.oppPitcher] is undefined",
+  "PASS EXPECT seed -1 starts a valid game (no JS error) | GOT ",
+  "FAIL state after seed -1: locked / game shown / oppPitcher | GOT locked=true gameVisible=true oppPitcher=-1 pitcher=-1",
+  "feed after 한 구 with seed -1: 1회초이 조합의 투구 데이터가 없습니다 (data/bank/top_-1_2.json 404)",
+  "FAIL EXPECT a pitch is playable with seed -1 | GOT 1회초이 조합의 투구 데이터가 없습니다 (data/bank/top_-1_2.json 404)",
+  "FAIL EXPECT 결과 바로보기 can finish the seed -1 game | GOT over=false busy=false",
+  "FAIL EXPECT can leave after seed -1 (soft-lock check) | GOT locked=true clubHidden=true nav disabled=5",
+  "resume label=다음 이닝 진행"
+ ],
+ "persona": "QA 파괴 테스터 · seed input",
+ "checks": [
+  {
+   "name": "seed input allows -1 (no min attr)",
+   "ok": true,
+   "got": "min='' value=-1"
+  },
+  {
+   "name": "EXPECT seed -1 starts a valid game (no JS error)",
+   "ok": true,
+   "got": ""
+  },
+  {
+   "name": "state after seed -1: locked / game shown / oppPitcher",
+   "ok": false,
+   "got": "locked=true gameVisible=true oppPitcher=-1 pitcher=-1"
+  },
+  {
+   "name": "EXPECT a pitch is playable with seed -1",
+   "ok": false,
+   "got": "1회초이 조합의 투구 데이터가 없습니다 (data/bank/top_-1_2.json 404)"
+  },
+  {
+   "name": "EXPECT 결과 바로보기 can finish the seed -1 game",
+   "ok": false,
+   "got": "over=false busy=false"
+  },
+  {
+   "name": "EXPECT can leave after seed -1 (soft-lock check)",
+   "ok": false,
+   "got": "locked=true clubHidden=true nav disabled=5"
+  }
+ ],
+ "fails": 4,
+ "hangs": []
+}

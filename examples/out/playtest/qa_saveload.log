@@ -1,0 +1,24 @@
+23:08:48 PASS FA signed before save | GOT true
+23:08:48 PASS save modal lists slots | GOT [object HTMLButtonElement]
+23:08:48 PASS slot 1 label shows day | GOT 슬롯 1KIA 타이거즈 · day 3 · 3승 0패 · 2026-09-06 14:08여기 저장슬롯 2비어 있음여기 저장슬롯 3비어 있음여기 저장
+23:08:48 PASS kv save:1 exists with same day | GOT 3
+23:08:48 release button not on first page; skipping UI release
+23:08:48 PASS state changed after mutations | GOT dayB=7 policy=hitting
+23:08:48 PASS titleBtn autosaves current (day B) | GOT 7
+23:08:48 PASS load list rendered | GOT [object HTMLButtonElement]
+23:08:48 PASS EXPECT loaded state == saved snapshot | GOT identical
+23:08:48 PASS loaded day/budget/ledger | GOT 3/48.6/4
+23:08:48 PASS header strip shows loaded date/budget | GOT 4/6 (월) 48.6
+23:08:48 PASS kv club == loaded | GOT 3
+23:08:48 FAIL EXPECT autosave follows load (day 3) | GOT autosave day 7 (boot with hash restores autosave, not the loaded slot)
+23:08:48 PASS continue button visible | GOT true
+23:08:49 PASS continue -> state intact (day 3) | GOT 3
+23:08:49 PASS empty slot 3 load is a no-op | GOT slot3=false title=true
+23:08:49 PASS saveBtn disabled while locked | GOT true
+23:08:49 PASS save modal stays hidden while locked | GOT true
+23:08:52 PASS autosave written right after game over | GOT 2026-09-06T14:08:49.014Z -> 2026-09-06T14:08:49.733Z
+23:08:53 PASS EXPECT schedule pager on page 1 after 새 시즌 | GOT before=1/4 after=1/4
+23:08:53 FAIL EXPECT 새 시즌 keeps club identity (KIA 타이거즈) | GOT club=덕아웃 나이트 kbo=undefined opps=항구 갈매기/고원 산양/강변 여우/도심 늑대/남부 사자
+23:08:53 PASS reset -> day 0 record 0-0 | GOT 0 0-0
+23:08:53 FAIL EXPECT trade panel still usable after 새 시즌 | GOT 트레이드는 KBO 구단으로 시작한 시즌에서 할 수 있습니다.
+23:08:53 FAIL EXPECT game setup cards match club roster after 새 시즌 | GOT stale names: 김태군,박상준,김선빈,김도영,이호연,고종욱,김민규,카스트로,한준수,나성범,정현창,박정우 | club=덕아웃 나이트

@@ -1,0 +1,14 @@
+{
+ "name": "casual_roster_pos",
+ "ms": 919,
+ "errs": [],
+ "log": [
+  "on screen: 선수단",
+  "lineup rows 10 box 339/382 · rosterList rows 8 box 339/339 pager '이전1/15다음' · .swap 41x30px/12.5px | .posSel 42x26px/11px | [data-act=down] 37x30px/12.5px | #rosterList .pr td 69x35px/11px | badge .gi, .grade, td i, td b 0x0px/11px · h2s: 타순 (9) · 교체 후 오른쪽 타자 클릭 / 선발 로테이션 · 불펜 / FA 시장 / 1군 · 2군 · 이름을 누르면 카드",
+  "lineup warn/hint: 포지션 8개가 모두 채워졌습니다. · market rows 3 rotation hint: 불펜: 이정용, 조원태, 이상영, 박시원, 카라스코, 김영우, 케네디",
+  "row1 text: 우강훈SPRPCL R23구위 D 제구 A 체력 B 무브먼트 A2군",
+  "pos SP → RP · warn: 포지션 8개가 모두 채워졌습니다."
+ ],
+ "persona": "casual mobile",
+ "screen": "casual_roster_pos"
+}

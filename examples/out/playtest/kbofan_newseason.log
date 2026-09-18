@@ -1,0 +1,7 @@
+00:10:11 before 새 시즌: {"W":25,"L":5,"D":0,"day":35,"budget":84.9,"fatigueAvg":"0.04","statsG":21} · rankNow: 1.덕아웃 나이트 25-5, 2.삼성 라이온즈 30-20, 3.NC 다이노스 27-18, 4.LG 트윈스 24-22, 5.롯데 자이언츠 20-22, 6.두산 베어스 20-23, 7.KIA 타이거즈 20-25, 8.SSG 랜더스 16-25, 9.키움 히어로즈 16-26, 10.KT 위즈 17-29
+00:10:11 header: tDate=5/8 (금) tRec=25-5 tRank=1위 / 6 tBudget=84.9 tPay=113.5/137.4 · rankNow length 10
+00:10:12 after reset click: event  · modal visible false
+00:10:12 after 새 시즌: {"club":"한화 이글스","W":0,"L":0,"D":0,"day":0,"budget":40,"players":93,"sched0":"2026-04-03","results":0,"fatigueAvg":"0.13","statsG":0,"ledger":0,"log0":"한화 이글스 · 시즌 개막 준비. 이적 자금 40억, 선수 93명, 상위 40인 보수 113.5억 (샐러리캡 137.4억)."}
+00:10:12 header after: tDate=4/3 (금) tRec=0-0 tRank=1위 / 6 tBudget=40.0 tPay=113.5/137.4
+00:10:12 standings rows: #구단승패승률 | 1덕아웃 나이트000.000 | 2삼성 라이온즈000.000 · rows 11
+00:10:12 '상대 5구단' text present in page: true · '/ 6' in tRank: 1위 / 6

@@ -1,0 +1,28 @@
+23:08:11 club SSG 랜더스 players 91 active 24 budget 40 top40 102.4 policy manual days 37
+23:08:11 programs default: {"control":45,"bat":46}
+23:08:11 lineup ovr [0.67,0.64,0.77,0.86,0.79,0.64,0.77,0.72,0.71] rotation 이건욱:0.71,아빌라:0.69,최민준:0.62,한두솔:0.74,김건우:0.64
+23:08:11 standings: 1.덕아웃 나이트 24-6 | 2.LG 트윈스 27-21 | 3.두산 베어스 27-22 | 4.롯데 자이언츠 20-17 | 5.키움 히어로즈 24-23 | 6.KIA 타이거즈 17-20 | 7.한화 이글스 21-25 | 8.KT 위즈 19-25 | 9.NC 다이노스 16-25 | 10.삼성 라이온즈 17-28
+23:08:11 season done at day 35 W-L 24-6 runs 210/126 budget 91.7 top40 102.4 done=true
+23:08:11 header rank text: 1위 / 6 · opp games played: 삼성 45,LG 48,두산 49,KIA 37,롯데 37,한화 46,NC 41,KT 44,키움 47
+23:08:11 fin inc {"gate":43.49999999999999,"ads":26.2,"parent":10} exp {"salary":23,"ops":5,"tax":0,"fees":0,"buyout":0} att 297493 ledger 20
+23:08:11 ledger kinds: {"주간 결산":5,"입장 수입":15}
+23:08:11 ledger last 12: 5/7 (목) 주간 결산 1.6 모기업 2 + 광고·상품 5.2 − 연봉 4.6 − 운영 1 || 5/3 (일) 입장 수입 2.9 관중 19,775명 || 5/2 (토) 입장 수입 2.9 관중 19,789명 || 5/1 (금) 입장 수입 2.8 관중 19,365명 || 4/30 (목) 주간 결산 1.8 모기업 2 + 광고·상품 5.4 − 연봉 4.6 − 운영 1 || 4/26 (일) 입장 수입 3.1 관중 21,097명 || 4/25 (토) 입장 수입 3.2 관중 21,930명 || 4/24 (금) 입장 수입 2.7 관중 18,299명 || 4/23 (목) 주간 결산 1.6 모기업 2 + 광고·상품 5.2 − 연봉 4.6 − 운영 1 || 4/19 (일) 입장 수입 3 관중 20,344명 || 4/18 (토) 입장 수입 2.9 관중 19,805명 || 4/17 (금) 입장 수입 2.7 관중 18,573명
+23:08:11 weekly settlements [1.6,1.8,1.6,1.5,1.7] gate per home game avg 2.9 n=15
+23:08:11 morale 1군 before {"playing_time":0.6,"team_success":0.6,"salary_fairness":0.6,"relationships":0.6,"role_fit":0.6} after {"playing_time":0.65,"team_success":0.73,"salary_fairness":0.74,"relationships":0.6,"role_fit":0.77}
+23:08:11 morale 2군 before {"playing_time":0.6,"team_success":0.6,"salary_fairness":0.6,"relationships":0.6,"role_fit":0.6} after {"playing_time":0.35,"team_success":0.73,"salary_fairness":0.42,"relationships":0.6,"role_fit":0.82}
+23:08:11 morale overall avg before 0.6 after 0.6 transfer requests in log: 0 (log cap 200)
+23:08:11 fatigue before {"B":0.12,"SP":0.13,"RP":0.14,"farm":0.15} after {"B":0.36,"SP":0.83,"RP":0.59,"farm":0}
+23:08:11 condition before {"B":76.67,"SP":80.6,"RP":76.57,"farm":76.22} after {"B":98.81,"SP":97.82,"RP":98.71,"farm":98.75}
+23:08:11 lineup fatigue after: 이지영 0.48, 박성한 0.57, 김요셉 0.5, 한유섬 0.46, 전의산 0.44, 홍대인 0.5, 임근우 0.46, 최지훈 0.44, 안상현 0.42
+23:08:11 rotation fatigue after: 이건욱 0.76, 아빌라 0.85, 최민준 0.9, 한두솔 0.94, 김건우 0.68
+23:08:11 starter fatigue at each start: 1:이건욱@0.12/7ip 2:아빌라@0.03/6ip 3:최민준@0.04/6ip 4:한두솔@0/6ip 5:김건우@0/6ip 6:이건욱@0.42/6ip 7:아빌라@0.3/6ip 8:최민준@0.32/6ip 9:한두솔@0.32/6ip 10:김건우@0.28/6ip 11:이건욱@0.69/6ip 12:아빌라@0.58/5ip 13:최민준@0.59/5ip 14:한두솔@0.6/5ip 15:김건우@0.6/6ip 16:이건욱@0.72/5ip 17:아빌라@0.72/4ip 18:최민준@0.72/6ip 19:한두솔@0.72/5ip 20:김건우@0.72/5ip 21:이건욱@0.76/5ip 22:아빌라@0.72/5ip 23:최민준@0.72/5ip 24:한두솔@0.72/5ip 25:김건우@0.72/5ip 26:이건욱@0.72/6ip 27:이건욱@0.94/5ip 28:아빌라@0.68/5ip 29:최민준@0.68/5ip 30:한두솔@0.68/6ip
+23:08:11 injuries logged 6 days [4,5,10,6,3,3] currently injured 0 active injured 
+23:08:11 starts by pitcher {"이건욱":7,"아빌라":6,"최민준":6,"한두솔":6,"김건우":5} starts with fatigue>=0.75 at start: 2/30
+23:08:11 training gains (x100 attr pts) top5: 김예준(22,2군) sum 8.85 ovr 1.26 {"contact":7.59,"power":1.26,"eye":0,"speed":0,"run_iq":0,"defense":0,"arm":0} | 김준영(23,2군) sum 8.64 ovr 2.16 {"stuff":0,"control":7.37,"stamina":0,"movement":1.27} | 김성현(19,2군) sum 8.64 ovr 1.23 {"contact":7.07,"power":1.57,"eye":0,"speed":0,"run_iq":0,"defense":0,"arm":0} | 박정빈(25,2군) sum 8.15 ovr 2.04 {"stuff":0,"control":6.85,"stamina":0,"movement":1.3} | 윤성보(23,2군) sum 7.73 ovr 1.93 {"stuff":0,"control":6.31,"stamina":0,"movement":1.42}
+23:08:11 training gains bottom5: 김성욱(31) sum 0 ovr 0 | 이지영(40) sum -0.49 ovr -0.07 | 에레디아(35) sum -0.49 ovr -0.07 | 한유섬(37) sum -0.49 ovr -0.07 | 박세직(33) sum -0.49 ovr -0.07
+23:08:11 avg dOvr x100 by age: [["0-24",1.04],["25-27",0.83],["28-31",0.27],["32-50",0.02]]
+23:08:11 avg dOvr x100 active vs farm: 0.51 / 0.76
+23:08:11 runs us {"3":1,"4":4,"5":4,"6":2,"7":7,"8":6,"9":4,"13":2} avg 7 | them {"0":1,"1":4,"2":5,"3":1,"4":4,"5":7,"6":3,"7":2,"8":1,"9":2} avg 4.2 | home W-L 11-4 away 13-2
+23:08:11 AI trade offers logged: 2 offers pending 0
+23:08:11 season end log: 시즌 재정 결산 · 잔액 91.7억 · 수입 79.7억 · 지출 28억 || 정규 시즌 30경기 종료 · 24승 6패
+23:08:11 after extra 12 simDay: day 37 (days cap 37) budget 91.7 (was 91.7) ledger newest 주간 결산 1.6 nextDay disabled=true last log: 시즌 종료. 최종 24승 6패

@@ -1,0 +1,20 @@
+23:20:14 baseline 삼성 라이온즈 19-11 R 166/127 B 0.59 D 0.62 lineupOvr 0.66 rotOvr 0.61 oppPitch 0.55 oppBat 0.52 inj 5 spFatLate 0.67 budget 82 top40 100.9
+23:20:14 baseline LG 트윈스 28-2 R 200/104 B null D null lineupOvr 0.67 rotOvr 0.67 oppPitch 0.54 oppBat 0.53 inj 8 spFatLate 0.71 budget 95.3 top40 102.2
+23:20:14 baseline 두산 베어스 18-12 R 168/139 B null D null lineupOvr 0.65 rotOvr 0.67 oppPitch 0.54 oppBat 0.53 inj 3 spFatLate 0.71 budget 77.5 top40 120.6
+23:20:14 baseline KIA 타이거즈 20-10 R 175/134 B null D null lineupOvr 0.65 rotOvr 0.71 oppPitch 0.54 oppBat 0.53 inj 6 spFatLate 0.76 budget 82.3 top40 127
+23:20:15 baseline SSG 랜더스 24-6 R 210/126 B null D null lineupOvr 0.73 rotOvr 0.68 oppPitch 0.55 oppBat 0.54 inj 6 spFatLate 0.7 budget 91.7 top40 102.4
+23:20:15 baseline 롯데 자이언츠 24-6 R 168/108 B null D null lineupOvr 0.69 rotOvr 0.68 oppPitch 0.54 oppBat 0.53 inj 11 spFatLate 0.72 budget 78.6 top40 119.5
+23:20:15 baseline 한화 이글스 26-4 R 177/93 B null D null lineupOvr 0.65 rotOvr 0.74 oppPitch 0.54 oppBat 0.53 inj 4 spFatLate 0.7 budget 85.2 top40 113.5
+23:20:15 baseline NC 다이노스 24-6 R 174/95 B null D null lineupOvr 0.66 rotOvr 0.73 oppPitch 0.54 oppBat 0.53 inj 4 spFatLate 0.71 budget 93.5 top40 129.8
+23:20:15 baseline KT 위즈 27-3 R 220/81 B null D null lineupOvr 0.74 rotOvr 0.75 oppPitch 0.55 oppBat 0.52 inj 6 spFatLate 0.67 budget 94.5 top40 133.7
+23:20:15 baseline 키움 히어로즈 21-9 R 178/107 B null D null lineupOvr 0.66 rotOvr 0.77 oppPitch 0.55 oppBat 0.52 inj 6 spFatLate 0.7 budget 73.2 top40 116
+23:20:15 baseline avg W 23.1 runs/g 6.12 ra/g 3.71
+23:20:16 variant manual-default: W 27-3/25-5/22-8 avgW 24.67 runs/g 6.44 ra/g 3.63 inj 9(77d)/6(63d)/8(66d) spFatAtStart 0.52 late 0.68 fatSPend 0.76 fatBend 0.47 dOvrActive 0.51 dOvrYoung 1.05 sumAbsActive 2.72 progMid {"control":45,"bat":46}
+23:20:16 variant balanced: W 29-1/28-2/25-5 avgW 27.33 runs/g 6.84 ra/g 3.32 inj 24(208d)/18(181d)/18(194d) spFatAtStart 0.29 late 0.35 fatSPend 0.36 fatBend 0.43 dOvrActive 0.44 dOvrYoung 1.08 sumAbsActive 2.43 progMid {"movement":14,"control":14,"stuff":13,"rest":4,"speed":12,"bat":12,"eye":11,"field":11}
+23:20:17 variant hitting: W 26-4/23-7/26-4 avgW 25 runs/g 6.78 ra/g 3.63 inj 27(226d)/22(199d)/24(211d) spFatAtStart 0.28 late 0.31 fatSPend 0.34 fatBend 0.54 dOvrActive 0.43 dOvrYoung 0.99 sumAbsActive 2.4 progMid {"control":19,"stuff":20,"rest":6,"eye":16,"bat":15,"power":15}
+23:20:17 variant pitching: W 23-7/24-6/27-3 avgW 24.67 runs/g 6.21 ra/g 3.16 inj 23(191d)/18(160d)/15(144d) spFatAtStart 0.25 late 0.29 fatSPend 0.35 fatBend 0.55 dOvrActive 0.46 dOvrYoung 1.08 sumAbsActive 2.56 progMid {"movement":12,"endurance":10,"stuff":9,"control":10,"rest":4,"field":23,"bat":23}
+23:20:18 variant youth: W 23-7/26-4/24-6 avgW 24.33 runs/g 6.41 ra/g 3.2 inj 33(283d)/36(357d)/20(152d) spFatAtStart 0.31 late 0.36 fatSPend 0.48 fatBend 0.35 dOvrActive 0.36 dOvrYoung 0.98 sumAbsActive 2 progMid {"stuff":22,"control":17,"rest":12,"speed":12,"power":20,"bat":8}
+23:20:18 variant rest: W 27-3/27-3/25-5 avgW 26.33 runs/g 6.4 ra/g 2.88 inj 5(24d)/4(33d)/2(15d) spFatAtStart 0.09 late 0.11 fatSPend 0.29 fatBend 0.05 dOvrActive 0.33 dOvrYoung 0.59 sumAbsActive 1.71 progMid {"rest":46,"control":22,"bat":23}
+23:20:19 variant manual-SPrest: W 25-5/26-4/28-2 avgW 26.33 runs/g 6.79 ra/g 3.18 inj 6(40d)/8(60d)/7(77d) spFatAtStart 0 late 0 fatSPend 0.14 fatBend 0.46 dOvrActive 0.4 dOvrYoung 1.02 sumAbsActive 2.3 progMid {"control":40,"rest":5,"bat":46}
+23:20:19 variant manual-allrest: W 27-3/30-0/28-2 avgW 28.33 runs/g 7.01 ra/g 2.78 inj 0(0d)/0(0d)/0(0d) spFatAtStart 0 late 0 fatSPend 0.14 fatBend 0 dOvrActive 0 dOvrYoung 0 sumAbsActive 0 progMid {"rest":91}
+23:20:20 variant manual-power+stuff: W 22-8/24-6/26-4 avgW 24 runs/g 6.27 ra/g 3.73 inj 65(685d)/44(493d)/49(521d) spFatAtStart 0.57 late 0.7 fatSPend 0.68 fatBend 0.57 dOvrActive 0.28 dOvrYoung 0.83 sumAbsActive 1.65 progMid {"stuff":45,"power":46}

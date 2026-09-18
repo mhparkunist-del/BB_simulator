@@ -1,0 +1,11 @@
+{
+ "name": "casual_save_modal",
+ "ms": 1552,
+ "errs": [],
+ "log": [
+  "policy now balanced · #saveBtn 35x30px/12px · #titleBtn 42x30px/12px",
+  "save modal visible true slots: 슬롯 1비어 있음여기 저장슬롯 2비어 있음여기 저장슬롯 3비어 있음여기 저장 · #saveSlots [data-slot] 66x30px/12.5px"
+ ],
+ "persona": "casual mobile",
+ "screen": "casual_save_modal"
+}

@@ -1,0 +1,11 @@
+23:28:42 document.hidden=false visibilityState=visible raf timeout 3s
+23:28:42 FAIL requestAnimationFrame fires in this harness | GOT raf timeout 3s
+23:28:58 FAIL 한 구 (animated, 10x) completes within 15s | GOT pitches=0 busy=true
+23:29:13 FAIL 12 rapid 한 구 clicks -> exactly 1 pitch (busy guard) | GOT 0 pitches
+23:29:13 PASS spd input has min=0.25 but accepts -1 | GOT -1
+23:29:16 FAIL EXPECT 배속 -1 does not freeze the game (buttons back within 3s) | GOT playPitch.disabled=true
+23:29:21 FAIL 정지 rescues the freeze | GOT playPitch.disabled=true
+23:29:36 FAIL spd 0 -> falls back to 1x, pitch completes | GOT true
+23:29:36 FAIL fast + stop spam: stopped cleanly, buttons enabled | GOT over=false inning=1top pitches=0
+23:29:36 FAIL feed announces interruption | GOT 1회초타석 시작 · 임종성 (R) · 컨택 B 파워 A 선구 A 주력 B · 오늘 0/0상대 투수 고우석 (R) · 투구 0구 · 평균 -1회초
+23:29:56 FAIL 타석 completes | GOT pitches=0

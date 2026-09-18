@@ -1,0 +1,6 @@
+23:14:06 viewport 900x420 dpr 1
+23:14:06 tag: 투수·타자·포수·야수가 각자 판단하는 야구 · 구단을 맡아 시즌을 치릅니다 || note: 가로 화면 전용 · 진행은 기기 안에 저장됩니다 || logo: .logo 533x64px/64px
+23:14:06 buttons: #btnContinue 0x0px/17px hidden | #btnNew 156x48px/17px | #btnLoad 156x48px/17px
+23:14:06 fonts loaded: loading "Black Han Sans","Gothic A1","IBM Plex Mono","Jua"
+23:14:06 load slots visible true text: 슬롯 1비어 있음불러오기슬롯 2비어 있음불러오기슬롯 3비어 있음불러오기
+23:14:07 빈 슬롯 불러오기 클릭 후 screen title visible true event false

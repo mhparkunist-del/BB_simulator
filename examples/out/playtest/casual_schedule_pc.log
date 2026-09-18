@@ -1,0 +1,9 @@
+23:35:03 after skip on screen: 선수단 → 일정 탭 누름
+23:35:03 day 0 date 4/3 (금) nextDay label '오늘 경기 시작' #nextDay 104x34px/14px disabled false
+23:35:03 nav buttons: 일정 46x30, 훈련 46x30, 선수단 56x30, 기록 45x30, 예산·이적 72x30, 경기 46x30 | #saveBtn 40x26px/12px | #titleBtn 50x26px/12px
+23:35:03 header strip: DATE4/3 (금)REC0-0RANK1위 / 6 BUDGET40.0PAYROLL102.2/137.4MORALE60%
+23:35:03 schedule rows 9 pager 이전1/4다음 table font 12px
+23:35:03 log: 4/3 (금)LG 트윈스 · 시즌 개막 준비. 이적 자금 40억, 선수 98명, 상위 40인 보수 102.2억 (샐러리캡 137.4억).
+23:35:03 next game: 1차전 · 4/2 (목) · 삼성 라이온즈 (홈)예정 선발 김진수 (피로 17%) · 타선 0.72 · 수비 0.65 · 상대 타격 0.57 / 투수 0.53
+23:35:03 hint next to button: 경기 날은 넘길 수 없습니다 · 경기 화면에서 치르거나 결과 바로보기 | reset btn #reset 64x34px/14px
+23:35:03 schedule box 598/598

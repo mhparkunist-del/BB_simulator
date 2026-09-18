@@ -1,0 +1,15 @@
+{
+ "name": "casual_play_setup",
+ "ms": 706,
+ "errs": [],
+ "log": [
+  "harness: native rAF does not fire in headless capture → setTimeout polyfill (60fps)",
+  "nextDay label '오늘 경기 시작'",
+  "setup: note '1차전 · 삼성 라이온즈 (홈) · 결과가 시즌에 기록됩니다' order '선택 9/9' start disabled false innings 3 pitchers 5 batters 12 selected p 1 b 9",
+  "setup sizes: #start 65x30px/12.5px | #autoOrder 66x30px/12.5px | [data-b] 141x80px/10px | #innings 54x30px/12px h2 font 12.5px card font 10px",
+  "batters box 165/165 overflow hidden",
+  "h2 text: 우리 선발 투수와 타순 9명 · 이닝 시드 1차전 · 삼성 라이온즈 (홈) · 결과가 시즌에 기록됩니다 구단 화면의 타순·선발이 미리 채워집니다. 초에는 우리 타선(공격 사인), 말에는 우리 선발(수비 사인)입니다."
+ ],
+ "persona": "casual mobile",
+ "screen": "casual_play_setup"
+}

@@ -1,0 +1,11 @@
+23:28:53 HANG inning 1top pitches=8703 count 1-2 batter#2 pitcher#2 key=2|2|?|1|2 feed: 1회초4구째 78마일, 몸쪽 낮은 코스 — 파울1회초4구째 77마일, 낮은 코스 — 파울1회초4구째 77마일, 낮은 코스 — 
+23:28:54 escape hatch: GameUI.renderBreak(true) + resume (API)
+23:29:16 HANG inning 2top pitches=9007 count 2-2 batter#11 pitcher#1 key=11|1|?|2|2 feed: 2회초5구째 83마일, 바깥쪽 낮은 코스 — 파울2회초5구째 83마일, 바깥쪽 낮은 코스 — 파울2회초5구째 83마일, 바깥쪽
+23:29:16 escape hatch: GameUI.renderBreak(true) + resume (API)
+23:29:28 HANG inning 3top pitches=8951 count 1-2 batter#2 pitcher#2 key=2|2|?|1|2 feed: 3회초4구째 77마일, 낮은 코스 — 파울3회초4구째 78마일, 몸쪽 낮은 코스 — 파울3회초4구째 78마일, 몸쪽 낮은 코스
+23:29:29 escape hatch: GameUI.renderBreak(true) + resume (API)
+23:29:41 HANG inning 2top pitches=8951 count 1-2 batter#3 pitcher#3 key=3|3|?|1|2 feed: 2회초4구째 68마일, 몸쪽 낮은 코스 — 파울2회초4구째 68마일, 몸쪽 낮은 코스 — 파울2회초4구째 68마일, 몸쪽 낮은
+23:29:41 escape hatch: GameUI.renderBreak(true) + resume (API)
+23:29:44 seed1 ok {"us":0,"them":0} | seed2 HANG | seed3 ok {"us":0,"them":0} | seed4 ok {"us":0,"them":1} | seed5 ok {"us":3,"them":2} | seed6 HANG | seed7 HANG | seed8 HANG
+23:29:44 FAIL EXPECT 0 of 8 fast 3-inning practice games hang in an endless foul loop | GOT 4/8 hung. HANG inning 1top pitches=8703 count 1-2 batter#2 pitcher#2 key=2|2|?|1|2 feed: 1회초4구째 78마일, 몸쪽 낮은 코스 — 파울1회초4구째 77마일, 낮은 코스 — 파울1회초4구째 77마일, 낮은 코스 —  ;; HANG inning 2top pitches=9007 count 2-2 batter#11 pitcher#1 key=11|1|?|2|2 feed: 2회초5구째 83마일, 바깥쪽 낮은 코스 — 파울2회초5구째 83마일, 바깥쪽 낮은 코스 — 파울2회초5구째 83마일, 바깥쪽 ;; HANG inning 3top pitches=8951 count 1-2 batter#2 pitcher#2 key=2|2|?|1|2 feed: 3회초4구째 77마일, 낮은 코스 — 파울3회초4구째 78마일, 몸쪽 낮은 코스 — 파울3회초4구째 78마일, 몸쪽 낮은 코스 ;; HANG inning 2top pitches=8951 count 1-2 batter#3 pitcher#3 key=3|3|?|1|2 feed: 2회초4구째 68마일, 몸쪽 낮은 코스 — 파울2회초4구째 68마일, 몸쪽 낮은 코스 — 파울2회초4구째 68마일, 몸쪽 낮은
+23:29:44 PASS unlocked at the end | GOT false

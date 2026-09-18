@@ -1,0 +1,150 @@
+{
+ "name": "qa_saveload",
+ "ms": 5542,
+ "errs": [],
+ "log": [
+  "PASS FA signed before save | GOT true",
+  "PASS save modal lists slots | GOT [object HTMLButtonElement]",
+  "PASS slot 1 label shows day | GOT 슬롯 1KIA 타이거즈 · day 3 · 3승 0패 · 2026-09-06 14:08여기 저장슬롯 2비어 있음여기 저장슬롯 3비어 있음여기 저장",
+  "PASS kv save:1 exists with same day | GOT 3",
+  "release button not on first page; skipping UI release",
+  "PASS state changed after mutations | GOT dayB=7 policy=hitting",
+  "PASS titleBtn autosaves current (day B) | GOT 7",
+  "PASS load list rendered | GOT [object HTMLButtonElement]",
+  "PASS EXPECT loaded state == saved snapshot | GOT identical",
+  "PASS loaded day/budget/ledger | GOT 3/48.6/4",
+  "PASS header strip shows loaded date/budget | GOT 4/6 (월) 48.6",
+  "PASS kv club == loaded | GOT 3",
+  "FAIL EXPECT autosave follows load (day 3) | GOT autosave day 7 (boot with hash restores autosave, not the loaded slot)",
+  "PASS continue button visible | GOT true",
+  "PASS continue -> state intact (day 3) | GOT 3",
+  "PASS empty slot 3 load is a no-op | GOT slot3=false title=true",
+  "PASS saveBtn disabled while locked | GOT true",
+  "PASS save modal stays hidden while locked | GOT true",
+  "PASS autosave written right after game over | GOT 2026-09-06T14:08:49.014Z -> 2026-09-06T14:08:49.733Z",
+  "PASS EXPECT schedule pager on page 1 after 새 시즌 | GOT before=1/4 after=1/4",
+  "FAIL EXPECT 새 시즌 keeps club identity (KIA 타이거즈) | GOT club=덕아웃 나이트 kbo=undefined opps=항구 갈매기/고원 산양/강변 여우/도심 늑대/남부 사자",
+  "PASS reset -> day 0 record 0-0 | GOT 0 0-0",
+  "FAIL EXPECT trade panel still usable after 새 시즌 | GOT 트레이드는 KBO 구단으로 시작한 시즌에서 할 수 있습니다.",
+  "FAIL EXPECT game setup cards match club roster after 새 시즌 | GOT stale names: 김태군,박상준,김선빈,김도영,이호연,고종욱,김민규,카스트로,한준수,나성범,정현창,박정우 | club=덕아웃 나이트"
+ ],
+ "persona": "QA 파괴 테스터 · save/load",
+ "checks": [
+  {
+   "name": "FA signed before save",
+   "ok": true,
+   "got": "true"
+  },
+  {
+   "name": "save modal lists slots",
+   "ok": true,
+   "got": "[object HTMLButtonElement]"
+  },
+  {
+   "name": "slot 1 label shows day",
+   "ok": true,
+   "got": "슬롯 1KIA 타이거즈 · day 3 · 3승 0패 · 2026-09-06 14:08여기 저장슬롯 2비어 있음여기 저장슬롯 3비어 있음여기 저장"
+  },
+  {
+   "name": "kv save:1 exists with same day",
+   "ok": true,
+   "got": "3"
+  },
+  {
+   "name": "state changed after mutations",
+   "ok": true,
+   "got": "dayB=7 policy=hitting"
+  },
+  {
+   "name": "titleBtn autosaves current (day B)",
+   "ok": true,
+   "got": "7"
+  },
+  {
+   "name": "load list rendered",
+   "ok": true,
+   "got": "[object HTMLButtonElement]"
+  },
+  {
+   "name": "EXPECT loaded state == saved snapshot",
+   "ok": true,
+   "got": "identical"
+  },
+  {
+   "name": "loaded day/budget/ledger",
+   "ok": true,
+   "got": "3/48.6/4"
+  },
+  {
+   "name": "header strip shows loaded date/budget",
+   "ok": true,
+   "got": "4/6 (월) 48.6"
+  },
+  {
+   "name": "kv club == loaded",
+   "ok": true,
+   "got": "3"
+  },
+  {
+   "name": "EXPECT autosave follows load (day 3)",
+   "ok": false,
+   "got": "autosave day 7 (boot with hash restores autosave, not the loaded slot)"
+  },
+  {
+   "name": "continue button visible",
+   "ok": true,
+   "got": "true"
+  },
+  {
+   "name": "continue -> state intact (day 3)",
+   "ok": true,
+   "got": "3"
+  },
+  {
+   "name": "empty slot 3 load is a no-op",
+   "ok": true,
+   "got": "slot3=false title=true"
+  },
+  {
+   "name": "saveBtn disabled while locked",
+   "ok": true,
+   "got": "true"
+  },
+  {
+   "name": "save modal stays hidden while locked",
+   "ok": true,
+   "got": "true"
+  },
+  {
+   "name": "autosave written right after game over",
+   "ok": true,
+   "got": "2026-09-06T14:08:49.014Z -> 2026-09-06T14:08:49.733Z"
+  },
+  {
+   "name": "EXPECT schedule pager on page 1 after 새 시즌",
+   "ok": true,
+   "got": "before=1/4 after=1/4"
+  },
+  {
+   "name": "EXPECT 새 시즌 keeps club identity (KIA 타이거즈)",
+   "ok": false,
+   "got": "club=덕아웃 나이트 kbo=undefined opps=항구 갈매기/고원 산양/강변 여우/도심 늑대/남부 사자"
+  },
+  {
+   "name": "reset -> day 0 record 0-0",
+   "ok": true,
+   "got": "0 0-0"
+  },
+  {
+   "name": "EXPECT trade panel still usable after 새 시즌",
+   "ok": false,
+   "got": "트레이드는 KBO 구단으로 시작한 시즌에서 할 수 있습니다."
+  },
+  {
+   "name": "EXPECT game setup cards match club roster after 새 시즌",
+   "ok": false,
+   "got": "stale names: 김태군,박상준,김선빈,김도영,이호연,고종욱,김민규,카스트로,한준수,나성범,정현창,박정우 | club=덕아웃 나이트"
+  }
+ ],
+ "fails": 4
+}

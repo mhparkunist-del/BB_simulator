@@ -1,0 +1,164 @@
+{
+ "name": "qa_market_900",
+ "ms": 1220,
+ "errs": [],
+ "log": [
+  "PASS nego modal opens from the signing table | GOT true",
+  "PASS offer 0억: refused, patience -1, not signed | GOT 에이전트: 그 조건으로는 어렵습니다. 요구는 0.4억, 3년입니다.",
+  "PASS offer -5억: refused, not signed, no error | GOT 에이전트: 그 조건으로는 어렵습니다. 요구는 0.4억, 3년입니다. (마지막 제안입니다) patience=1",
+  "PASS nego close hides modal | GOT true",
+  "PASS salary input has no max attr | GOT max=''",
+  "FAIL EXPECT 999억×4년 offer cannot be afforded (budget 46.2) | GOT signed=true budget 46.2 -> -1152.6 msg=계약 성사 · 장지훈 4년, 연봉 999억 (계약금 1198.8억 별도)",
+  "FAIL EXPECT budget never negative | GOT budget=-1152.6 strip=-1152.6 top40=1100.8",
+  "FAIL EXPECT contract years capped at 4 (API offer years=99) | GOT signed=true years=99",
+  "PASS offer w/o nego, bogus startNego, bogus answerOffer: no error | GOT ",
+  "PASS release with negative/insufficient budget is refused | GOT budget=-1167.5 players 100 -> 100 log=임찬규 방출 불가 · 잔여 연봉 정산금 0.3억이 잔액보다 큽니다",
+  "budget reset to 40 via API for the trade tests",
+  "PASS empty trade refused | GOT 선수를 고르세요.",
+  "PASS unknown club refused | GOT KBO 구단에서만 트레이드할 수 있습니다.",
+  "PASS cash > budget refused | GOT 현금이 잔액(40억)을 넘습니다.",
+  "FAIL EXPECT NaN cash handled (no 'NaN' in message) | GOT 삼성 거절 · 맞출 카드가 없습니다 (부족 NaN).",
+  "FAIL EXPECT duplicate id in theirIds refused / no duplicate player in our club | GOT 삼성 수락 · 이승민, 이승민 ⇄ 김진수, 이영빈 copies=2 sameIdRosterRows=이승민/이승민",
+  "FAIL EXPECT giving a player away for nothing needs a confirmation/refusal | GOT 삼성 수락 ·  ⇄ 신민재",
+  "negative cash (sell for 30억): 삼성 거절 · 가치 차이가 큽니다 (우리 11 vs 요구 22.7). budget 40 -> 40 inc.parent=0",
+  "PASS negative cash trade: ledger entry consistent | GOT 삼성 거절 · 가치 차이가 큽니다 (우리 11 vs 요구 22.7). ledger0={\"d\":\"4/5 (일)\",\"kind\":\"계약금\",\"amt\":-14.9,\"text\":\"허윤동 99년\"}",
+  "FAIL EXPECT 3-for-3 refused (UI says max 2) | GOT 삼성 수락 · 이재현, 전병우, 최원태 ⇄ 천성호, 최원영, 문보경",
+  "PASS FA-signed player is trade-locked | GOT FA로 영입한 선수는 1년간 트레이드할 수 없습니다.",
+  "FAIL UI limits 받을 선수 to 2 | GOT 1",
+  "PASS tradeGo with cash 'abc': message, no error | GOT 삼성 거절 · 가치 차이가 큽니다 (우리 0 vs 요구 31.6).",
+  "PASS deadline: tradeGo disabled after 20 games | GOT games=20 disabled=true",
+  "PASS deadline: API refuses | GOT 트레이드 마감입니다 (20경기 이후 · 실제 KBO는 7월 31일).",
+  "PASS offer card rendered after deadline | GOT true",
+  "FAIL EXPECT accepting an AI offer after the deadline is refused | GOT gave 김윤식 stillOurs=false got 김진수=true"
+ ],
+ "persona": "QA 파괴 테스터 · market abuse",
+ "checks": [
+  {
+   "name": "nego modal opens from the signing table",
+   "ok": true,
+   "got": "true"
+  },
+  {
+   "name": "offer 0억: refused, patience -1, not signed",
+   "ok": true,
+   "got": "에이전트: 그 조건으로는 어렵습니다. 요구는 0.4억, 3년입니다."
+  },
+  {
+   "name": "offer -5억: refused, not signed, no error",
+   "ok": true,
+   "got": "에이전트: 그 조건으로는 어렵습니다. 요구는 0.4억, 3년입니다. (마지막 제안입니다) patience=1"
+  },
+  {
+   "name": "nego close hides modal",
+   "ok": true,
+   "got": "true"
+  },
+  {
+   "name": "salary input has no max attr",
+   "ok": true,
+   "got": "max=''"
+  },
+  {
+   "name": "EXPECT 999억×4년 offer cannot be afforded (budget 46.2)",
+   "ok": false,
+   "got": "signed=true budget 46.2 -> -1152.6 msg=계약 성사 · 장지훈 4년, 연봉 999억 (계약금 1198.8억 별도)"
+  },
+  {
+   "name": "EXPECT budget never negative",
+   "ok": false,
+   "got": "budget=-1152.6 strip=-1152.6 top40=1100.8"
+  },
+  {
+   "name": "EXPECT contract years capped at 4 (API offer years=99)",
+   "ok": false,
+   "got": "signed=true years=99"
+  },
+  {
+   "name": "offer w/o nego, bogus startNego, bogus answerOffer: no error",
+   "ok": true,
+   "got": ""
+  },
+  {
+   "name": "release with negative/insufficient budget is refused",
+   "ok": true,
+   "got": "budget=-1167.5 players 100 -> 100 log=임찬규 방출 불가 · 잔여 연봉 정산금 0.3억이 잔액보다 큽니다"
+  },
+  {
+   "name": "empty trade refused",
+   "ok": true,
+   "got": "선수를 고르세요."
+  },
+  {
+   "name": "unknown club refused",
+   "ok": true,
+   "got": "KBO 구단에서만 트레이드할 수 있습니다."
+  },
+  {
+   "name": "cash > budget refused",
+   "ok": true,
+   "got": "현금이 잔액(40억)을 넘습니다."
+  },
+  {
+   "name": "EXPECT NaN cash handled (no 'NaN' in message)",
+   "ok": false,
+   "got": "삼성 거절 · 맞출 카드가 없습니다 (부족 NaN)."
+  },
+  {
+   "name": "EXPECT duplicate id in theirIds refused / no duplicate player in our club",
+   "ok": false,
+   "got": "삼성 수락 · 이승민, 이승민 ⇄ 김진수, 이영빈 copies=2 sameIdRosterRows=이승민/이승민"
+  },
+  {
+   "name": "EXPECT giving a player away for nothing needs a confirmation/refusal",
+   "ok": false,
+   "got": "삼성 수락 ·  ⇄ 신민재"
+  },
+  {
+   "name": "negative cash trade: ledger entry consistent",
+   "ok": true,
+   "got": "삼성 거절 · 가치 차이가 큽니다 (우리 11 vs 요구 22.7). ledger0={\"d\":\"4/5 (일)\",\"kind\":\"계약금\",\"amt\":-14.9,\"text\":\"허윤동 99년\"}"
+  },
+  {
+   "name": "EXPECT 3-for-3 refused (UI says max 2)",
+   "ok": false,
+   "got": "삼성 수락 · 이재현, 전병우, 최원태 ⇄ 천성호, 최원영, 문보경"
+  },
+  {
+   "name": "FA-signed player is trade-locked",
+   "ok": true,
+   "got": "FA로 영입한 선수는 1년간 트레이드할 수 없습니다."
+  },
+  {
+   "name": "UI limits 받을 선수 to 2",
+   "ok": false,
+   "got": "1"
+  },
+  {
+   "name": "tradeGo with cash 'abc': message, no error",
+   "ok": true,
+   "got": "삼성 거절 · 가치 차이가 큽니다 (우리 0 vs 요구 31.6)."
+  },
+  {
+   "name": "deadline: tradeGo disabled after 20 games",
+   "ok": true,
+   "got": "games=20 disabled=true"
+  },
+  {
+   "name": "deadline: API refuses",
+   "ok": true,
+   "got": "트레이드 마감입니다 (20경기 이후 · 실제 KBO는 7월 31일)."
+  },
+  {
+   "name": "offer card rendered after deadline",
+   "ok": true,
+   "got": "true"
+  },
+  {
+   "name": "EXPECT accepting an AI offer after the deadline is refused",
+   "ok": false,
+   "got": "gave 김윤식 stillOurs=false got 김진수=true"
+  }
+ ],
+ "fails": 9,
+ "hangs": []
+}

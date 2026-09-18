@@ -1,0 +1,4 @@
+23:35:00 step 1 [1/3] on screen '선수단' text: 먼저 선수단을 둘러보세요. 이름을 누르면 카드가 열리고, 포지션 셀렉트로 수비 위치를 정합니다.
+23:35:00 tutorial shown true
+23:35:00   tbox 170,306 560x98 font 13px | #tutNext 41x30px/12.5px | #tutSkip 62x30px/12.5px
+23:35:00   element just above box: H2.

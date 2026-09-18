@@ -1,0 +1,48 @@
+{
+ "name": "qa_tz",
+ "ms": 697,
+ "errs": [],
+ "log": [
+  "timezoneOffset=-540 (minutes; -540 = KST)",
+  "eventModal css position=fixed PT.visible(eventModal when shown) would be false",
+  "KBO sched[0].date=2026-04-02 today()=2026-04-02 header=4/3 (금) date0=2026-04-03",
+  "schedule row 1: 14/2 (목)삼성 라이온즈홈-",
+  "FAIL EXPECT schedule row date == header date on day 0 (KBO club) | GOT row=14/2 (목)삼성 라이온즈홈- header=4/3 (금)",
+  "PASS KBO club: game today on day 0 | GOT {\"g\":1,\"opp\":\"삼성 라이온즈\",\"home\":true,\"starter\":0}",
+  "displayed dates: 4/2 (목) 4/3 (금) 4/4 (토) 4/6 (월) 4/7 (화) 4/8 (수) 4/9 (목) 4/10 (금)",
+  "FAIL EXPECT no game displayed on a Monday (KBO schedule skips Mondays) | GOT 4/6 (월)",
+  "generic sched[0].date=2026-04-03 today()=2026-04-02 club=덕아웃 나이트",
+  "PASS EXPECT generic club (after 새 시즌) finds its games by date (days with a game in 0..7) | GOT days with game: 1,2,3,5,6,7 (sched dates 2026-04-03,2026-04-04,2026-04-05)",
+  "PASS EXPECT generic club plays its 30 games by the day limit | GOT results=30 W-L 18-12 day=37"
+ ],
+ "persona": "QA 파괴 테스터 · timezone/dates",
+ "checks": [
+  {
+   "name": "EXPECT schedule row date == header date on day 0 (KBO club)",
+   "ok": false,
+   "got": "row=14/2 (목)삼성 라이온즈홈- header=4/3 (금)"
+  },
+  {
+   "name": "KBO club: game today on day 0",
+   "ok": true,
+   "got": "{\"g\":1,\"opp\":\"삼성 라이온즈\",\"home\":true,\"starter\":0}"
+  },
+  {
+   "name": "EXPECT no game displayed on a Monday (KBO schedule skips Mondays)",
+   "ok": false,
+   "got": "4/6 (월)"
+  },
+  {
+   "name": "EXPECT generic club (after 새 시즌) finds its games by date (days with a game in 0..7)",
+   "ok": true,
+   "got": "days with game: 1,2,3,5,6,7 (sched dates 2026-04-03,2026-04-04,2026-04-05)"
+  },
+  {
+   "name": "EXPECT generic club plays its 30 games by the day limit",
+   "ok": true,
+   "got": "results=30 W-L 18-12 day=37"
+  }
+ ],
+ "fails": 2,
+ "hangs": []
+}

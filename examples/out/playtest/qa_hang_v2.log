@@ -1,0 +1,3 @@
+23:50:22 seed1 ok {"us":1,"them":0} | seed2 ok {"us":0,"them":0} | seed3 ok {"us":0,"them":0} | seed4 ok {"us":0,"them":1} | seed5 ok {"us":2,"them":0} | seed6 ok {"us":1,"them":2} | seed7 ok {"us":0,"them":0} | seed8 ok {"us":1,"them":0}
+23:50:22 PASS EXPECT 0 of 8 fast 3-inning practice games hang in an endless foul loop | GOT 0/8 hung. 
+23:50:22 PASS unlocked at the end | GOT false

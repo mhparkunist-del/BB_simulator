@@ -1,0 +1,13 @@
+{
+ "name": "casual_debug_stop_d200",
+ "ms": 4732,
+ "errs": [],
+ "log": [
+  "PA1 done · 1회초 · fast label '결과 바로보기'",
+  "fast pressed, stop pressed after 200ms · fast label now '결과 바로보기'",
+  "701ms · 2bottom outs 0 score 4:1 over true · pitchBtn off · fast '결과 바로보기' · scene break",
+  "end · feedLast: 2회말경기 종료 · 우리 4 : 상대 12회말2회말 종료 · 1점"
+ ],
+ "probe": "stop",
+ "delay": 200
+}

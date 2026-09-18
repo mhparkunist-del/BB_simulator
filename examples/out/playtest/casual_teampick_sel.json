@@ -1,0 +1,17 @@
+{
+ "name": "casual_teampick_sel",
+ "ms": 820,
+ "errs": [],
+ "log": [
+  "cards 10 first card tc 283x66px/12px hint font 11px",
+  "teamCards box 870x292 scrollH 292 overflow hidden",
+  "card0 text: 삼성 라이온즈대구 · 1군 34명 · 전체 96명 (KBO 2026)",
+  "h2: 맡을 구단을 고르세요 이름·상징색이 정해집니다. 선수단은 시즌 시작 시점의 같은 구단이고, 상대 5구단과 30경기를 치릅니다.",
+  "teamStart disabled true #teamStart 62x30px/12.5px pick hint: 구단을 누르세요",
+  "last card bottom 327 vs viewport 420 (보임)",
+  "pick text: LG 트윈스 선택 start disabled false theme {\"color\":\"#c30452\",\"color2\":\"#ff6fae\"}"
+ ],
+ "persona": "casual mobile",
+ "screen": "casual_teampick_sel",
+ "cards": 10
+}

@@ -1,0 +1,34 @@
+{
+ "name": "kbofan_flow",
+ "ms": 3058,
+ "errs": [],
+ "log": [
+  "t0 screen-title modals:",
+  "after btnNew screen-team modals:",
+  "after card screen-team modals: teamPick=한화 이글스 선택 startDisabled=false",
+  "teamStart settled=true after 530ms · screen-club modals:eventModal · state? 한화 이글스 day 0",
+  "event: 구단주 인사 / 한화 이글스 감독으로 부임하신 것을 환영합니다.실제 한화 이글스 선수단(2026 등록명단 기준)으로 시즌을 치릅니다. 능력치는 이 게임의 추정값입니다.올 시즌 30경기, 선수단과 훈련은 감독님께 맡깁니다. 먼저 선수들을 둘러보시죠.",
+  "after eventOk screen-club modals:tutorial tut: 먼저 선수단을 둘러보세요. 이름을 누르면 카드가 열리고, 포지션 셀렉트로 수비 위치를 정합니다.",
+  "after tutSkip screen-club modals:",
+  "strip: tDate=4/3 (금) tRec=0-0 tRank=1위 / 6 tBudget=40.0 tPay=113.5/137.4 tMorale=60%",
+  "season over: 25-5 day 35 · log head: 5/8 (금) 시즌 재정 결산 · 잔액 84.9억 · 수입 75.4억 · 지출 30.5억 || 5/8 (금) 정규 시즌 30경기 종료 · 25승 5패 || 5/7 (목) 승 9:1 vs 삼성 라이온즈 (원정) · 선발 박상원 7이닝 1실점 · 최재훈 3안타, 최유빈 3안타, 심우준 2안타",
+  "nextDay label at season end: 다음 날 · nextGame: 남은 경기가 없습니다.",
+  "season-end buttons: reset:새 시즌",
+  "after 새 시즌: club 한화 이글스 rec 25-5 day 35 budget 84.9 players 93 sched0 2026-04-03 screen-club modals: · event 구단주 인사 / 한화 이글스 감독으로 부임하신 것을 환영합니다.실제 한화 이글스 선수단(2026 등록명단 기준)으로 시즌을 치릅니다. 능력치는 이 게임의 추정값입니다.올 시즌 30경기, 선수단과 훈련은 감독님께 맡깁니다. 먼저 선수들을 둘러보시죠."
+ ],
+ "persona": "KBO 골수팬 · 흐름",
+ "notes": [
+  "t0 screen-title modals:",
+  "after btnNew screen-team modals:",
+  "after card screen-team modals: teamPick=한화 이글스 선택 startDisabled=false",
+  "teamStart settled=true after 530ms · screen-club modals:eventModal · state? 한화 이글스 day 0",
+  "event: 구단주 인사 / 한화 이글스 감독으로 부임하신 것을 환영합니다.실제 한화 이글스 선수단(2026 등록명단 기준)으로 시즌을 치릅니다. 능력치는 이 게임의 추정값입니다.올 시즌 30경기, 선수단과 훈련은 감독님께 맡깁니다. 먼저 선수들을 둘러보시죠.",
+  "after eventOk screen-club modals:tutorial tut: 먼저 선수단을 둘러보세요. 이름을 누르면 카드가 열리고, 포지션 셀렉트로 수비 위치를 정합니다.",
+  "after tutSkip screen-club modals:",
+  "strip: tDate=4/3 (금) tRec=0-0 tRank=1위 / 6 tBudget=40.0 tPay=113.5/137.4 tMorale=60%",
+  "season over: 25-5 day 35 · log head: 5/8 (금) 시즌 재정 결산 · 잔액 84.9억 · 수입 75.4억 · 지출 30.5억 || 5/8 (금) 정규 시즌 30경기 종료 · 25승 5패 || 5/7 (목) 승 9:1 vs 삼성 라이온즈 (원정) · 선발 박상원 7이닝 1실점 · 최재훈 3안타, 최유빈 3안타, 심우준 2안타",
+  "nextDay label at season end: 다음 날 · nextGame: 남은 경기가 없습니다.",
+  "season-end buttons: reset:새 시즌",
+  "after 새 시즌: club 한화 이글스 rec 25-5 day 35 budget 84.9 players 93 sched0 2026-04-03 screen-club modals: · event 구단주 인사 / 한화 이글스 감독으로 부임하신 것을 환영합니다.실제 한화 이글스 선수단(2026 등록명단 기준)으로 시즌을 치릅니다. 능력치는 이 게임의 추정값입니다.올 시즌 30경기, 선수단과 훈련은 감독님께 맡깁니다. 먼저 선수들을 둘러보시죠."
+ ]
+}

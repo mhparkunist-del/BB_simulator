@@ -1,0 +1,12 @@
+00:09:04 start top40 133.7 budget 40 1군 24 · FA pool 이호성(RP 0.4억),지현(RP 0.4억),양수호(RP 6.4억),허윤동(RP 0.5억),김경묵(RP 0.4억),김지현(C 7.5억),안민성(C 0.4억),이준범(SS 4.2억)
+00:09:04 KT 1군 외국인(이름 기준 추정):  · 전체 외국인 
+00:09:05 SIGNED: 이호성:signed 0.4억 active=true noTrade=true | 지현:signed 0.4억 active=true noTrade=true | 양수호:signed 6.4억 active=false noTrade=true | 허윤동:signed 0.5억 active=false noTrade=true | 김경묵:signed 0.4억 active=false noTrade=true | 김지현:signed 7.5억 active=false noTrade=true | 안민성:signed 0.4억 active=false noTrade=true | 이준범:signed 4.2억 active=false noTrade=true
+00:09:05 after signing: top40 151.0 (캡 137.4) budget 21.5 1군 26 · nego modal msg: -
+00:09:06 roster head: 1군 (26/26) · warn: 
+00:09:06 strip: tDate=4/3 (금) tRec=0-0 tRank=1위 / 6 tBudget=21.5 tPay=151.0/137.4
+00:09:06 trade noTrade player 이호성 → {"ok":false,"msg":"FA로 영입한 선수는 1년간 트레이드할 수 없습니다."}
+00:09:06 cash 9999 probe → {"ok":false,"msg":"현금이 잔액(21.5억)을 넘습니다."} budget 21.5
+00:09:06 season end: 29-1-0 budget 70.1 top40 151.0 exp {"salary":33,"ops":5,"tax":4.1,"fees":18.5,"buyout":0} inc {"gate":50.4,"ads":30.300000000000004,"parent":10}
+00:09:06 ledger 제재/정산 lines: 5/8 (금) 샐러리캡 제재금 -4.1 상위 40인 151.0억, 초과분의 30%
+00:09:06 log head: 5/8 (금) 시즌 재정 결산 · 잔액 70.1억 · 수입 90.7억 · 지출 60.6억 || 5/8 (금) 샐러리캡 초과 제재금 4.1억 (야구발전기금) || 5/8 (금) 정규 시즌 30경기 종료 · 29승 1패 || 5/7 (목) 오윤석 훈련 중 부상 · 5일 결장
+00:09:06 draws recorded? S.D=undefined · results with us==them: 0 · sched result sample: {"us":4,"them":1,"sp":"박영현","ip":7,"er":1}

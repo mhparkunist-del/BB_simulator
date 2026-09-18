@@ -1,0 +1,21 @@
+00:09:35 control: {"B":0.78,"D":0.71,"W":24,"L":6,"runs":183,"ra":103}
+00:09:35 (c) top-5 + 4 empty: {"B":0.85,"D":0.52,"W":29,"L":1,"runs":223,"ra":100} warn: 포지션 비어 있음: C, 1B, SS, RF · 수비 강도 −20%
+00:09:35 (c) top-3 + 6 empty: {"B":0.89,"D":0.51,"W":27,"L":3,"runs":227,"ra":115} warn: 포지션 비어 있음: C, 1B, 3B, SS, RF · 수비 강도 −25%
+00:09:36 (c) top-1 + 8 empty: {"B":0.98,"D":0.55,"W":27,"L":3,"runs":278,"ra":96} warn: 포지션 비어 있음: C, 1B, 2B, 3B, SS, LF, RF · 수비 강도 −35%
+00:09:39 (c-UI) demoted bench 3 + worst starters 0: lineup 이지영/박성한/김요셉/한유섬/전의산/홍대인/임근우/최지훈/안상현 active 21 · {"B":0.78,"D":0.71} · lineup table text: 타순선수포지션나이등급1이지영C40컨택 B 파워 B 선구 A 주력 A교체2박성한SS28컨택 B 파워 B 선구 A 주력 B교체3김요셉2B19컨택 A 파워 B 선구 S 주력 S교체4한유
+00:09:39 (c-UI) season with 9-man lineup via UI: {"W":24,"L":6,"runs":183,"ra":103} errs 0
+00:09:39 (d) relabel: warnings {"miss":[],"dup":[]} D 0.71 -> {"miss":[],"dup":[]} D 0.71 · posSel in UI editable=true
+00:09:39 (d3) top-5 relabeled + 4 empty: {"B":0.85,"D":0.57,"W":28,"L":2,"runs":215,"ra":100}
+00:09:40 (d4) best-26-from-org (9 from 2군): lineup ovr 0.75 rot ovr 0.69 {"B":0.8,"D":0.57,"W":28,"L":2,"runs":217,"ra":99} vs control {"B":0.78,"D":0.71,"W":24,"L":6,"runs":183,"ra":103}
+00:09:40 (a) pitcher 이건욱 in slot 1: strengths null · quick-sim result {"us":1,"them":0,"sp":"이건욱","ip":6,"er":0} · his bat stats G/PA 2/5 · errs 0
+00:09:40 (a2) game screen: clubLineup.order=[0,1,11,2,3,4,5,6,7] pick.order=[0,1,11,2,3,4,5,6,7] selected=9 [56 이지영 · C R/2 박성한 · SS L/35 한유섬 · CF R/47 전의산 · 3B R/97 홍대인 · 1B R/63 임근우 · LF R/54 최지훈 · RF R/10 안상현 · DH R/46 김요셉 · 2] start disabled=false
+00:09:40 (a3) 1-inning game: stopped=false over=true pitches 35 · errs []
+00:09:43 (a4) event: 졌습니다. 0 : 1결과가 오늘 일정과 기록에 반영됐습니다. 정비 시간입니다. · locked=false
+00:09:43 (b) 9x 한유섬: strengths {"B":0.98,"D":0.5} warnings {"miss":["C","1B","2B","3B","SS","LF","RF"],"dup":["CF"]} result {"us":5,"them":3,"sp":"이건욱","ip":6,"er":2} hero G/PA after 1 game 9/40 · UI lineup rows 10
+00:09:44 (b2) 9x hero season: {"W":26,"L":4,"runs":205,"ra":102} hero G/PA 270/1200 fatigue 0.91
+00:09:44 (b3) UI swap slot1 with lineup[1] player: lineup 이지영/박성한/김요셉/한유섬/전의산/홍대인/임근우/최지훈/안상현 dup=false
+00:09:44 (b4) game screen for 9x lineup: pick.order=[0,1,11,2,3,4,5,6,7] selected cards=9 start disabled=false order label=-
+00:09:44 (e) 8-man lineup: clubLineup.order=null selected=9 start disabled=false
+00:09:44 (f) worst starter 홍대인 injured 30d left in lineup: B 0.78 -> 0.8 D 0.71 -> 0.71 · after a game his G=0 · still in lineup=true · UI warns? false
+00:09:47 (g) seed 1 1-inning: 0:0 ev '비겼습니다. 0 : 0결과가 오늘 일정과 기록에 반영됐습니다. 정비 시간입니다.' header 0-0-1 · sched result {"us":0,"them":0,"sp":"이건욱","ip":1,"er":0,"real":true} · log 패 0:0 vs 삼성 라이온즈 · 직접 경기
+00:09:47 (g2) draw: schedule cell text has 무? false · rank row: 

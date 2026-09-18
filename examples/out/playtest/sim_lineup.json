@@ -1,0 +1,84 @@
+{
+ "name": "sim_lineup",
+ "ms": 15486,
+ "errs": [],
+ "log": [
+  "control full lineup: {\"B\":0.78,\"D\":0.71,\"W\":24,\"L\":6,\"runs\":210,\"ra\":126}",
+  "top-7 + 2 empty: {\"B\":0.83,\"D\":0.52,\"W\":23,\"L\":7,\"runs\":208,\"ra\":132} warn: 포지션 비어 있음: C, 1B, SS 중복: CF · 수비 강도 −20%",
+  "top-5 + 4 empty: {\"B\":0.85,\"D\":0.52,\"W\":26,\"L\":4,\"runs\":235,\"ra\":102} warn: 포지션 비어 있음: C, 1B, SS, RF · 수비 강도 −20%",
+  "top-3 + 6 empty: {\"B\":0.89,\"D\":0.51,\"W\":25,\"L\":5,\"runs\":230,\"ra\":127} warn: 포지션 비어 있음: C, 1B, 3B, SS, RF · 수비 강도 −25%",
+  "top-1 + 8 empty: {\"B\":0.98,\"D\":0.55,\"W\":26,\"L\":4,\"runs\":273,\"ra\":130} warn: 포지션 비어 있음: C, 1B, 2B, 3B, SS, LF, RF · 수비 강도 −35%",
+  "(d) relabel positions: warnings before {\"miss\":[],\"dup\":[]} D 0.71 -> after {\"miss\":[],\"dup\":[]} D 0.71 · positions of a real C now? 이지영:C,박성한:1B,김요셉:2B,한유섬:3B,전의산:SS,홍대인:LF,임근우:CF,최지훈:RF,안상현:DH",
+  "(d2) best-9-bats relabeled: {\"B\":0.8,\"D\":0.7,\"W\":24,\"L\":6,\"runs\":221,\"ra\":117} vs control {\"B\":0.78,\"D\":0.71,\"W\":24,\"L\":6,\"runs\":210,\"ra\":126}",
+  "(d3) top-5 relabeled + 4 empty: {\"B\":0.85,\"D\":0.57,\"W\":26,\"L\":4,\"runs\":203,\"ra\":104}",
+  "(d4) best-from-whole-org (9 of 26 came from 2군): lineup ovr 0.75 rot ovr 0.69 {\"B\":0.8,\"D\":0.72,\"W\":27,\"L\":3,\"runs\":225,\"ra\":112} vs control {\"B\":0.78,\"D\":0.71,\"W\":24,\"L\":6,\"runs\":210,\"ra\":126}",
+  "(c-UI) after demoting bench(3) + 4 worst starters: lineup 이지영/박성한/김요셉/한유섬/전의산/홍대인/임근우/최지훈/안상현 active 21 lineup table shows: 타순선수포지션나이등급1이지영C40컨택 B 파워 B 선구 A 주력 A교체2박성한SS28컨택 B 파워 B 선구 A 주력 B교체3김요셉2B19컨택 A 파워 B 선구 S 주력 S교체4한유섬CF37컨택 S 파워 S 선구 A  · {\"B\":0.78,\"D\":0.71}",
+  "(c-UI) season with 5-man lineup via UI: {\"W\":24,\"L\":6,\"runs\":210,\"ra\":126} errs 0",
+  "(a) pitcher 이건욱 in lineup slot 1: strengths null · game result {\"us\":1,\"them\":0,\"sp\":\"이건욱\",\"ip\":6,\"er\":0} · pitcher stats {\"G\":2,\"PA\":5,\"H\":0,\"HR\":0,\"RBI\":0,\"BB\":0,\"K\":0,\"IP\":6,\"ER\":0,\"W\":1,\"L\":0,\"SV\":0,\"KP\":6} · errs []",
+  "(a2) game screen with pitcher in lineup: clubLineup.order=[0,1,11,2,3,4,5,6,7] pick.order=[0,1,11,2,3,4,5,6,7] selected cards=56 이지영 · C R/2 박성한 · SS L/35 한유섬 · CF R/47 전의산 · 3B R/97 홍대인 · 1B R/63 임근우 · LF R/54 최지훈 · RF R/10 안상현 · DH R/46 김요셉 · 2B L · lineup names 이건욱/박성한/김요셉/한유섬/전의산/홍대인/임근우/최지훈/안상현 · start disabled=false",
+  "(a3) played 1 inning: stopped=true over=false pitches 5200 inning 1top count 2-2 batter idx 11 pitcher 1 score 0:0 lineup used 이지영/박성한/김요셉/한유섬/전의산/홍대인/임근우/최지훈/안상현 errs []",
+  "(a3b) after sign change: over=false pitches 8800",
+  "(a4) game stuck; locked=true",
+  "(b) 9x 한유섬: strengths {\"B\":0.98,\"D\":0.5} warnings {\"miss\":[\"C\",\"1B\",\"2B\",\"3B\",\"SS\",\"LF\",\"RF\"],\"dup\":[\"CF\"]} result {\"us\":5,\"them\":3,\"sp\":\"이건욱\",\"ip\":6,\"er\":2} hero stats after 1 game {\"G\":9,\"PA\":40,\"H\":14,\"HR\":6,\"RBI\":10,\"BB\":4,\"K\":4,\"IP\":0,\"ER\":0,\"W\":0,\"L\":0,\"SV\":0,\"KP\":0} lineup table rows 10",
+  "(b2) 9x hero season: {\"W\":23,\"L\":7,\"runs\":171,\"ra\":113} hero G/PA 198/880 fatigue 0.39",
+  "(b3) game screen: pick.order=[0,1,11,2,3,4,5,6,7] selected cards=9 start disabled=false",
+  "(f) worst starter 홍대인 injured 30d, left in lineup: B 0.78 -> 0.8 D 0.71 -> 0.71 · after a game his G=0 · lineup still has him=true · log: 승 4:2 vs 삼성 라이온즈 (홈) · 선발 이건욱 7이닝 2실점 · 박성한 1안타, 김요셉 2안타 1홈런 | SSG 랜더스 · 시즌 개막 준비. 이적 자금 40억, 선수 91명, 상위 40인 보수 102.4억 (샐러리",
+  "(e) 8-man lineup: clubLineup.order=null selected=9 start disabled=false",
+  "(e2) after autoOrder: selected=9 start disabled=false order=한유섬/박성한/홍대인/김정민/전의산/김요셉/안상현/이지영/임근우"
+ ],
+ "scenario": "lineup",
+ "ctrl": {
+  "B": 0.78,
+  "D": 0.71,
+  "W": 24,
+  "L": 6,
+  "runs": 210,
+  "ra": 126
+ },
+ "topN": {
+  "1": {
+   "B": 0.98,
+   "D": 0.55,
+   "W": 26,
+   "L": 4,
+   "runs": 273,
+   "ra": 130
+  },
+  "3": {
+   "B": 0.89,
+   "D": 0.51,
+   "W": 25,
+   "L": 5,
+   "runs": 230,
+   "ra": 127
+  },
+  "5": {
+   "B": 0.85,
+   "D": 0.52,
+   "W": 26,
+   "L": 4,
+   "runs": 235,
+   "ra": 102
+  },
+  "7": {
+   "B": 0.83,
+   "D": 0.52,
+   "W": 23,
+   "L": 7,
+   "runs": 208,
+   "ra": 132
+  }
+ },
+ "rUI": {
+  "W": 24,
+  "L": 6,
+  "runs": 210,
+  "ra": 126
+ },
+ "rDup": {
+  "W": 23,
+  "L": 7,
+  "runs": 171,
+  "ra": 113
+ }
+}

@@ -1,0 +1,10 @@
+23:35:22 budget: 잔액(이적 자금)40.0억시즌 수입+0억시즌 지출−0억상위 40인 보수 102.2억캡 137.4억캡 여유 35.2억 · 홈 관중 누계 0명 · 트레이드 가능 (마감까지 20경기)입장광고·상품모기업연봉운영계약금·현금정산·제재0000000날짜항목금액내용
+23:35:22 trade: 상대삼성 라이온즈두산 베어스KIA 타이거즈SSG 랜더스롯데 자이언츠한화 이글스NC 다이노스KT 위즈키움 히어로즈가치 = 능력·나이·계약 (ZenGM식)받을 선수 (최대 2)선수포지션OVR·연봉가치 김영웅1B 23B 3.6억11.2 원태인SP 26A 6.4억9.9 이승현SP 24B 2.9억9.6 박계범SS 30A 6.1억9.1 박승규LF 26B 6.8억8.8 · checkbox #tradeTheirs input 14x30px/12px · #tradeGo 41x30px/12.5px · #tradeClub 108x30px/12px
+23:35:22 signing rows 6 · [data-nego] 41x30px/12.5px · first: 이호성 삼성RP23구위 D 제구 D 체력 C0.4억협상 · hint: FA·방출 선수 · 요구액과 인내
+23:35:22 cash 40 fa 8
+23:35:22 HIT [data-nego] center 926,107 right 947 vs panel right 894 · bottom 122 vs panel bottom 416 · elementFromPoint = 없음
+23:35:22 HIT #tradeGo center 520,395 right 540 vs panel right 569 · bottom 410 vs panel bottom 416 · elementFromPoint = BUTTON#tradeGo (자기 자신, 탭 가능)
+23:35:22 HIT #tradeCash center 458,395 right 493 vs panel right 569 · bottom 410 vs panel bottom 416 · elementFromPoint = INPUT#tradeCash (자기 자신, 탭 가능)
+23:35:22 HIT #tradeOurs input center 524,189 right 531 vs panel right 569 · bottom 204 vs panel bottom 416 · elementFromPoint = INPUT (자기 자신, 탭 가능)
+23:35:22 ours names: 김진수@569,이영빈@569,신민재@569,천성호@569,최원영@569,문보경@569 · panel2 right 569
+23:35:22 nego modal: body '이호성 · RP · 23세 · 전 소속 삼성 · 구위 D 제구 D 체력 C 무브먼트 D요구 0.4억 × 3년 · 인내 ●●● · 잔액 40억 · 계약금은 연봉×연수의 30 % (지금 0.4억)에이전트: 이호성 선수는 연봉 0.4억, 3년을 원합니다. 조건을 제시해 주세요.' salary input 0.4 years 3 ask 0.4×3 · #negoOffer 41x30px/12.5px | #negoMeet 64x30px/12.5px | #negoSalary 80x30px/12px

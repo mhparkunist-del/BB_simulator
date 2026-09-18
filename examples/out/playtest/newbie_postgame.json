@@ -1,0 +1,130 @@
+{
+ "name": "newbie_postgame",
+ "ms": 12538,
+ "errs": [],
+ "log": [
+  "1경기: {\"pre\":{\"date\":\"4/3 (금)\",\"note\":\"1차전 · 삼성 라이온즈 (홈) · 결과가 시즌에 기록됩니다\",\"seed\":\"1\",\"inn\":\"3\",\"startDisabled\":false,\"order\":\"선택 9/9\"},\"sc\":\"4:0\",\"title\":\"경기 종료 · 우리 4 : 상대 0\",\"resume\":\"정비로 돌아가기\",\"scoreLine\":\"1 2 3 R H E ‖ KIA 타이거즈 4 0 0 4 7 0 ‖ 삼성 0 0 0 0 1 0\",\"post\":{\"modalFirstSeenMs\":null,\"modalLastSeenMs\":null,\"modalVisibleNow\":false,\"eventTitle\":\"경기 종료\",\"eventBody\":\"이겼습니다. 4 : 0결과가 오늘 일정과 기록에 반영됐습니다. 정비 시간입니다.\",\"screen\":\"경기\",\"gameHidden\":true,\"setupVisible\":true,\"setupNote\":\"1차전 · 삼성 라이온즈 (홈) · 결과가 시즌에 기록됩니다\",\"startDisabled\":false,\"lock\":false,\"strip\":\"DATE4/3 (금) · REC1-0 · RANK1위 / 6 · BUDGET42.6 · PAYROLL127.0/137.4 · MORALE60%\",\"afterOkScreen\":\"경기\",\"afterOkNextDay\":\"다음 날\",\"afterOkStrip\":\"DATE4/3 (금) · REC1-0 · RANK1위 / 6 · BUDGET42.6 · PAYROLL127.0/137.4 · MORALE60%\",\"afterOkSetupVisible\":true}}",
+  "GUESS: 경기가 끝났는데 다시 '플레이 볼' 화면이라 한 번 더 해야 하는 줄 알았음 (안내문: 1차전 · 삼성 라이온즈 (홈) · 결과가 시즌에 기록됩니다)",
+  "2경기(시드 그대로): {\"pre\":{\"date\":\"4/4 (토)\",\"note\":\"2차전 · 삼성 라이온즈 (홈) · 결과가 시즌에 기록됩니다\",\"seed\":\"1\",\"inn\":\"3\",\"startDisabled\":false,\"order\":\"선택 9/9\"},\"sc\":\"4:0\",\"title\":\"경기 종료 · 우리 4 : 상대 0\",\"resume\":\"정비로 돌아가기\",\"scoreLine\":\"1 2 3 R H E ‖ KIA 타이거즈 4 0 0 4 7 0 ‖ 삼성 0 0 0 0 1 0\",\"post\":{\"modalFirstSeenMs\":null,\"modalLastSeenMs\":null,\"modalVisibleNow\":false,\"eventTitle\":\"경기 종료\",\"eventBody\":\"이겼습니다. 4 : 0결과가 오늘 일정과 기록에 반영됐습니다. 정비 시간입니다.\",\"screen\":\"경기\",\"gameHidden\":true,\"setupVisible\":true,\"setupNote\":\"2차전 · 삼성 라이온즈 (홈) · 결과가 시즌에 기록됩니다\",\"startDisabled\":false,\"lock\":false,\"strip\":\"DATE4/4 (토) · REC2-0 · RANK1위 / 6 · BUDGET45.9 · PAYROLL127.0/137.4 · MORALE60%\",\"afterOkScreen\":\"경기\",\"afterOkNextDay\":\"다음 날\",\"afterOkStrip\":\"DATE4/4 (토) · REC2-0 · RANK1위 / 6 · BUDGET45.9 · PAYROLL127.0/137.4 · MORALE60%\",\"afterOkSetupVisible\":true}}",
+  "3경기(시드 7): {\"pre\":{\"date\":\"4/5 (일)\",\"note\":\"3차전 · 삼성 라이온즈 (홈) · 결과가 시즌에 기록됩니다\",\"seed\":\"7\",\"inn\":\"3\",\"startDisabled\":false,\"order\":\"선택 9/9\"},\"sc\":\"1:0\",\"title\":\"경기 종료 · 우리 1 : 상대 0\",\"resume\":\"정비로 돌아가기\",\"scoreLine\":\"1 2 3 R H E ‖ KIA 타이거즈 1 0 0 1 4 0 ‖ 삼성 0 0 0 0 0 1\",\"post\":{\"modalFirstSeenMs\":null,\"modalLastSeenMs\":null,\"modalVisibleNow\":false,\"eventTitle\":\"경기 종료\",\"eventBody\":\"이겼습니다. 1 : 0결과가 오늘 일정과 기록에 반영됐습니다. 정비 시간입니다.\",\"screen\":\"경기\",\"gameHidden\":true,\"setupVisible\":true,\"setupNote\":\"3차전 · 삼성 라이온즈 (홈) · 결과가 시즌에 기록됩니다\",\"startDisabled\":false,\"lock\":false,\"strip\":\"DATE4/5 (일) · REC3-0 · RANK1위 / 6 · BUDGET49.2 · PAYROLL127.0/137.4 · MORALE60%\",\"afterOkScreen\":\"경기\",\"afterOkNextDay\":\"다음 날\",\"afterOkStrip\":\"DATE4/5 (일) · REC3-0 · RANK1위 / 6 · BUDGET49.2 · PAYROLL127.0/137.4 · MORALE60%\",\"afterOkSetupVisible\":true}}",
+  "점수 1/2/3경기: 4:0 / 4:0 / 1:0 · 1=2? true · 1=3? false · 시드 1/1/7",
+  "일정: 1 | 4/3 (금) | 삼성 라이온즈 | 홈 | 승 4:0 | 성영탁 3이닝 0자책 ‖ 2 | 4/4 (토) | 삼성 라이온즈 | 홈 | 승 4:0 | 성영탁 3이닝 0자책 ‖ 3 | 4/5 (일) | 삼성 라이온즈 | 홈 | 승 1:0 | 성영탁 3이닝 0자책 ‖ 4 | 4/7 (화) | LG 트윈스 | 원정 | - | ",
+  "일지: 4/5 (일)승 1:0 vs 삼성 라이온즈 · 직접 경기 ‖ 4/4 (토)승 4:0 vs 삼성 라이온즈 · 직접 경기 ‖ 4/3 (금)승 4:0 vs 삼성 라이온즈 · 직접 경기 ‖ 4/3 (금)KIA 타이거즈 · 시즌 개막 준비. 이적 자금 40억, 선수 99명, 상위 40인 보수 127.0억 (샐러리캡 137.4억)."
+ ],
+ "persona": "야구 초보",
+ "screen": "postgame",
+ "seen": {
+  "games": [
+   {
+    "pre": {
+     "date": "4/3 (금)",
+     "note": "1차전 · 삼성 라이온즈 (홈) · 결과가 시즌에 기록됩니다",
+     "seed": "1",
+     "inn": "3",
+     "startDisabled": false,
+     "order": "선택 9/9"
+    },
+    "sc": "4:0",
+    "title": "경기 종료 · 우리 4 : 상대 0",
+    "resume": "정비로 돌아가기",
+    "scoreLine": "1 2 3 R H E ‖ KIA 타이거즈 4 0 0 4 7 0 ‖ 삼성 0 0 0 0 1 0",
+    "post": {
+     "modalFirstSeenMs": null,
+     "modalLastSeenMs": null,
+     "modalVisibleNow": false,
+     "eventTitle": "경기 종료",
+     "eventBody": "이겼습니다. 4 : 0결과가 오늘 일정과 기록에 반영됐습니다. 정비 시간입니다.",
+     "screen": "경기",
+     "gameHidden": true,
+     "setupVisible": true,
+     "setupNote": "1차전 · 삼성 라이온즈 (홈) · 결과가 시즌에 기록됩니다",
+     "startDisabled": false,
+     "lock": false,
+     "strip": "DATE4/3 (금) · REC1-0 · RANK1위 / 6 · BUDGET42.6 · PAYROLL127.0/137.4 · MORALE60%",
+     "afterOkScreen": "경기",
+     "afterOkNextDay": "다음 날",
+     "afterOkStrip": "DATE4/3 (금) · REC1-0 · RANK1위 / 6 · BUDGET42.6 · PAYROLL127.0/137.4 · MORALE60%",
+     "afterOkSetupVisible": true
+    }
+   },
+   {
+    "pre": {
+     "date": "4/4 (토)",
+     "note": "2차전 · 삼성 라이온즈 (홈) · 결과가 시즌에 기록됩니다",
+     "seed": "1",
+     "inn": "3",
+     "startDisabled": false,
+     "order": "선택 9/9"
+    },
+    "sc": "4:0",
+    "title": "경기 종료 · 우리 4 : 상대 0",
+    "resume": "정비로 돌아가기",
+    "scoreLine": "1 2 3 R H E ‖ KIA 타이거즈 4 0 0 4 7 0 ‖ 삼성 0 0 0 0 1 0",
+    "post": {
+     "modalFirstSeenMs": null,
+     "modalLastSeenMs": null,
+     "modalVisibleNow": false,
+     "eventTitle": "경기 종료",
+     "eventBody": "이겼습니다. 4 : 0결과가 오늘 일정과 기록에 반영됐습니다. 정비 시간입니다.",
+     "screen": "경기",
+     "gameHidden": true,
+     "setupVisible": true,
+     "setupNote": "2차전 · 삼성 라이온즈 (홈) · 결과가 시즌에 기록됩니다",
+     "startDisabled": false,
+     "lock": false,
+     "strip": "DATE4/4 (토) · REC2-0 · RANK1위 / 6 · BUDGET45.9 · PAYROLL127.0/137.4 · MORALE60%",
+     "afterOkScreen": "경기",
+     "afterOkNextDay": "다음 날",
+     "afterOkStrip": "DATE4/4 (토) · REC2-0 · RANK1위 / 6 · BUDGET45.9 · PAYROLL127.0/137.4 · MORALE60%",
+     "afterOkSetupVisible": true
+    }
+   },
+   {
+    "pre": {
+     "date": "4/5 (일)",
+     "note": "3차전 · 삼성 라이온즈 (홈) · 결과가 시즌에 기록됩니다",
+     "seed": "7",
+     "inn": "3",
+     "startDisabled": false,
+     "order": "선택 9/9"
+    },
+    "sc": "1:0",
+    "title": "경기 종료 · 우리 1 : 상대 0",
+    "resume": "정비로 돌아가기",
+    "scoreLine": "1 2 3 R H E ‖ KIA 타이거즈 1 0 0 1 4 0 ‖ 삼성 0 0 0 0 0 1",
+    "post": {
+     "modalFirstSeenMs": null,
+     "modalLastSeenMs": null,
+     "modalVisibleNow": false,
+     "eventTitle": "경기 종료",
+     "eventBody": "이겼습니다. 1 : 0결과가 오늘 일정과 기록에 반영됐습니다. 정비 시간입니다.",
+     "screen": "경기",
+     "gameHidden": true,
+     "setupVisible": true,
+     "setupNote": "3차전 · 삼성 라이온즈 (홈) · 결과가 시즌에 기록됩니다",
+     "startDisabled": false,
+     "lock": false,
+     "strip": "DATE4/5 (일) · REC3-0 · RANK1위 / 6 · BUDGET49.2 · PAYROLL127.0/137.4 · MORALE60%",
+     "afterOkScreen": "경기",
+     "afterOkNextDay": "다음 날",
+     "afterOkStrip": "DATE4/5 (일) · REC3-0 · RANK1위 / 6 · BUDGET49.2 · PAYROLL127.0/137.4 · MORALE60%",
+     "afterOkSetupVisible": true
+    }
+   }
+  ],
+  "sameScore12": true,
+  "sameScore13": false,
+  "sched": [
+   "1 | 4/3 (금) | 삼성 라이온즈 | 홈 | 승 4:0 | 성영탁 3이닝 0자책",
+   "2 | 4/4 (토) | 삼성 라이온즈 | 홈 | 승 4:0 | 성영탁 3이닝 0자책",
+   "3 | 4/5 (일) | 삼성 라이온즈 | 홈 | 승 1:0 | 성영탁 3이닝 0자책",
+   "4 | 4/7 (화) | LG 트윈스 | 원정 | - | "
+  ],
+  "log": [
+   "4/5 (일)승 1:0 vs 삼성 라이온즈 · 직접 경기",
+   "4/4 (토)승 4:0 vs 삼성 라이온즈 · 직접 경기",
+   "4/3 (금)승 4:0 vs 삼성 라이온즈 · 직접 경기",
+   "4/3 (금)KIA 타이거즈 · 시즌 개막 준비. 이적 자금 40억, 선수 99명, 상위 40인 보수 127.0억 (샐러리캡 137.4억)."
+  ]
+ }
+}

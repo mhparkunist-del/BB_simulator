@@ -1,0 +1,5 @@
+23:28:40 PASS UI limits 받을 선수 to 2 | GOT 2
+23:28:40 FAIL EXPECT UI 제안 with only 보낼 선수 (gift) is refused or confirmed | GOT 김진수 still ours=false msg=삼성 수락 ·  ⇄ 김진수
+23:28:40 PASS at 26 active every visible 1군 button is disabled | GOT active=26 enabledUp=0/0 header=1군 (26/26)임찬
+23:28:40 PASS FA signed at 26 lands in 2군 | GOT active=26
+23:28:40 PASS 2-for-1 at 26 active keeps the cap | GOT 삼성 수락 · 이승민, 이재현 ⇄ 이영빈 active=26

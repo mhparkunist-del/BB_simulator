@@ -1,0 +1,5 @@
+00:03:14 team screen: #teamBack 41x30px/12.5px | #teamStart 62x30px/12.5px
+00:03:14 after 뒤로: title visible true
+00:03:15 before: club LG 트윈스 policy balanced day 0 · #reset 54x30px/12.5px next to #nextDay 90x30px/12.5px
+00:03:16 reset with 취소: confirm text '저장된 시즌을 지우고 새로 시작할까요?' · club still LG 트윈스 policy balanced
+00:03:16 reset with 확인: club LG 트윈스 policy manual day 0 players 98 · event modal false '구단주 인사' · tutorial false · screen 일정

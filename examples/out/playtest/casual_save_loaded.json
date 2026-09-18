@@ -1,0 +1,19 @@
+{
+ "name": "casual_save_loaded",
+ "ms": 4038,
+ "errs": [],
+ "log": [
+  "policy now balanced · #saveBtn 35x30px/12px · #titleBtn 42x30px/12px",
+  "save modal visible true slots: 슬롯 1비어 있음여기 저장슬롯 2비어 있음여기 저장슬롯 3비어 있음여기 저장 · #saveSlots [data-slot] 66x30px/12.5px",
+  "after 여기 저장: event true '저장 · 슬롯 1에 저장했습니다.' save modal still visible true slots now: 슬롯 1LG 트윈스 · day 0 · 0승 0패 · 2026-09-06 14:29여기 저장슬롯 2비어 있음여기 저장슬롯 3비어 있음여기 저장",
+  "modal closed true",
+  "title: continue visible true #btnContinue 156x48px/17px",
+  "load slots: 슬롯 1LG 트윈스 · day 0 · 0승 0패 · 2026-09-06 14:29불러오기슬롯 2비어 있음불러오기슬롯 3비어 있음불러오기",
+  "other club now: 삼성 라이온즈 policy manual",
+  "loaded: club LG 트윈스 policy balanced day 0 header DATE4/3 (금)REC0-0RANK1위 / 6 BUDGET40.0PAYROLL102.2/137.4MORALE60% event shown false"
+ ],
+ "persona": "casual mobile",
+ "screen": "casual_save_loaded",
+ "loadedClub": "LG 트윈스",
+ "loadedPolicy": "balanced"
+}

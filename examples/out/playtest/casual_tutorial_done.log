@@ -1,0 +1,11 @@
+23:14:29 tutorial shown true
+23:14:29 step 1 [1/3] on screen '선수단' text: 먼저 선수단을 둘러보세요. 이름을 누르면 카드가 열리고, 포지션 셀렉트로 수비 위치를 정합니다.
+23:14:29   tbox 170,306 560x98 font 13px | #tutNext 41x30px/12.5px | #tutSkip 62x30px/12.5px
+23:14:29   element just above box: H2.
+23:14:29 step 2 [2/3] on screen '훈련' text: 훈련 화면에서 코치에게 방침을 맡기거나(균형·타격·투수·유망주·회복) 선수마다 직접 프로그램을 고릅니다.
+23:14:29   tbox 170,306 560x98 font 13px | #tutNext 41x30px/12.5px | #tutSkip 62x30px/12.5px
+23:14:29   element just above box: SELECT.prog
+23:14:29 step 3 [3/3] on screen '일정' text: 일정에서 다음 날을 진행하세요. 경기 날은 넘길 수 없고 경기 화면에서 직접 지휘합니다. 급하면 결과 바로보기로 남은 경기를 바로 끝냅니다. 경기가 시작되면 끝날 때까지 정비 화면으로 나갈 수 없습니다.
+23:14:29   tbox 170,287 560x117 font 13px | #tutNext 41x30px/12.5px | #tutSkip 62x30px/12.5px
+23:14:29   element just above box: BUTTON.
+23:14:30 after last 다음: tutorial visible false screen '일정' nextDay label '오늘 경기 시작' tutorial_done true

@@ -1,0 +1,19 @@
+00:05:55 (a) lopsided 김영웅(v11.2) <- 홍건희(v0.3): ok=false 삼성 거절 · 가치 차이가 큽니다 (우리 0.3 vs 요구 15.7).
+00:05:55 (c) API cash sale of 2군 곽동효 (ovr 0.76, v 20.4, salary 0.4) for 26.9억: ok=true 삼성 수락 ·  ⇄ 곽동효 + 현금 -26.9억 budget 40 -> 66.9
+00:05:56 (c-UI) 2군 listed in 보낼 선수=false · demote true promote true · checkbox found=true · tradeMsg: 삼성 수락 ·  ⇄ 곽동효 + 현금 -26.9억 · budget 66.9 · sold=true
+00:05:56 (c3) sold farm 2-at-a-time: 60/75 players in 30 trades (rejected 0) for 352.6억 · budget 392.6 · top40 127 -> 116.8 · opp roster sizes 42/43/42/41/39/40/40/40/38
+00:05:56 (d) cash buy 박계범 (ovr 0.71 v 9.1) for 14.1억: ok=true 삼성 수락 · 박계범 ⇄  + 현금 14.1억 budget 25.9
+00:05:56 (e) 3 farm for star: ok=false 한쪽 최대 2명입니다.
+00:05:56 (e2) 2 farm gems (곽동효 ovr 0.76 sal 0.4 v20.4, 김정엽 ovr 0.79 sal 0.4 v19.8 sum 43.2) for star 김영웅 (ovr 0.67 sal 3.6 v 11.2 need 15.7): ok=true 삼성 수락 · 김영웅 ⇄ 곽동효, 김정엽
+00:05:56 (e3) roster gen: 2군 batters better than the worst lineup starter (0.47): 20 (best 곽동효 0.76 sal 0.4, 이준범 0.65 sal 0.4, 이영재 0.63 sal 0.4) · 2군 pitchers better than worst SP (0.64): 5 · all 10 clubs: undefined 15,undefined 13,undefined 33,undefined 20,undefined 4,undefined 5,undefined 19,undefined 8,undefined 2,undefined 11
+00:05:56 (f) 1-for-3: ok=false 한쪽 최대 2명입니다.
+00:05:56 (g) funded: sold 60 farm in 30 trades for 352.6 budget 392.6
+00:05:56 (g) bought stars: 곽동효(CF ovr 0.76 41억), 김진수(SP ovr 0.84 45.2억), 타카다(SP ovr 0.8 44.8억), 김요셉(2B ovr 0.77 39.2억), 박건우(C ovr 0.72 28.3억), 박재규(SP ovr 0.85 48.6억), 오태양(1B ovr 0.8 39.2억), 최원준(LF ovr 0.86 42.6억), 윤석원(SP ovr 0.89 59.4억) · budget 4.3 · top40 127 -> 200.5 (cap 137.4) · opp str before 삼성 0.57/0.53,LG 0.53/0.57,두산 0.53/0.55,SSG 0.46/0.47,롯데 0.51/0.61,한화 0.52/0.55,NC 0.49/0.57,KT 0.59/0.52,키움 0.61/0.48 · after 삼성 0.6/0.5,LG 0.6/0.6,두산 0.6/0.5,SSG 0.5/0.5,롯데 0.6/0.6,한화 0.5/0.5,NC 0.5/0.6,KT 0.6/0.5,키움 0.7/0.5
+00:05:56 (g) super team lineup ovr 0.86,0.81,0.8,0.77,0.76,0.72,0.71,0.71,0.66 rotation 0.89,0.85,0.84,0.8,0.77 · 1차전 · 4/3 (금) · 삼성 라이온즈 (홈)예정 선발 윤석원 (피로 21%) · 타선 0.83 · 수비 0.59 · 상대 타격 0.6 / 투수 0.5
+00:05:56 (g) super team season: 26-4 runs 215/87 budget 21.6 · [{"d":"5/8 (금)","kind":"샐러리캡 제재금","amt":-18.9,"text":"상위 40인 200.5억, 초과분의 30%"}] · 시즌 재정 결산 · 잔액 21.6억 · 수입 433.3억 · 지출 451.7억
+00:05:56 (h) injured 황동하 value 14.4 -> 10 sold for cash: ok=true 삼성 수락 ·  ⇄ 황동하 + 현금 -13.2억
+00:05:56 (h2) round trip 박상준: sold 22.4 bought back 34.1 ok=true net -11.7
+00:05:56 (i) AI offer from 삼성 day 7: wants 곽도규 (v 12.9 ovr 0.73 age 22) gives 김영웅(v11.2 ovr 0.67 age 23),이진용(v3.6 ovr 0.54 age 20) · value ratio 1.15
+00:05:57 (j) offer held to game 20: still listed=false · accept after deadline: players 99 -> 99 got false,false lost false · log 승 7:6 vs NC 다이노스 (홈) · 선발 양현종 6이닝 4실점 · 김태군 3안타, 박상준 2안타, 김선빈 1안타
+00:05:57 (j2) proposeTrade after 20 games: ok=false 트레이드 마감입니다 (20경기 이후 · 실제 KBO는 7월 31일).
+00:05:57 (k) dumped 20 farm players (avg ovr 0.63) on 삼성: bat/pitch 0.57/0.53 -> 0.7/0.6 · their roster 54 · AI cash spent so far this test -244 (no AI budget field: true)

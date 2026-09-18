@@ -1,0 +1,50 @@
+{
+ "name": "watch_views",
+ "ms": 3165,
+ "errs": [],
+ "log": [
+  "sample groundout ← batter#0 count 0-0 · 1구째 94마일, 높은 코스 — 쳤습니다! 땅볼, 106마일 → SS 정면, 아웃",
+  "sample ball ← batter#0 count 1-1 · 3구째 91마일, 몸쪽 높은 코스 — 볼",
+  "sample hit ← batter#0 count 3-2 · 6구째 95마일, 몸쪽 낮은 코스 — 쳤습니다! 땅볼, 100마일 → 안타! CF 앞에 떨어집니다",
+  "sample foul ← batter#0 count 3-2 · 6구째 92마일, 몸쪽 코스 — 파울",
+  "sample called ← batter#0 count 3-0 · 4구째 92마일, 가운데 코스 — 지켜보고 스트라이크",
+  "sample swing_miss ← batter#2 count 0-0 · 1구째 91마일, 바깥쪽 코스 — 헛스윙!",
+  "picks 108 stats {\"groundout\":10,\"ball\":40,\"hit\":8,\"foul\":27,\"called\":15,\"swing_miss\":8} got groundout,ball,hit,foul,called,swing_miss",
+  "sample bunt ← batter#0 1-0 · 2구째 92마일, 낮은 코스 — 파울 · swing_kind=bunt note=undefined",
+  "swing_miss: result=swinging_strike kind=- T=0.44 tC=0.44 mph=91.4 hand=R text=1구째 91마일, 바깥쪽 코스 — 헛스윙!",
+  "called: result=called_strike kind=- T=0.43 tC=0.43 mph=91.9 hand=R text=4구째 92마일, 가운데 코스 — 지켜보고 스트라이크",
+  "ball: result=ball kind=- T=0.44 tC=0.44 mph=91.1 hand=R text=3구째 91마일, 몸쪽 높은 코스 — 볼",
+  "no sample for dirt",
+  "foul: result=foul kind=foul T=0.43 tC=0.41 mph=92.4 hand=R text=6구째 92마일, 몸쪽 코스 — 파울",
+  "groundout: result=in_play kind=out T=0.42 tC=0.40 mph=94.1 hand=R text=1구째 94마일, 높은 코스 — 쳤습니다! 땅볼, 106마일 → SS 정면, 아웃",
+  "groundout play events: move:SS@0.2 field:SS@1.05 move:1B@0.3 throw:SS@2.03 run:BR@0.18 call:1@4.29",
+  "no sample for flyout",
+  "hit: result=in_play kind=single T=0.42 tC=0.40 mph=94.7 hand=R text=6구째 95마일, 몸쪽 낮은 코스 — 쳤습니다! 땅볼, 100마일 → 안타! CF 앞에 떨어집니다",
+  "hit play events: move:CF@0.3 field:CF@2.6 move:SS@0.3 throw:CF@3.83 run:BR@0.18",
+  "no sample for hr",
+  "bunt: result=foul kind=foul T=0.43 tC=0.41 mph=92 hand=R text=2구째 92마일, 낮은 코스 — 파울",
+  "no sample for buntAny"
+ ],
+ "persona": "관전자",
+ "picks": 108,
+ "stats": {
+  "groundout": 10,
+  "ball": 40,
+  "hit": 8,
+  "foul": 27,
+  "called": 15,
+  "swing_miss": 8
+ },
+ "samples": [
+  "groundout",
+  "ball",
+  "hit",
+  "foul",
+  "called",
+  "swing_miss",
+  "bunt"
+ ],
+ "notes": [
+  "views captured"
+ ]
+}

@@ -8,3 +8,4 @@ web/*.html
 web/templates/*.bak
 *.bak
 .DS_Store
+!examples/out/playtest/

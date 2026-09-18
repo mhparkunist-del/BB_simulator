@@ -1,0 +1,14 @@
+{
+ "name": "casual_welcome",
+ "ms": 335,
+ "errs": [],
+ "log": [
+  "event modal after 54ms visible true",
+  "title: 구단주 인사 || body: LG 트윈스 감독으로 부임하신 것을 환영합니다.실제 LG 트윈스 선수단(2026 등록명단 기준)으로 시즌을 치릅니다. 능력치는 이 게임의 추정값입니다.올 시즌 30경기, 선수단과 훈련은 감독님께 맡깁니다. 먼저 선수들을 둘러보시죠.",
+  "ok button #eventOk 42x30px/12.5px modalbox #eventModal .modalbox 560x151px/12px body font 12px",
+  "behind modal: schedule visible true header strip: DATE4/3 (금)REC0-0RANK1위 / 6 BUDGET40.0PAYROLL102.2/137.4MORALE60%",
+  "club LG 트윈스 day 0 players 98 budget 40"
+ ],
+ "persona": "casual mobile",
+ "screen": "welcome"
+}

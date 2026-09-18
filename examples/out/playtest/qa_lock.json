@@ -1,0 +1,243 @@
+{
+ "name": "qa_lock",
+ "ms": 13844,
+ "errs": [
+  "TypeError: can't access property \"score\", G is null @game.js:74"
+ ],
+ "log": [
+  "PASS day 0 has a home game | GOT {\"g\":1,\"opp\":\"삼성 라이온즈\",\"home\":true,\"starter\":0}",
+  "PASS nextDay label = 오늘 경기 시작 | GOT 오늘 경기 시작",
+  "PASS nextDay routes to game screen on a game day | GOT true",
+  "PASS game day note says result is recorded | GOT 1차전 · 삼성 라이온즈 (홈) · 결과가 시즌에 기록됩니다",
+  "PASS can leave the game screen before starting | GOT true",
+  "PASS locked after start | GOT true",
+  "PASS APP.show(schedule) while locked stays on game | GOT #game",
+  "PASS APP.show(title) while locked stays on game | GOT #game",
+  "PASS APP.show(team) while locked stays on game | GOT #game",
+  "PASS 5 nav buttons disabled | GOT 5",
+  "PASS nav click while locked ignored | GOT true",
+  "PASS saveBtn/titleBtn disabled | GOT true/true",
+  "PASS titleBtn click ignored while locked | GOT true",
+  "PASS reset button not visible while locked | GOT false",
+  "PASS hash change while locked does not switch screen | GOT #schedule",
+  "FAIL event shown after 정비로 돌아가기 | GOT 졌습니다. 0 : 0결과가 오늘 일정과 기록에 반영됐습니다. 정비 시간입니다.",
+  "PASS unlocked after game over | GOT false",
+  "PASS schedule screen after eventOk | GOT #schedule",
+  "PASS result recorded once (sched) | GOT 1 {\"us\":0,\"them\":0,\"sp\":\"성영탁\",\"ip\":1,\"er\":0,\"real\":true}",
+  "PASS W+L == 1 after one game | GOT 0-1",
+  "PASS played list == [1] | GOT [1]",
+  "PASS one 직접 경기 log line | GOT 1",
+  "PASS opponent record +1 once | GOT 1-0",
+  "FAIL EXPECT tie (0:0) not reported/recorded as a loss | GOT 졌습니다. 0 : 0결과가 오늘 일정과 기록에 반영됐습니다. 정비 시간입니다. W-L 0-1",
+  "PASS nextDay label = 다음 날 after the game | GOT 다음 날",
+  "PASS second game today flagged as practice | GOT 오늘은 경기가 없습니다 · 연습 경기(기록 없음)",
+  "PASS practice result not recorded | GOT 1 0-1 logs 1",
+  "PASS practice event says not recorded | GOT 졌습니다. 0 : 0연습 경기라 기록에는 남지 않습니다.",
+  "FAIL EXPECT tie event not '졌습니다' (practice seed 3) | GOT 졌습니다. 0 : 0연습 경기라 기록에는 남지 않습니다.",
+  "ERR@double-resume: TypeError: can't access property \"score\", G is null @game.js:74",
+  "FAIL EXPECT double click on 정비로 돌아가기 throws nothing | GOT TypeError: can't access property \"score\", G is null @game.js:74",
+  "PASS after double resume still 1 recorded game | GOT 1 0-1",
+  "PASS day advanced to 1 | GOT 1",
+  "PASS still 1 result after 다음 날 (no double play) | GOT 1 0-1",
+  "FAIL EXPECT gate income for a directly played HOME game | GOT gate 0 -> 0 ledger= att=0",
+  "FAIL EXPECT a 2:2 tie is not counted as a loss | GOT rec=true W-L 0-1 -> 0-2 log=패 2:2 vs 삼성 라이온즈 · 직접 경기",
+  "PASS quick-sim home game adds gate income (contrast) | GOT home=true gate 0 -> 2.4",
+  "FAIL EXPECT simDay refused while locked (day stays 3) | GOT 4",
+  "PASS results == W+L after simDay-under-lock | GOT 4 vs 4"
+ ],
+ "persona": "QA 파괴 테스터 · lock/record",
+ "checks": [
+  {
+   "name": "day 0 has a home game",
+   "ok": true,
+   "got": "{\"g\":1,\"opp\":\"삼성 라이온즈\",\"home\":true,\"starter\":0}"
+  },
+  {
+   "name": "nextDay label = 오늘 경기 시작",
+   "ok": true,
+   "got": "오늘 경기 시작"
+  },
+  {
+   "name": "nextDay routes to game screen on a game day",
+   "ok": true,
+   "got": "true"
+  },
+  {
+   "name": "game day note says result is recorded",
+   "ok": true,
+   "got": "1차전 · 삼성 라이온즈 (홈) · 결과가 시즌에 기록됩니다"
+  },
+  {
+   "name": "can leave the game screen before starting",
+   "ok": true,
+   "got": "true"
+  },
+  {
+   "name": "locked after start",
+   "ok": true,
+   "got": "true"
+  },
+  {
+   "name": "APP.show(schedule) while locked stays on game",
+   "ok": true,
+   "got": "#game"
+  },
+  {
+   "name": "APP.show(title) while locked stays on game",
+   "ok": true,
+   "got": "#game"
+  },
+  {
+   "name": "APP.show(team) while locked stays on game",
+   "ok": true,
+   "got": "#game"
+  },
+  {
+   "name": "5 nav buttons disabled",
+   "ok": true,
+   "got": "5"
+  },
+  {
+   "name": "nav click while locked ignored",
+   "ok": true,
+   "got": "true"
+  },
+  {
+   "name": "saveBtn/titleBtn disabled",
+   "ok": true,
+   "got": "true/true"
+  },
+  {
+   "name": "titleBtn click ignored while locked",
+   "ok": true,
+   "got": "true"
+  },
+  {
+   "name": "reset button not visible while locked",
+   "ok": true,
+   "got": "false"
+  },
+  {
+   "name": "hash change while locked does not switch screen",
+   "ok": true,
+   "got": "#schedule"
+  },
+  {
+   "name": "event shown after 정비로 돌아가기",
+   "ok": false,
+   "got": "졌습니다. 0 : 0결과가 오늘 일정과 기록에 반영됐습니다. 정비 시간입니다."
+  },
+  {
+   "name": "unlocked after game over",
+   "ok": true,
+   "got": "false"
+  },
+  {
+   "name": "schedule screen after eventOk",
+   "ok": true,
+   "got": "#schedule"
+  },
+  {
+   "name": "result recorded once (sched)",
+   "ok": true,
+   "got": "1 {\"us\":0,\"them\":0,\"sp\":\"성영탁\",\"ip\":1,\"er\":0,\"real\":true}"
+  },
+  {
+   "name": "W+L == 1 after one game",
+   "ok": true,
+   "got": "0-1"
+  },
+  {
+   "name": "played list == [1]",
+   "ok": true,
+   "got": "[1]"
+  },
+  {
+   "name": "one 직접 경기 log line",
+   "ok": true,
+   "got": "1"
+  },
+  {
+   "name": "opponent record +1 once",
+   "ok": true,
+   "got": "1-0"
+  },
+  {
+   "name": "EXPECT tie (0:0) not reported/recorded as a loss",
+   "ok": false,
+   "got": "졌습니다. 0 : 0결과가 오늘 일정과 기록에 반영됐습니다. 정비 시간입니다. W-L 0-1"
+  },
+  {
+   "name": "nextDay label = 다음 날 after the game",
+   "ok": true,
+   "got": "다음 날"
+  },
+  {
+   "name": "second game today flagged as practice",
+   "ok": true,
+   "got": "오늘은 경기가 없습니다 · 연습 경기(기록 없음)"
+  },
+  {
+   "name": "practice result not recorded",
+   "ok": true,
+   "got": "1 0-1 logs 1"
+  },
+  {
+   "name": "practice event says not recorded",
+   "ok": true,
+   "got": "졌습니다. 0 : 0연습 경기라 기록에는 남지 않습니다."
+  },
+  {
+   "name": "EXPECT tie event not '졌습니다' (practice seed 3)",
+   "ok": false,
+   "got": "졌습니다. 0 : 0연습 경기라 기록에는 남지 않습니다."
+  },
+  {
+   "name": "EXPECT double click on 정비로 돌아가기 throws nothing",
+   "ok": false,
+   "got": "TypeError: can't access property \"score\", G is null @game.js:74"
+  },
+  {
+   "name": "after double resume still 1 recorded game",
+   "ok": true,
+   "got": "1 0-1"
+  },
+  {
+   "name": "day advanced to 1",
+   "ok": true,
+   "got": "1"
+  },
+  {
+   "name": "still 1 result after 다음 날 (no double play)",
+   "ok": true,
+   "got": "1 0-1"
+  },
+  {
+   "name": "EXPECT gate income for a directly played HOME game",
+   "ok": false,
+   "got": "gate 0 -> 0 ledger= att=0"
+  },
+  {
+   "name": "EXPECT a 2:2 tie is not counted as a loss",
+   "ok": false,
+   "got": "rec=true W-L 0-1 -> 0-2 log=패 2:2 vs 삼성 라이온즈 · 직접 경기"
+  },
+  {
+   "name": "quick-sim home game adds gate income (contrast)",
+   "ok": true,
+   "got": "home=true gate 0 -> 2.4"
+  },
+  {
+   "name": "EXPECT simDay refused while locked (day stays 3)",
+   "ok": false,
+   "got": "4"
+  },
+  {
+   "name": "results == W+L after simDay-under-lock",
+   "ok": true,
+   "got": "4 vs 4"
+  }
+ ],
+ "fails": 7,
+ "hangs": []
+}

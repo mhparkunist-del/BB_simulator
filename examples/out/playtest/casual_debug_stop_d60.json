@@ -1,0 +1,13 @@
+{
+ "name": "casual_debug_stop_d60",
+ "ms": 4633,
+ "errs": [],
+ "log": [
+  "PA1 done · 1회초 · fast label '결과 바로보기'",
+  "fast pressed, stop pressed after 61ms · fast label now '진행 중…'",
+  "562ms · 1top outs 0 score 2:0 over false · pitchBtn on · fast '결과 바로보기' · scene pitch",
+  "end · feedLast: 1회초결과 바로보기 중단 · 1회초부터 지휘합니다1회초1구째 91마일, 몸쪽 낮은 코스 — 볼"
+ ],
+ "probe": "stop",
+ "delay": 60
+}

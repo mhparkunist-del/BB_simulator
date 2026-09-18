@@ -1,0 +1,11 @@
+elapsed 32.2s
+png: MISSING
+report: MISSING (scenario never called PT.done — check qa_anim2.log and the png status bar)
+firefox stderr: *** You are running in headless mode.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+

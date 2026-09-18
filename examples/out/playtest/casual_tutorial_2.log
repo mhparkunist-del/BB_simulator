@@ -1,0 +1,7 @@
+23:14:22 tutorial shown true
+23:14:22 step 1 [1/3] on screen '선수단' text: 먼저 선수단을 둘러보세요. 이름을 누르면 카드가 열리고, 포지션 셀렉트로 수비 위치를 정합니다.
+23:14:22   tbox 170,306 560x98 font 13px | #tutNext 41x30px/12.5px | #tutSkip 62x30px/12.5px
+23:14:22   element just above box: H2.
+23:14:23 step 2 [2/3] on screen '훈련' text: 훈련 화면에서 코치에게 방침을 맡기거나(균형·타격·투수·유망주·회복) 선수마다 직접 프로그램을 고릅니다.
+23:14:23   tbox 170,306 560x98 font 13px | #tutNext 41x30px/12.5px | #tutSkip 62x30px/12.5px
+23:14:23   element just above box: SELECT.prog

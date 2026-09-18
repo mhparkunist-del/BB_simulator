@@ -1,0 +1,13 @@
+{
+ "name": "casual_tutorial_1_pc",
+ "ms": 406,
+ "errs": [],
+ "log": [
+  "tutorial shown true",
+  "step 1 [1/3] on screen '선수단' text: 먼저 선수단을 둘러보세요. 이름을 누르면 카드가 열리고, 포지션 셀렉트로 수비 위치를 정합니다.",
+  "  tbox 400,582 560x102 font 13px | #tutNext 49x34px/14px | #tutSkip 73x34px/14px",
+  "  element just above box: DIV.grow"
+ ],
+ "persona": "casual mobile",
+ "screen": "casual_tutorial_1"
+}

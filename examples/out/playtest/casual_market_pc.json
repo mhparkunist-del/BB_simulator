@@ -1,0 +1,18 @@
+{
+ "name": "casual_market_pc",
+ "ms": 1094,
+ "errs": [],
+ "log": [
+  "budget: 잔액(이적 자금)40.0억시즌 수입+0억시즌 지출−0억상위 40인 보수 102.2억캡 137.4억캡 여유 35.2억 · 홈 관중 누계 0명 · 트레이드 가능 (마감까지 20경기)입장광고·상품모기업연봉운영계약금·현금정산·제재0000000날짜항목금액내용",
+  "trade: 상대삼성 라이온즈두산 베어스KIA 타이거즈SSG 랜더스롯데 자이언츠한화 이글스NC 다이노스KT 위즈키움 히어로즈가치 = 능력·나이·계약 (ZenGM식)받을 선수 (최대 2)선수포지션OVR·연봉가치 김영웅1B 23B 3.6억11.2 원태인SP 26A 6.4억9.9 이승현SP 24B 2.9억9.6 박계범SS 30A 6.1억9.1 박승규LF 26B 6.8억8.8 · checkbox #tradeTheirs input 14x30px/12px · #tradeGo 50x34px/14px · #tradeClub 108x30px/12px",
+  "signing rows 6 · [data-nego] 50x34px/14px · first: 이호성 삼성RP23구위 D 제구 D 체력 C0.4억협상 · hint: FA·방출 선수 · 요구액과 인내",
+  "cash 40 fa 8",
+  "HIT [data-nego] center 1301,129 right 1326 vs panel right 1352 · bottom 146 vs panel bottom 694 · elementFromPoint = BUTTON (자기 자신, 탭 가능)",
+  "HIT #tradeGo center 680,668 right 705 vs panel right 861 · bottom 685 vs panel bottom 694 · elementFromPoint = BUTTON#tradeGo (자기 자신, 탭 가능)",
+  "HIT #tradeCash center 614,668 right 649 vs panel right 861 · bottom 683 vs panel bottom 694 · elementFromPoint = INPUT#tradeCash (자기 자신, 탭 가능)",
+  "HIT #tradeOurs input center 681,184 right 688 vs panel right 861 · bottom 199 vs panel bottom 694 · elementFromPoint = INPUT (자기 자신, 탭 가능)",
+  "ours names: 김진수@726,이영빈@726,신민재@726,천성호@726,최원영@726,문보경@726 · panel2 right 861"
+ ],
+ "persona": "casual mobile",
+ "screen": "casual_market"
+}

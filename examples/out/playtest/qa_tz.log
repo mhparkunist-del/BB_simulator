@@ -1,0 +1,11 @@
+23:28:38 timezoneOffset=-540 (minutes; -540 = KST)
+23:28:38 eventModal css position=fixed PT.visible(eventModal when shown) would be false
+23:28:38 schedule row 1: 14/2 (목)삼성 라이온즈홈-
+23:28:38 KBO sched[0].date=2026-04-02 today()=2026-04-02 header=4/3 (금) date0=2026-04-03
+23:28:38 FAIL EXPECT schedule row date == header date on day 0 (KBO club) | GOT row=14/2 (목)삼성 라이온즈홈- header=4/3 (금)
+23:28:38 displayed dates: 4/2 (목) 4/3 (금) 4/4 (토) 4/6 (월) 4/7 (화) 4/8 (수) 4/9 (목) 4/10 (금)
+23:28:38 PASS KBO club: game today on day 0 | GOT {"g":1,"opp":"삼성 라이온즈","home":true,"starter":0}
+23:28:38 FAIL EXPECT no game displayed on a Monday (KBO schedule skips Mondays) | GOT 4/6 (월)
+23:28:38 generic sched[0].date=2026-04-03 today()=2026-04-02 club=덕아웃 나이트
+23:28:38 PASS EXPECT generic club (after 새 시즌) finds its games by date (days with a game in 0..7) | GOT days with game: 1,2,3,5,6,7 (sched dates 2026-04-03,2026-04-04,2026-04-05)
+23:28:38 PASS EXPECT generic club plays its 30 games by the day limit | GOT results=30 W-L 18-12 day=37

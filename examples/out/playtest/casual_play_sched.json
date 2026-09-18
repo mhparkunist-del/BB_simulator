@@ -1,0 +1,32 @@
+{
+ "name": "casual_play_sched",
+ "ms": 9009,
+ "errs": [],
+ "log": [
+  "harness: native rAF does not fire in headless capture → setTimeout polyfill (60fps)",
+  "nextDay label '오늘 경기 시작'",
+  "setup: note '1차전 · 삼성 라이온즈 (홈) · 결과가 시즌에 기록됩니다' order '선택 9/9' start disabled false innings 3 pitchers 5 batters 12 selected p 1 b 9",
+  "setup sizes: #start 65x30px/12.5px | #autoOrder 66x30px/12.5px | [data-b] 141x80px/10px | #innings 54x30px/12px h2 font 12.5px card font 10px",
+  "batters box 165/165 overflow hidden",
+  "h2 text: 우리 선발 투수와 타순 9명 · 이닝 시드 1차전 · 삼성 라이온즈 (홈) · 결과가 시즌에 기록됩니다 구단 화면의 타순·선발이 미리 채워집니다. 초에는 우리 타선(공격 사인), 말에는 우리 선발(수비 사인)입니다.",
+  "start → pitch scene after 11ms · locked true nav disabled 5 lockBadge '경기 중 · 정비는 경기 뒤에'",
+  "hud: inn '1회초' batter '김민수 · 투수 0구' ondeck '대기 문보경 · 신민재' feedLast '1회초플레이 볼 · 우리 선발 김진수 · 상대 선발 최원태 · 1번 김민수'",
+  "hud sizes: #playPitch 56x34px/14px | #playPA 56x34px/14px | #playInning 56x34px/14px | #playFast 87x30px/12.5px | #stop 40x30px/12.5px | #spd 46x28px/12px | chips .call 44x28px/12px | view .viewsel button 44x26px/12px | kz #kz 104x80px/12px | field #field 100x79px/12px | strip b font 15px small 9px",
+  "cam canvas #cam 886x374px/12px feedLast font 11.5px",
+  "fast label while running: '진행 중…'",
+  "fast took 524ms · over true score 4:1 break visible true title '경기 종료 · 우리 4 : 상대 1' resume '정비로 돌아가기' pitches {\"us\":32,\"them\":70}",
+  "final table: 12RHELG 트윈스40460삼성01120",
+  "event after resume false: '경기 종료' 이겼습니다. 4 : 1결과가 오늘 일정과 기록에 반영됐습니다. 정비 시간입니다. · locked false",
+  "back: schedule visible true day 0 rec 1-0 nextDay '다음 날' sched1 {\"us\":4,\"them\":1,\"sp\":\"김진수\",\"ip\":2,\"er\":1,\"real\":true} log0 승 4:1 vs 삼성 라이온즈 · 직접 경기"
+ ],
+ "persona": "casual mobile",
+ "screen": "casual_play_sched",
+ "result": {
+  "us": 4,
+  "them": 1,
+  "sp": "김진수",
+  "ip": 2,
+  "er": 1,
+  "real": true
+ }
+}

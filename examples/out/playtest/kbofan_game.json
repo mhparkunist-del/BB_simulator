@@ -1,0 +1,42 @@
+{
+ "name": "kbofan_game",
+ "ms": 2942,
+ "errs": [],
+ "log": [
+  "gameDayNote: 1차전 · 삼성 라이온즈 (홈) · 결과가 시즌에 기록됩니다 · clubLineup oppClub {\"name\":\"삼성 라이온즈\",\"short\":\"삼성\",\"color\":\"#074CA1\"} order prefilled 선택 9/9",
+  "PITCHER CARDS: 박재규 · R · 오버핸드 파워구위 S제구 C체력 C 체력 86% · 컨디션 81 || 박상원 · R · 쓰리쿼터 표준구위 A제구 C체력 B 체력 93% · 컨디션 84 || 김서현 · R · 사이드암 기교구위 C제구 A체력 B 체력 91% · 컨디션 73 || 류현진 · L · 좌완 언더핸드구위 D제구 B체력 B 체력 84% · 컨디션 71 || 짐머맨 · L · 좌완 하이슬롯구위 S제구 B체력 B 체력 93% · 컨디션 76",
+  "BATTER CARDS: 113 최재훈 · C R컨택 C파워 B선구 C주력 D || 293 최유빈 · SS L컨택 B파워 A선구 B주력 B || 37 심우준 · 2B R컨택 B파워 A선구 A주력 B || 58 노시환 · 3B R컨택 C파워 A선구 B주력 D || 663 박정현 · 1B R컨택 C파워 S선구 B주력 C || 730 페라자 · LF R컨택 D파워 B선구 B주력 A || 860 이도훈 · RF R컨택 C파워 C선구 C주력 S || 998 배승수 · DH R컨택 B파워 B선구 C주력 A || 65 유민 · CF R컨택 B파워 A선구 B주력 S || 32 장규현 · C R컨택 C파워 B선구 D주력 D || 41 최인호 · RF R컨택 D파워 B선구 D주력 C || 451 문현빈 · CF L컨택 B파워 C선구 A주력 C",
+  "OPP names: batters 47 강민호/C/R, 7 이재현/1B/R, 9 박계범/SS/R, 2 김재성/C/L, 50 이창용/2B/R, 52 박세혁/C/L, 0 디아즈/SS/L, 61 전병우/SS/R, 32 김헌곤/RF/R · pitchers 원태인/R, 최원태/R, 김태훈/R, 이승현/L, 이승민/L",
+  "club lineup for game: 최재훈/C/R, 최유빈/SS/L, 심우준/2B/R, 문현빈/CF/L, 노시환/3B/R, 박정현/1B/R, 페라자/LF/L, 이도훈/RF/R, 배승수/DH/R · starter today 박재규 R",
+  "innings default 3 max 9",
+  "locked true · first feed: 1회초플레이 볼 · 우리 선발 박재규 · 상대 선발 최원태 · 1번 최재훈",
+  "HUD: 1회초 0:0 AT BAT 최재훈 · 투수 0구 · 대기 최유빈 · 심우준",
+  "after 1 PA: 1회초 outs 0 AT BAT 최유빈 · 투수 2구 · 대기 심우준 · 문현빈 · feedLast: 1회초2루타 · 아웃 0 · 우리 0 : 상대 0 1회초2구째 92마일, 몸쪽 높은 코스 — 쳤습니다! 뜬공, 103마일 → 2루타! CF가 쫓아갑니다",
+  "over true score us 4,0,0 them 0,0,0 hits {\"us\":7,\"them\":1} errors {\"us\":0,\"them\":0} pitches {\"us\":40,\"them\":76}",
+  "BREAK title: 경기 종료 · 우리 4 : 상대 0 · nextUp: ",
+  "SCORE TABLE:  1 2 3 R H E 한화 이글스 4 0 0 4 7 0 삼성 0 0 0 0 1 0",
+  "BOX US: 타자타석안타볼넷삼진최재훈2110최유빈2100심우준2110문현빈2100노시환2000박정현2002페라자2200이도훈2100배승수1000",
+  "BOX THEM: 타자타석안타볼넷삼진강민호2000이재현2002박계범1000김재성1000이창용1010박세혁1100디아즈1001전병우1000김헌곤1000",
+  "PITCHERS: 투수이닝투구피안타실점삼진볼넷평균 mph우리 · 박재규3.040103189상대 · 최원태3.076742290",
+  "box names in our roster? 최재훈:true, 최유빈:true, 심우준:true, 문현빈:true, 노시환:true, 박정현:true, 페라자:true, 이도훈:true, 배승수:true"
+ ],
+ "persona": "KBO 골수팬 · 경기",
+ "notes": [
+  "gameDayNote: 1차전 · 삼성 라이온즈 (홈) · 결과가 시즌에 기록됩니다 · clubLineup oppClub {\"name\":\"삼성 라이온즈\",\"short\":\"삼성\",\"color\":\"#074CA1\"} order prefilled 선택 9/9",
+  "PITCHER CARDS: 박재규 · R · 오버핸드 파워구위 S제구 C체력 C 체력 86% · 컨디션 81 || 박상원 · R · 쓰리쿼터 표준구위 A제구 C체력 B 체력 93% · 컨디션 84 || 김서현 · R · 사이드암 기교구위 C제구 A체력 B 체력 91% · 컨디션 73 || 류현진 · L · 좌완 언더핸드구위 D제구 B체력 B 체력 84% · 컨디션 71 || 짐머맨 · L · 좌완 하이슬롯구위 S제구 B체력 B 체력 93% · 컨디션 76",
+  "BATTER CARDS: 113 최재훈 · C R컨택 C파워 B선구 C주력 D || 293 최유빈 · SS L컨택 B파워 A선구 B주력 B || 37 심우준 · 2B R컨택 B파워 A선구 A주력 B || 58 노시환 · 3B R컨택 C파워 A선구 B주력 D || 663 박정현 · 1B R컨택 C파워 S선구 B주력 C || 730 페라자 · LF R컨택 D파워 B선구 B주력 A || 860 이도훈 · RF R컨택 C파워 C선구 C주력 S || 998 배승수 · DH R컨택 B파워 B선구 C주력 A || 65 유민 · CF R컨택 B파워 A선구 B주력 S || 32 장규현 · C R컨택 C파워 B선구 D주력 D || 41 최인호 · RF R컨택 D파워 B선구 D주력 C || 451 문현빈 · CF L컨택 B파워 C선구 A주력 C",
+  "OPP names: batters 47 강민호/C/R, 7 이재현/1B/R, 9 박계범/SS/R, 2 김재성/C/L, 50 이창용/2B/R, 52 박세혁/C/L, 0 디아즈/SS/L, 61 전병우/SS/R, 32 김헌곤/RF/R · pitchers 원태인/R, 최원태/R, 김태훈/R, 이승현/L, 이승민/L",
+  "club lineup for game: 최재훈/C/R, 최유빈/SS/L, 심우준/2B/R, 문현빈/CF/L, 노시환/3B/R, 박정현/1B/R, 페라자/LF/L, 이도훈/RF/R, 배승수/DH/R · starter today 박재규 R",
+  "innings default 3 max 9",
+  "locked true · first feed: 1회초플레이 볼 · 우리 선발 박재규 · 상대 선발 최원태 · 1번 최재훈",
+  "HUD: 1회초 0:0 AT BAT 최재훈 · 투수 0구 · 대기 최유빈 · 심우준",
+  "after 1 PA: 1회초 outs 0 AT BAT 최유빈 · 투수 2구 · 대기 심우준 · 문현빈 · feedLast: 1회초2루타 · 아웃 0 · 우리 0 : 상대 0 1회초2구째 92마일, 몸쪽 높은 코스 — 쳤습니다! 뜬공, 103마일 → 2루타! CF가 쫓아갑니다",
+  "over true score us 4,0,0 them 0,0,0 hits {\"us\":7,\"them\":1} errors {\"us\":0,\"them\":0} pitches {\"us\":40,\"them\":76}",
+  "BREAK title: 경기 종료 · 우리 4 : 상대 0 · nextUp: ",
+  "SCORE TABLE:  1 2 3 R H E 한화 이글스 4 0 0 4 7 0 삼성 0 0 0 0 1 0",
+  "BOX US: 타자타석안타볼넷삼진최재훈2110최유빈2100심우준2110문현빈2100노시환2000박정현2002페라자2200이도훈2100배승수1000",
+  "BOX THEM: 타자타석안타볼넷삼진강민호2000이재현2002박계범1000김재성1000이창용1010박세혁1100디아즈1001전병우1000김헌곤1000",
+  "PITCHERS: 투수이닝투구피안타실점삼진볼넷평균 mph우리 · 박재규3.040103189상대 · 최원태3.076742290",
+  "box names in our roster? 최재훈:true, 최유빈:true, 심우준:true, 문현빈:true, 노시환:true, 박정현:true, 페라자:true, 이도훈:true, 배승수:true"
+ ]
+}

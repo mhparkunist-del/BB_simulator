@@ -1,0 +1,13 @@
+23:34:58 harness: native rAF does not fire in headless capture → setTimeout polyfill (60fps)
+23:34:58 nextDay label '오늘 경기 시작'
+23:34:58 setup sizes: #start 65x30px/12.5px | #autoOrder 66x30px/12.5px | [data-b] 141x80px/10px | #innings 54x30px/12px h2 font 12.5px card font 10px
+23:34:58 setup: note '1차전 · 삼성 라이온즈 (홈) · 결과가 시즌에 기록됩니다' order '선택 9/9' start disabled false innings 3 pitchers 5 batters 12 selected p 1 b 9
+23:34:58 batters box 165/165 overflow hidden
+23:34:58 h2 text: 우리 선발 투수와 타순 9명 · 이닝 시드 1차전 · 삼성 라이온즈 (홈) · 결과가 시즌에 기록됩니다 구단 화면의 타순·선발이 미리 채워집니다. 초에는 우리 타선(공격 사인), 말에는 우리 선발(수비 사인)입니다.
+23:34:58 start → pitch scene after 12ms · locked true nav disabled 5 lockBadge '경기 중 · 정비는 경기 뒤에'
+23:34:59 hud: inn '1회초' batter '김민수 · 투수 0구' ondeck '대기 문보경 · 신민재' feedLast '1회초플레이 볼 · 우리 선발 김진수 · 상대 선발 최원태 · 1번 김민수'
+23:34:59 hud sizes: #playPitch 56x34px/14px | #playPA 56x34px/14px | #playInning 56x34px/14px | #playFast 87x30px/12.5px | #stop 40x30px/12.5px | #spd 46x28px/12px | chips .call 44x28px/12px | view .viewsel button 44x26px/12px | kz #kz 104x80px/12px | field #field 100x79px/12px | strip b font 15px small 9px
+23:34:59 cam canvas #cam 886x374px/12px feedLast font 11.5px
+23:35:02 pitch 1 took 3260ms · mph '91' count B1 S0 O0 · feedLast: 1회초1구째 91마일, 바깥쪽 높은 코스 — 볼1회초타석 시작 · 김민수 (R) · 컨택 C 파워 B 선구 C 주력 D · 오늘 0/0상대 투수 최원태 (R) · 투구 0구 · 평균 -
+23:35:15 pitch 2 took 12633ms · mph '92' count B0 S0 O0 · feedLast: 1회초2루타 · 아웃 0 · 우리 0 : 상대 01회초2구째 92마일, 몸쪽 높은 코스 — 쳤습니다! 뜬공, 103마일 → 2루타! CF가 쫓아갑니다
+23:35:18 pitch 3 took 3322ms · mph '84' count B1 S0 O0 · feedLast: 1회초1구째 84마일, 바깥쪽 낮은 코스 — 볼1회초타석 시작 · 문보경 (L) · 컨택 B 파워 A 선구 B 주력 B · 오늘 0/0상대 투수 최원태 (R) · 투구 2구 · 평균 92 mph

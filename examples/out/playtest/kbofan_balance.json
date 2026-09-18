@@ -1,0 +1,20 @@
+{
+ "name": "kbofan_balance",
+ "ms": 1809,
+ "errs": [],
+ "log": [
+  "키움 final standings: 1.덕아웃 나이트 23-7, 2.롯데 자이언츠 31-18, 3.KIA 타이거즈 24-14, 4.삼성 라이온즈 28-22, 5.LG 트윈스 22-18, 6.SSG 랜더스 18-22, 7.한화 이글스 20-26, 8.KT 위즈 19-30, 9.두산 베어스 15-27, 10.NC 다이노스 15-31",
+  "키움 last log: 5/8 (금) 시즌 재정 결산 · 잔액 74.9억 · 수입 65.4억 · 지출 30.5억 || 5/8 (금) 정규 시즌 30경기 종료 · 23승 7패 || 5/7 (목) 패 3:4 vs 삼성 라이온즈 (원정) · 선발 알칸타라 7이닝 3실점 · 김재현 1안타 1홈런, 안치홍 2안타, 김웅빈 2안타 || 5/6 (수) 승 5:1 vs 삼성 라이온즈 (원정) · 선발 윤석원 8이닝 1실점 · 김재현 1안타, 안치홍 5안타, 김웅빈 3안타 1홈런 || 5/5 (화) 패 4:6 vs 삼성 라이온즈 (원정) · 선발 김연주 7이닝 5실점 · 안치홍 1안타, 김웅빈 3안타, 추재현 2안타 1홈런",
+  "키움 ledger tail: 5/7 (목) 주간 결산 0 모기업 2 + 광고·상품 4.1 − 연봉 5.1 − 운영 1 || 5/3 (일) 입장 수입 2.3 관중 15,789명 || 5/2 (토) 입장 수입 2.5 관중 17,195명 || 5/1 (금) 입장 수입 2.1 관중 14,385명",
+  "SEASON RESULTS: SS 24-6 R176/RA95 rank 1/10 top40 100.9 budget 82.4 oppGames 40-47 days 35 | LG 25-5 R169/RA87 rank 1/10 top40 102.2 budget 93.4 oppGames 33-54 days 35 | OB 24-6 R183/RA95 rank 1/10 top40 120.6 budget 81.6 oppGames 34-45 days 35 | HT 25-5 R186/RA97 rank 1/10 top40 127.0 budget 83.2 oppGames 36-48 days 35 | SK 24-6 R183/RA103 rank 1/10 top40 102.4 budget 92.1 oppGames 34-49 days 35 | LT 28-2 R195/RA103 rank 1/10 top40 119.5 budget 79.5 oppGames 36-56 days 35 | HH 25-5 R172/RA78 rank 1/10 top40 113.5 budget 84.9 oppGames 41-50 days 35 | NC 28-2 R177/RA72 rank 1/10 top40 129.8 budget 94.1 oppGames 40-51 days 35 | KT 28-2 R215/RA70 rank 1/10 top40 133.7 budget 95.4 oppGames 35-50 days 35 | WO 23-7 R153/RA84 rank 1/10 top40 116.0 budget 74.9 oppGames 38-50 days 35",
+  "strip: tDate=5/8 (금) tRec=23-7 tRank=1위 / 6 tBudget=74.9 tPay=116.0/137.4"
+ ],
+ "persona": "KBO 골수팬 · 밸런스",
+ "notes": [
+  "키움 final standings: 1.덕아웃 나이트 23-7, 2.롯데 자이언츠 31-18, 3.KIA 타이거즈 24-14, 4.삼성 라이온즈 28-22, 5.LG 트윈스 22-18, 6.SSG 랜더스 18-22, 7.한화 이글스 20-26, 8.KT 위즈 19-30, 9.두산 베어스 15-27, 10.NC 다이노스 15-31",
+  "키움 last log: 5/8 (금) 시즌 재정 결산 · 잔액 74.9억 · 수입 65.4억 · 지출 30.5억 || 5/8 (금) 정규 시즌 30경기 종료 · 23승 7패 || 5/7 (목) 패 3:4 vs 삼성 라이온즈 (원정) · 선발 알칸타라 7이닝 3실점 · 김재현 1안타 1홈런, 안치홍 2안타, 김웅빈 2안타 || 5/6 (수) 승 5:1 vs 삼성 라이온즈 (원정) · 선발 윤석원 8이닝 1실점 · 김재현 1안타, 안치홍 5안타, 김웅빈 3안타 1홈런 || 5/5 (화) 패 4:6 vs 삼성 라이온즈 (원정) · 선발 김연주 7이닝 5실점 · 안치홍 1안타, 김웅빈 3안타, 추재현 2안타 1홈런",
+  "키움 ledger tail: 5/7 (목) 주간 결산 0 모기업 2 + 광고·상품 4.1 − 연봉 5.1 − 운영 1 || 5/3 (일) 입장 수입 2.3 관중 15,789명 || 5/2 (토) 입장 수입 2.5 관중 17,195명 || 5/1 (금) 입장 수입 2.1 관중 14,385명",
+  "SEASON RESULTS: SS 24-6 R176/RA95 rank 1/10 top40 100.9 budget 82.4 oppGames 40-47 days 35 | LG 25-5 R169/RA87 rank 1/10 top40 102.2 budget 93.4 oppGames 33-54 days 35 | OB 24-6 R183/RA95 rank 1/10 top40 120.6 budget 81.6 oppGames 34-45 days 35 | HT 25-5 R186/RA97 rank 1/10 top40 127.0 budget 83.2 oppGames 36-48 days 35 | SK 24-6 R183/RA103 rank 1/10 top40 102.4 budget 92.1 oppGames 34-49 days 35 | LT 28-2 R195/RA103 rank 1/10 top40 119.5 budget 79.5 oppGames 36-56 days 35 | HH 25-5 R172/RA78 rank 1/10 top40 113.5 budget 84.9 oppGames 41-50 days 35 | NC 28-2 R177/RA72 rank 1/10 top40 129.8 budget 94.1 oppGames 40-51 days 35 | KT 28-2 R215/RA70 rank 1/10 top40 133.7 budget 95.4 oppGames 35-50 days 35 | WO 23-7 R153/RA84 rank 1/10 top40 116.0 budget 74.9 oppGames 38-50 days 35",
+  "strip: tDate=5/8 (금) tRec=23-7 tRank=1위 / 6 tBudget=74.9 tPay=116.0/137.4"
+ ]
+}

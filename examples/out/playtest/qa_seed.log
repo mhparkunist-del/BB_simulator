@@ -1,0 +1,9 @@
+23:34:50 start threw can't access property "name", BANK.opp.pitchers[G.oppPitcher] is undefined
+23:34:50 PASS seed input allows -1 (no min attr) | GOT min='' value=-1
+23:34:51 PASS EXPECT seed -1 starts a valid game (no JS error) | GOT 
+23:34:51 FAIL state after seed -1: locked / game shown / oppPitcher | GOT locked=true gameVisible=true oppPitcher=-1 pitcher=-1
+23:34:52 feed after 한 구 with seed -1: 1회초이 조합의 투구 데이터가 없습니다 (data/bank/top_-1_2.json 404)
+23:34:52 FAIL EXPECT a pitch is playable with seed -1 | GOT 1회초이 조합의 투구 데이터가 없습니다 (data/bank/top_-1_2.json 404)
+23:34:53 FAIL EXPECT 결과 바로보기 can finish the seed -1 game | GOT over=false busy=false
+23:34:53 FAIL EXPECT can leave after seed -1 (soft-lock check) | GOT locked=true clubHidden=true nav disabled=5
+23:34:53 resume label=다음 이닝 진행

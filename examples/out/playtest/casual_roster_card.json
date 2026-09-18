@@ -1,0 +1,14 @@
+{
+ "name": "casual_roster_card",
+ "ms": 1061,
+ "errs": [],
+ "log": [
+  "on screen: 선수단",
+  "lineup rows 10 box 339/382 · rosterList rows 8 box 339/339 pager '이전1/15다음' · .swap 41x30px/12.5px | .posSel 42x26px/11px | [data-act=down] 37x30px/12.5px | #rosterList .pr td 69x35px/11px | badge .gi, .grade, td i, td b 0x0px/11px · h2s: 타순 (9) · 교체 후 오른쪽 타자 클릭 / 선발 로테이션 · 불펜 / FA 시장 / 1군 · 2군 · 이름을 누르면 카드",
+  "lineup warn/hint: 포지션 8개가 모두 채워졌습니다. · market rows 3 rotation hint: 불펜: 이정용, 조원태, 이상영, 박시원, 카라스코, 김영우, 케네디",
+  "row1 text: 우강훈SPRPCL R23구위 D 제구 A 체력 B 무브먼트 A2군",
+  "card modal visible true for 우강훈 · #cardClose 41x30px/12.5px · box #cardModal .modalbox 560x378px/12px · text: 우강훈 SP23세 · R1군구위D잠재 C제구A잠재 A체력B잠재 A무브먼트A잠재 S컨디션 66 · 피로 9%만족도 60% · 출전 60 · 성적 60 · 연봉 60 · 동료 60 · 역할 60성격 · 야망 0.57 충성 0.26 프로의식 0.57계약 · 1.3억 × 2년 (신인)시즌 0경기 0이닝 0자책 · ERA - · 0승 0패 0세이브개별 훈련 구위(손목·악력·하체)제구(딜리버리 반복)그립·실밥·무브먼트체력·회복휴식팔 각도55°스트라이드84%상체 기울기30°투구 폼 조정은 저장되며, 엔진이 브라우저에서 실시간으로 돌게 되면 투구 물리에 반영됩니다(지금은 미리 계산된 은행 사용)."
+ ],
+ "persona": "casual mobile",
+ "screen": "casual_roster_card"
+}

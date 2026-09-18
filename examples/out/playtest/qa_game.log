@@ -1,0 +1,14 @@
+23:22:40 PASS day 3 has no game (practice) | GOT null
+23:22:40 PASS innings 0 falls back to 3 | GOT 3
+23:22:44 3-inning fast ms 3533 hung=false
+23:22:44 PASS innings -1 accepted (min=1 not enforced) | GOT -1
+23:22:44 FAIL EXPECT sane inning label with innings=-1 | GOT -1회초
+23:22:47 FAIL innings -1 game ends after 1 inning | GOT hung=false 졌습니다. 0 : 0연습 경기라 기록에는 남지 않습니다.
+23:22:47 PASS innings 'abc' -> 3 | GOT 3
+23:22:53 FAIL EXPECT 배속 -1 does not freeze the pitch (buttons back within 2.5s) | GOT playPitch.disabled=true pitches=0
+23:22:53 FAIL 정지 rescues the freeze | GOT true
+23:22:56 FAIL 12 rapid 한 구 clicks -> exactly 1 pitch (busy guard) | GOT 0 pitches
+23:22:56 FAIL fast + stop spam: stopped cleanly, buttons enabled | GOT over=false inning=1top pitch scene=true
+23:22:56 FAIL feed announces interruption | GOT 1회초타석 시작 · 임종성 (R) · 컨택 B 파워 A 선구 A 주력 B · 오늘 0/0상대 투수 고우석 (R) · 투구 0구 · 평균 -1회초
+23:22:56 PASS resize/view switch during fast run: no errors | GOT 
+23:22:59 spd/rapid game finished hung=false

@@ -1,0 +1,39 @@
+23:22:39 PASS day 0 has a home game | GOT {"g":1,"opp":"삼성 라이온즈","home":true,"starter":0}
+23:22:39 PASS nextDay label = 오늘 경기 시작 | GOT 오늘 경기 시작
+23:22:40 PASS nextDay routes to game screen on a game day | GOT true
+23:22:40 PASS game day note says result is recorded | GOT 1차전 · 삼성 라이온즈 (홈) · 결과가 시즌에 기록됩니다
+23:22:40 PASS can leave the game screen before starting | GOT true
+23:22:40 PASS locked after start | GOT true
+23:22:40 PASS APP.show(schedule) while locked stays on game | GOT #game
+23:22:40 PASS APP.show(title) while locked stays on game | GOT #game
+23:22:40 PASS APP.show(team) while locked stays on game | GOT #game
+23:22:40 PASS 5 nav buttons disabled | GOT 5
+23:22:40 PASS nav click while locked ignored | GOT true
+23:22:40 PASS saveBtn/titleBtn disabled | GOT true/true
+23:22:40 PASS titleBtn click ignored while locked | GOT true
+23:22:40 PASS reset button not visible while locked | GOT false
+23:22:40 PASS hash change while locked does not switch screen | GOT #schedule
+23:22:43 PASS unlocked after game over | GOT false
+23:22:43 FAIL event shown after 정비로 돌아가기 | GOT 졌습니다. 0 : 0결과가 오늘 일정과 기록에 반영됐습니다. 정비 시간입니다.
+23:22:43 PASS schedule screen after eventOk | GOT #schedule
+23:22:43 PASS result recorded once (sched) | GOT 1 {"us":0,"them":0,"sp":"성영탁","ip":1,"er":0,"real":true}
+23:22:43 PASS W+L == 1 after one game | GOT 0-1
+23:22:43 PASS played list == [1] | GOT [1]
+23:22:43 PASS one 직접 경기 log line | GOT 1
+23:22:43 PASS opponent record +1 once | GOT 1-0
+23:22:43 PASS nextDay label = 다음 날 after the game | GOT 다음 날
+23:22:43 FAIL EXPECT tie (0:0) not reported/recorded as a loss | GOT 졌습니다. 0 : 0결과가 오늘 일정과 기록에 반영됐습니다. 정비 시간입니다. W-L 0-1
+23:22:43 PASS second game today flagged as practice | GOT 오늘은 경기가 없습니다 · 연습 경기(기록 없음)
+23:22:46 PASS practice result not recorded | GOT 1 0-1 logs 1
+23:22:46 PASS practice event says not recorded | GOT 졌습니다. 0 : 0연습 경기라 기록에는 남지 않습니다.
+23:22:49 FAIL EXPECT tie event not '졌습니다' (practice seed 3) | GOT 졌습니다. 0 : 0연습 경기라 기록에는 남지 않습니다.
+23:22:50 ERR@double-resume: TypeError: can't access property "score", G is null @game.js:74
+23:22:50 FAIL EXPECT double click on 정비로 돌아가기 throws nothing | GOT TypeError: can't access property "score", G is null @game.js:74
+23:22:50 PASS after double resume still 1 recorded game | GOT 1 0-1
+23:22:50 PASS day advanced to 1 | GOT 1
+23:22:50 PASS still 1 result after 다음 날 (no double play) | GOT 1 0-1
+23:22:50 FAIL EXPECT gate income for a directly played HOME game | GOT gate 0 -> 0 ledger= att=0
+23:22:50 FAIL EXPECT a 2:2 tie is not counted as a loss | GOT rec=true W-L 0-1 -> 0-2 log=패 2:2 vs 삼성 라이온즈 · 직접 경기
+23:22:50 PASS quick-sim home game adds gate income (contrast) | GOT home=true gate 0 -> 2.4
+23:22:50 FAIL EXPECT simDay refused while locked (day stays 3) | GOT 4
+23:22:53 PASS results == W+L after simDay-under-lock | GOT 4 vs 4

@@ -1,0 +1,5 @@
+00:11:26 (1) UI path: demoted bench 3/3 (down button on starters? false) · sold starters 2/4 via form [삼성 수락 ·  ⇄ 홍대인, 이지영 + 현금 -18.1억 | 선수를 고르세요.] · lineup now null/박성한/김요셉/한유섬/전의산/null/임근우/최지훈/안상현 · nulls 2 · strengths {"B":0.78,"D":0.71} -> {"B":0.82,"D":0.6} budget 58.1 · roster screen warn: 포지션 비어 있음: C, 1B · 수비 강도 −10%
+00:11:26 (1b) season with 7-man lineup (UI path): {"W":26,"L":4,"runs":209,"ra":102}
+00:11:27 (2) draw 1:1 → schedule rows: 14/3 (금)삼성 라이온즈홈패 1:1이건욱 5이닝 1자책 || 24/4 (토)삼성 라이온즈홈- · header 0-0-1 · log 패 1:1 vs 삼성 라이온즈 · 직접 경기 · stats screen W-L text: 
+00:11:27 (3) 9x 한유섬 game screen: clubLineup.order=[2,2,2,2,2,2,2,2,2] pick.order=[2,2,2,2,2,2,2,2,2] selected cards=1 start disabled=false
+00:11:27 (3b) 9x hero 1-inning game: over=true stopped=false lineup used 2,2,2,2,2,2,2,2,2 box keys 한유섬 score 0:0

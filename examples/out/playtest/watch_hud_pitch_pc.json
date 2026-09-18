@@ -1,0 +1,19 @@
+{
+ "name": "watch_hud_pitch_pc",
+ "ms": 2698,
+ "errs": [],
+ "log": [
+  "state after: 1top b2 s2 o1 runners true,false,true sBatter=박상준 · 투수 3구 onDeck=대기 이호연 · 한준수 sRuns=2:0",
+  "layout cam=9,49 1342x644 | strip=17,57 402x58 | kz=1213,57 130x100 | field=17,590 120x95 | feedLast=145,649 420x36 | offCalls=1126,589 217x36 | playPitch=878,637 66x42 | bodyNote=770,57 435x19 win=1360x700"
+ ],
+ "persona": "관전자",
+ "layout": [
+  "cam=9,49 1342x644",
+  "strip=17,57 402x58",
+  "kz=1213,57 130x100",
+  "field=17,590 120x95",
+  "feedLast=145,649 420x36",
+  "offCalls=1126,589 217x36",
+  "bodyNote=770,57 435x19"
+ ]
+}

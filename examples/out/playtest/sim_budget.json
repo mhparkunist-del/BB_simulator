@@ -1,0 +1,33 @@
+{
+ "name": "sim_budget",
+ "ms": 644,
+ "errs": [],
+ "log": [
+  "(1) signed 이호성 at 133.3억 x1: budget 0 header 0.0 top40 262.7",
+  "(2) budget by day: 3.2,6.5,9.8,9.8,9.8,9.8,5.8,8.8,12.3,15.7,15.7,15.7,15.7,11.7 · weekly ledger: -4 (모기업 2 + 광고·상품 5.9 − 연봉 10.9 − 운영 1) | -4 (모기업 2 + 광고·상품 5.9 − 연봉 10.9 − 운영 1)",
+  "(3) trade with +0.5억 cash at budget 11.7: ok=false 삼성 거절 · 가치 차이가 큽니다 (우리 0.4 vs 요구 3.8).",
+  "(3b) cash sale at negative budget: ok=true budget 12.7",
+  "(3c) FA signing at 0.4 while budget 12.7: signed=false budget 12.7",
+  "(4) season end: budget -6.1 W-L 27-3 · 시즌 재정 결산 · 잔액 -6.1억 · 수입 89.5억 · 지출 135.6억 · tax [{\"d\":\"5/8 (금)\",\"kind\":\"샐러리캡 제재금\",\"amt\":-36.7,\"text\":\"상위 40인 259.8억, 초과분의 30%\"}] · consequences of negative cash: none",
+  "(5) salary dump: sold 60 non-starters for 339.4억, top40 129.8 -> 97.1 budget 379.4 active 15",
+  "(6) season: 23-7 budget 441.1 · [] · 시즌 재정 결산 · 잔액 441.1억 · 수입 425.1억 · 지출 24억 · weekly salary line: 모기업 2 + 광고·상품 5.8 − 연봉 3.8 − 운영 1",
+  "(7) sinks for cash in a 30-game season: FA signing bonus, trade cash, buyout, season-end tax. No staff/scouting/facilities. Income 425.1 vs expense 24"
+ ],
+ "scenario": "budget",
+ "track": [
+  3.2,
+  6.5,
+  9.8,
+  9.8,
+  9.8,
+  9.8,
+  5.8,
+  8.8,
+  12.3,
+  15.7,
+  15.7,
+  15.7,
+  15.7,
+  11.7
+ ]
+}

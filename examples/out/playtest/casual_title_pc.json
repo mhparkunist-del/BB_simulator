@@ -1,0 +1,13 @@
+{
+ "name": "casual_title_pc",
+ "ms": 526,
+ "errs": [],
+ "log": [
+  "viewport 1360x700 dpr 1",
+  "buttons: #btnContinue 0x0px/17px hidden | #btnNew 156x48px/17px | #btnLoad 156x48px/17px",
+  "tag: 투수·타자·포수·야수가 각자 판단하는 야구 · 구단을 맡아 시즌을 치릅니다 || note: 가로 화면 전용 · 진행은 기기 안에 저장됩니다 || logo: .logo 533x64px/64px",
+  "fonts loaded: loading \"Black Han Sans\",\"Gothic A1\",\"IBM Plex Mono\",\"Jua\""
+ ],
+ "persona": "casual mobile",
+ "screen": "casual_title"
+}

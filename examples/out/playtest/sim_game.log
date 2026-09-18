@@ -1,0 +1,17 @@
+23:36:10 (1) 9x 박상준 lineup → game screen: pick.order=[1,1,1,1,1,1,1,1,1] selected cards=1 start disabled=false order label=선택 9/9
+23:36:10 (2) 8-man lineup → game screen: clubLineup.order=null pick.order=[1,1,1,1,1,1,1,1,1] selected=1 start disabled=false
+23:36:11 (2b) after autoOrder: selected=9 start disabled=false pitcher card=0
+23:36:14 (3) game {"g":1,"inn":1,"us":0,"them":0,"hits":"1/0","pitches":31,"ms":255,"ev":"졌습니다. 0 : 0결과가 오늘 일정과 기록에 반영됐습니다. 정비 시간입니다.","result":"{\"us\":0,\"them\":0,\"sp\":\"양현종\",\"ip\":1,\"er\":0,\"real\":true}","played":true}
+23:36:14 (3) next day 1 W-L 0-1 results 1 real 1 · starter fatigue 성영0.11,황동0.19,정해0.19,곽도0.13,양현0.63
+23:36:18 (3) game {"g":2,"inn":9,"us":0,"them":3,"hits":"8/10","pitches":306,"ms":580,"ev":"졌습니다. 0 : 3결과가 오늘 일정과 기록에 반영됐습니다. 정비 시간입니다.","result":"{\"us\":0,\"them\":3,\"sp\":\"양현종\",\"ip\":9,\"er\":3,\"real\":true}","played":true}
+23:36:18 (3) next day 2 W-L 0-2 results 2 real 2 · starter fatigue 성영0.06,황동0.14,정해0.14,곽도0.08,양현0.94
+23:36:21 (3) game {"g":3,"inn":9,"us":1,"them":5,"hits":"4/11","pitches":308,"ms":318,"ev":"졌습니다. 1 : 5결과가 오늘 일정과 기록에 반영됐습니다. 정비 시간입니다.","result":"{\"us\":1,\"them\":5,\"sp\":\"양현종\",\"ip\":9,\"er\":5,\"real\":true}","played":true}
+23:36:21 (3) next day 3 W-L 0-3 results 3 real 3 · starter fatigue 성영0.02,황동0.1,정해0.1,곽도0.04,양현0.94
+23:36:24 (3) game {"g":4,"inn":9,"us":0,"them":8,"hits":"3/13","pitches":306,"ms":323,"ev":"졌습니다. 0 : 8결과가 오늘 일정과 기록에 반영됐습니다. 정비 시간입니다.","result":"{\"us\":0,\"them\":8,\"sp\":\"양현종\",\"ip\":9,\"er\":8,\"real\":true}","played":true}
+23:36:24 (3) next day 5 W-L 0-4 results 4 real 4 · starter fatigue 성영0,황동0.01,정해0.01,곽도0,양현0.94
+23:36:25 (4) save/load: saved day 5 W 0 → simmed to day 11 → loaded: day 5 W 0 · slot text: 슬롯 1KIA 타이거즈 · day 5 · 0승 4패 · 2026-09-06 14:36불러오기슬롯 2비어 있음불러오기슬롯 3비어 있음불러오기 · screen schedule visible=true
+23:36:25 (5) rest day 2026-04-12 note: 4차전 · LG 트윈스 (원정) · 결과가 시즌에 기록됩니다
+23:36:35 (5) seed 9 twice: [0,0,74] / [0,0,74] same=true · seed 14: [0,1,77] · W-L unchanged 4-5
+23:36:38 (6) HANG with default seed 1: game 10 9회초 key 11|1|none|2|2 pitches in 3s: 3616 · nav locked=true · feed lines 3754 · escape: change sign
+23:36:38 (6b) after sign change: over=true inning 9bottom pitches 3630 score 0:0
+23:36:38 summary: hang-free games 4 avg pitches 306.67 avg ms(9inn) 407 scores 0:0 0:3 1:5 0:8 hangs 1

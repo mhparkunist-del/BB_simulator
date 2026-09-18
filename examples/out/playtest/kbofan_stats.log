@@ -1,0 +1,7 @@
+00:00:07 teamStats: 경기 10 득점 / 실점 52 / 29 경기당 득점 5.20 타선 강도 0.72 수비 강도 0.67 1군 평균 만족도 62%
+00:00:07 standings: # 구단 승 패 승률 1 NC 다이노스 13 3 0.813 2 덕아웃 나이트 8 2 0.800 3 삼성 라이온즈 11 4 0.733 4 롯데 자이언츠 6 5 0.545 5 KT 위즈 7 6 0.538 6 LG 트윈스 6 9 0.400 7 SSG 랜더스 5 9 0.357 8 KIA 타이거즈 5 11 0.313 9 키움 히어로즈 3 8 0.273 10 두산 베어스 4 11 0.267
+00:00:07 batStats: 선수 G PA H HR RBI BB K AVG 문현빈 10 50 19 5 8 2 8 0.396 노시환 10 40 15 5 9 3 0 0.405 최재훈 10 50 18 1 5 4 5 0.391 심우준 10 50 17 4 8 4 10 0.370 박정현 10 40 12 1 7 7 7 0.364 이전 1/2 다음
+00:00:07 pitStats: 선수 G IP ER ERA W L SV K 강재민 7 7 0 0.00 0 0 1 0 조동욱 5 5 0 0.00 0 0 1 0 권민규 1 1 0 0.00 0 0 0 0 주현상 3 3 0 0.00 0 0 0 0 이전 1/3 다음
+00:00:07 strip: tDate=4/15 (수) tRec=8-2 tRank=2위 / 6 tBudget=56.4 tPay=113.5/137.4 tMorale=59%
+00:00:07 pitchers used: 짐머맨 G2 IP13 ER3 W2 L0 SV0 K13(SP) | 박재규 G2 IP15 ER2 W2 L0 SV0 K17(SP) | 김서현 G2 IP15 ER5 W2 L0 SV0 K15(SP) | 강재민 G7 IP7 ER0 W0 L0 SV1 K0(RP) | 조동욱 G5 IP5 ER0 W0 L0 SV1 K0(RP) | 박상원 G2 IP12 ER4 W1 L1 SV0 K12(SP) | 권민규 G1 IP1 ER0 W0 L0 SV0 K0(RP) | 주현상 G3 IP3 ER0 W0 L0 SV0 K0(RP) | 박준영 G5 IP5 ER0 W0 L0 SV1 K0(RP) | 강건우 G6 IP6 ER0 W0 L0 SV1 K0(RP) | 박준영 G3 IP3 ER0 W0 L0 SV0 K0(RP) | 류현진 G2 IP14 ER7 W1 L1 SV0 K14(SP)
+00:00:07 opp W-L sum check: 삼성 11-4, LG 6-9, 두산 4-11, KIA 5-11, SSG 5-9, 롯데 6-5, NC 13-3, KT 7-6, 키움 3-8 · total games logged us 10
