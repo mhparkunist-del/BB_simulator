@@ -1,6 +1,7 @@
 # BB_simulator — 물리 기반 야구 시뮬레이션 게임 엔진
 
 웹앱(PWA): https://mhparkunist-del.github.io/BB_simulator/web/app/ · 저장소: https://github.com/mhparkunist-del/BB_simulator
+다른 서버에서 이어받기: docs/HANDOFF.md (클론·의존성·실행·릴리스 순서·남은 일)
 
 
 - 생성일: 2026-09-05
