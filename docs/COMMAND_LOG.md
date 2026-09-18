@@ -85,6 +85,10 @@
 | 78 | 2026-09-18 | 플레이테스트 산출물(examples/out/playtest)을 GitHub 저장소에 올리기 | 681파일 68 MB(보고 JSON 150·로그 163·캡처 350·스캔 18)를 .gitignore 예외로 추적하고 커밋·푸시 | .gitignore, examples/out/playtest/ | 완료 |
 | 79 | 2026-09-18 | ampere에 연결할 테니 링크와 README만 남기기 | docs/HANDOFF.md(저장소·배포 링크, 클론·의존성·실행·릴리스 순서·폴더 안내·남은 일), requirements.txt, README 머리에 인수인계 링크 | docs/HANDOFF.md, requirements.txt, README.md | 완료 |
 
+| 80 | 2026-09-18 | FM 방향의 경기 화면 1차 구현 | 중계 HUD·덕아웃 작전 설명·분석 토글·홈원정 공수 표시·반응형 캔버스 | docs/BROADCAST_v2.7_0918.md | 개발 검증, 미배포 |
+
+| 81 | 2026-09-18 | 감독실·경기 전후 흐름·비주얼 개선, GitHub 배포 보류 | 실제 구단 상태 대시보드·첫 사인·경기 리포트 저장·구장 조명·선수 음영/원호 보정 | docs/MANAGER_v2.7_0918.md | 개발 검증, 미배포 |
+
 ## 운용
 - 새 지시 → 행 추가 → 산출물 버전 파일명(v{N.M}_{MMDD}) → recent report 갱신(이전 보고는 2_Archieve로) → README 이력표·2_Archieve/README.md 색인 갱신.
-- Artifact URL(2026-09-05 두 차례 재게시, 이전 4f2bf4a9…·bc1d35a5… 링크는 삭제됨. 링크가 지워지면 새 URL로 게시 후 문서 일괄 치환)은 url 파라미터로 갱신합니다: https://claude.ai/code/artifact/3ce6dff6-4ac4-4c7a-8474-679244f1da06
+- 미리보기 아티팩트는 계정 전환 때마다 삭제되어(2026-09-19 마지막 링크 3ce6dff6… 삭제) 더 이상 문서에 링크를 두지 않습니다. 확인은 배포 앱 https://mhparkunist-del.github.io/BB_simulator/web/app/ 로, 단일 파일 미리보기는 tools/bundle_app.py로 만든 web/app_preview_*.html(로컬, 미추적)로 합니다.
